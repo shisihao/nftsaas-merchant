@@ -1,0 +1,51 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2703585 */
+  src: url('iconfont.woff2?t=1627372572272') format('woff2'),
+       url('iconfont.woff?t=1627372572272') format('woff'),
+       url('iconfont.ttf?t=1627372572272') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-icon_tab_zixun_pre:before {
+  content: "\e679";
+}
+
+.icon-tab_icon_kuangchi_pre:before {
+  content: "\e67a";
+}
+
+.icon-tab_icon_me_pre:before {
+  content: "\e67b";
+}
+
+.icon-tab_icon_shop_pre:before {
+  content: "\e67c";
+}
+
+.icon-icon_tab_home_pre:before {
+  content: "\e67d";
+}
+
+.icon-zixun_icon_more:before {
+  content: "\e67f";
+}
+
+.icon-zixun_icon_like:before {
+  content: "\e680";
+}
+
+.icon-home_icom_notice1:before {
+  content: "\e686";
+}
+
+.icon-home_icon_news1:before {
+  content: "\e687";
+}
+
