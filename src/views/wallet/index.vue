@@ -55,18 +55,17 @@
             <div style="display: inline-block;margin-left: 2px">
               <div>
                 #{{ row.user.id }}
-                <el-divider direction="vertical"></el-divider>
+                <el-divider direction="vertical" />
                 {{ row.user.name }}
                 <span v-if="row.user.certification">
-                  <el-divider direction="vertical"></el-divider>
+                  <el-divider direction="vertical" />
                   <el-tag effect="plain">{{ row.user.certification.name }}</el-tag>
                 </span>
               </div>
               <div>
-                {{ row.user.phone || row.user.email}}
+                {{ row.user.phone || row.user.email }}
               </div>
-              <div>
-              </div>
+              <div />
             </div>
           </div>
           <div v-else>
@@ -104,7 +103,7 @@
         label="到账时间"
         width="140"
         align="center"
-        />
+      />
     </el-table>
     <pagination v-show="pages.total > 0" :total="pages.total" :page.sync="pages.current" :limit.sync="pages.limit" @pagination="getList()" />
   </div>
@@ -117,7 +116,7 @@ import { getToken, DominKey } from '@/utils/auth'
 import { pickerOptions, currencyOptions } from '@/utils/explain'
 
 export default {
-  name: 'wallet',
+  name: 'Wallet',
   components: { Pagination },
   data() {
     return {

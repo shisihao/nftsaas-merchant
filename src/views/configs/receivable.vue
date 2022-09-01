@@ -57,12 +57,10 @@
 
 <script>
 import { receivable, putReceivable } from '@/api/configs'
-import CustomUpload from '@/components/Upload/CustomUpload'
 import { DominKey, getToken } from '@/utils/auth'
 
 export default {
   name: 'Invite',
-  components: { CustomUpload },
   data() {
     const validateNumber = (rule, value, callback) => {
       if (value.length < 1 || value.length > 30) {
@@ -154,7 +152,7 @@ export default {
       this.currentType = type
     },
     handleAvatarSuccess(response, file) {
-      this.form[this.currentType] = response.filename
+      this.form[this.currentType] = response
     },
     beforeAvatarUpload(file, cb) {
       const type = ['image/jpeg', 'image/jpg', 'image/png']

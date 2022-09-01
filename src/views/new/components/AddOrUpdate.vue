@@ -126,7 +126,7 @@ export default {
       this.$reset()
     },
     handleAvatarSuccess(response, file) {
-      this.form.cover = response.name
+      this.form.cover = response
     },
     beforeAvatarUpload(file, cb) {
       const type = ['image/jpeg', 'image/jpg', 'image/png']

@@ -50,9 +50,9 @@
       >
         <template slot-scope="{ row }">
           <div v-if="row.displaySort">
-            <el-input-number v-model="row.sort" controls-position="right" :min="0" :precision="0"></el-input-number>
-            <el-button type="success" icon="el-icon-check" circle :loading="row.loadingSort" @click="onChangeSort(row)"></el-button>
-            <el-button type="warning" icon="el-icon-close" circle :loading="row.loadingSort" @click="row.displaySort = false;row.sort = row.defaultSort"></el-button>
+            <el-input-number v-model="row.sort" controls-position="right" :min="0" :precision="0" />
+            <el-button type="success" icon="el-icon-check" circle :loading="row.loadingSort" @click="onChangeSort(row)" />
+            <el-button type="warning" icon="el-icon-close" circle :loading="row.loadingSort" @click="row.displaySort = false;row.sort = row.defaultSort" />
           </div>
           <el-link v-else type="primary" @click="row.displaySort = true">{{ row.sort }} </el-link>
         </template>

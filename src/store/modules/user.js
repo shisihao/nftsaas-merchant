@@ -38,7 +38,7 @@ const mutations = {
   },
   SET_MSGCOUNT: (state, data) => {
     state.msgCount = data
-  },
+  }
 }
 
 const actions = {
@@ -48,7 +48,7 @@ const actions = {
       login(userInfo).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.admin.admin_token)
-        setToken(data.oss.DoMain, DominKey)
+        setToken(data.oss.domain, DominKey)
         setToken(data.admin.admin_token)
         setToken(data.admin.is_first, 'is_first')
         setToken(data.security, 'security')
@@ -89,7 +89,7 @@ const actions = {
       getInfo().then(response => {
         const { data: { tenant, tip_day }} = response
         if (tenant && tip_day) {
-          let info = Object.assign(tenant, tip_day)
+          const info = Object.assign(tenant, tip_day)
           commit('SET_INFO', info)
           resolve(info)
         } else {

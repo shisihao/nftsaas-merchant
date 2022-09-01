@@ -18,7 +18,7 @@
       <el-collapse v-model="activeNames">
         <el-collapse-item name="1">
           <template slot="title">
-          <span style="color: #409eff;">{{ `${collapseTitle ? '收起' : '展开'}资产详情` }}</span>
+            <span style="color: #409eff;">{{ `${collapseTitle ? '收起' : '展开'}资产详情` }}</span>
           </template>
           <el-divider content-position="left"><svg-icon icon-class="radius-cny" style="color: #C49C5D;" /> 现金 </el-divider>
           <el-row>
@@ -159,7 +159,7 @@
         </el-collapse-item>
       </el-collapse>
 
-      <p></p>
+      <p />
 
       <div class="filter-container">
         <el-form :inline="true" :model="search">
@@ -347,8 +347,8 @@ export default {
       setWalletVisible: false
     }
   },
-  watch:{
-    activeNames(val, oldVal){//普通的watch监听
+  watch: {
+    activeNames(val, oldVal) { // 普通的watch监听
       this.collapseTitle = val.length ? 1 : 0
     }
   },
@@ -436,7 +436,6 @@ export default {
     },
     handleChange(val) {
       console.log(this.activeNames)
-
     }
   }
 }

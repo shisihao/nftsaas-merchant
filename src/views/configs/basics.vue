@@ -59,7 +59,7 @@ import CustomUpload from '@/components/Upload/CustomUpload'
 import { DominKey, getToken } from '@/utils/auth'
 
 export default {
-  name: 'basics',
+  name: 'Basics',
   components: { CustomUpload },
   data() {
     return {
@@ -89,7 +89,7 @@ export default {
         'ant.secret': [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ],
-        'sign.sign':[
+        'sign.sign': [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ]
       }
@@ -187,7 +187,7 @@ export default {
       }
     },
     handleAvatarSuccess(response, file) {
-      this.form.icon.default_icon = response.name
+      this.form.icon.default_icon = response
     },
     beforeAvatarUpload(file, cb) {
       const type = ['image/jpeg', 'image/jpg', 'image/png']

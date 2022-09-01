@@ -128,7 +128,7 @@
     </div>
 
     <el-dialog title="会员服务协议" top="30px" width="80%" :visible.sync="dialogRenewalVisible">
-      <div v-html="configInfo.renewal_agreement"></div>
+      <div v-html="configInfo.renewal_agreement" />
     </el-dialog>
   </div>
 </template>
@@ -258,7 +258,7 @@ export default {
       })
     },
     handleAvatarSuccess(response, file) {
-      this.form[this.currentName] = response.name
+      this.form[this.currentName] = response
     },
     beforeAvatarUpload(file, cb, refName) {
       const type = ['image/jpeg', 'image/jpg', 'image/png']

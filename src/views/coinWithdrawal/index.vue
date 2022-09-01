@@ -45,57 +45,64 @@
           <span style="color: #409eff;">{{ `${collapseTitle ? '收起' : '展开'}提资产统计` }}</span>
         </template>
         <el-table
-        :data="data"
-        style="width: 100%">
-        <el-table-column
-          prop="currency"
-          label="资产类型"
-          width="80">
-           <template slot-scope="{ row }">
-             <span class="uppercase">{{ row.currency }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="success"
-          label="成功提现数量"
-          align="center">
-           <template slot-scope="{ row }">
-             {{ (row.success || 0) | cutZero }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="wait"
-          label="待审核数量"
-          align="center">
-           <template slot-scope="{ row }">
-             {{ (row.wait || 0) | cutZero }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="failed"
-          label="驳回提现数量"
-          align="center">
-           <template slot-scope="{ row }">
-             {{ (row.failed || 0) | cutZero }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="total_num"
-          label="今日提现数量"
-          align="center">
-           <template slot-scope="{ row }">
-             {{ (row.total_num || 0) | cutZero }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="total_fee"
-          label="手续费"
-          align="center">
-           <template slot-scope="{ row }">
-             {{ (row.total_fee || 0) | cutZero }}
-          </template>
-        </el-table-column>
-      </el-table>
+          :data="data"
+          style="width: 100%"
+        >
+          <el-table-column
+            prop="currency"
+            label="资产类型"
+            width="80"
+          >
+            <template slot-scope="{ row }">
+              <span class="uppercase">{{ row.currency }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="success"
+            label="成功提现数量"
+            align="center"
+          >
+            <template slot-scope="{ row }">
+              {{ (row.success || 0) | cutZero }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="wait"
+            label="待审核数量"
+            align="center"
+          >
+            <template slot-scope="{ row }">
+              {{ (row.wait || 0) | cutZero }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="failed"
+            label="驳回提现数量"
+            align="center"
+          >
+            <template slot-scope="{ row }">
+              {{ (row.failed || 0) | cutZero }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="total_num"
+            label="今日提现数量"
+            align="center"
+          >
+            <template slot-scope="{ row }">
+              {{ (row.total_num || 0) | cutZero }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="total_fee"
+            label="手续费"
+            align="center"
+          >
+            <template slot-scope="{ row }">
+              {{ (row.total_fee || 0) | cutZero }}
+            </template>
+          </el-table-column>
+        </el-table>
       </el-collapse-item>
     </el-collapse>
 
@@ -123,17 +130,16 @@
             <el-avatar :key="row.user.id" icon="el-icon-user-solid" style="vertical-align: top;" :src="row.user.avatar ? (domin + row.user.avatar) : ''" />
             <div style="display: inline-block;margin-left: 2px">
               <div>
-                #{{ row.user.id }}<el-divider direction="vertical"></el-divider>{{ row.user.name }}
+                #{{ row.user.id }}<el-divider direction="vertical" />{{ row.user.name }}
                 <span v-if="row.user.certification">
-                  <el-divider direction="vertical"></el-divider>
+                  <el-divider direction="vertical" />
                   <el-tag effect="plain">{{ row.user.certification.name }}</el-tag>
                 </span>
               </div>
               <div>
-                {{ row.user.phone || row.user.email}}
+                {{ row.user.phone || row.user.email }}
               </div>
-              <div>
-              </div>
+              <div />
             </div>
           </div>
           <div v-else>
@@ -309,7 +315,7 @@ export default {
         { label: 'BTC', value: 'btc' },
         { label: 'XCH', value: 'xch' },
         { label: 'USDT-ERC20', value: 'usdt' },
-        { label: 'USDT-TRC20', value: 'usdt_trx' },
+        { label: 'USDT-TRC20', value: 'usdt_trx' }
       ],
       withdrawOptions,
       statusOptions: examineStatusOptions.concat([{ label: '进行中', value: 3 }]),
@@ -339,13 +345,13 @@ export default {
       }
     }
   },
-  created() {
-    this.init()
-  },
-  watch:{
-    activeNames(val, oldVal){//普通的watch监听
+  watch: {
+    activeNames(val, oldVal) { // 普通的watch监听
       this.collapseTitle = val.length ? 1 : 0
     }
+  },
+  created() {
+    this.init()
   },
   methods: {
     init() {
@@ -373,7 +379,7 @@ export default {
     getStatistics() {
       getStatistics()
         .then(response => {
-          let data = []
+          const data = []
           Object.keys(response.data).forEach(key => {
             data.push(Object.assign(response.data[key], { currency: key }))
           })
@@ -397,7 +403,7 @@ export default {
       }
     },
     onStatusWithdraw(data, status) {
-      if(parseInt(getToken('security')) === 0 && status === 1) {
+      if (parseInt(getToken('security')) === 0 && status === 1) {
         this.onGoogleCode({ type: 1 })
         return false
       }

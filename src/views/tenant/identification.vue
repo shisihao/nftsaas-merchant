@@ -2,15 +2,15 @@
   <div class="identification">
     <el-row v-if="[0, 2].includes(form.status)" class="identify-result">
       <el-col>
-        <el-result v-if="form.status === 0" icon="warning" title="提交成功，请耐心等待审核" subTitle="实名认证已提交，请等待审核，大概需2~3个工作日">
+        <el-result v-if="form.status === 0" icon="warning" title="提交成功，请耐心等待审核" sub-title="实名认证已提交，请等待审核，大概需2~3个工作日">
           <template slot="icon">
-            <i class="el-icon-time icon-time"></i>
+            <i class="el-icon-time icon-time" />
           </template>
           <template slot="extra">
             <el-button type="primary" size="medium" @click="onInfo">查看认证信息</el-button>
           </template>
         </el-result>
-        <el-result v-else-if="form.status === 2" icon="error" title="认证失败，请重新提交" :subTitle="`失败原因：${form.reason}`">
+        <el-result v-else-if="form.status === 2" icon="error" title="认证失败，请重新提交" :sub-title="`失败原因：${form.reason}`">
           <template slot="extra">
             <el-button type="primary" size="medium" @click="form.status = 3">重新提交</el-button>
           </template>
@@ -26,7 +26,7 @@
         <identy-info :form="form" />
 
         <div class="identify-type">
-        <el-button type="primary" v-if="initForm.type === 0" @click="form.status = 3;form.type = 1">升级为企业认证</el-button>
+          <el-button v-if="initForm.type === 0" type="primary" @click="form.status = 3;form.type = 1">升级为企业认证</el-button>
         </div>
       </div>
     </div>
@@ -35,9 +35,9 @@
       <div class="title">
         认证类型
       </div>
-      
+
       <div class="identify-type">
-        <el-radio-group v-model="form.type"  :disabled="!!form.id" @change="onChangeType">
+        <el-radio-group v-model="form.type" :disabled="!!form.id" @change="onChangeType">
           <el-radio v-for="(item, index) in typeOptions" :key="index" :label="item.value">{{ item.label }}</el-radio>
         </el-radio-group>
       </div>
@@ -49,10 +49,10 @@
           </div>
           <div class="content">
             <el-form-item label="真实姓名" prop="user_name">
-              <el-input v-model="form.user_name" placeholder="请输入真实姓名" clearable></el-input>
+              <el-input v-model="form.user_name" placeholder="请输入真实姓名" clearable />
             </el-form-item>
             <el-form-item label="身份证号" prop="card_number">
-              <el-input v-model="form.card_number" maxlength="18" placeholder="请输入身份证号" show-word-limit clearable></el-input>
+              <el-input v-model="form.card_number" maxlength="18" placeholder="请输入身份证号" show-word-limit clearable />
             </el-form-item>
             <el-form-item label="身份证正面" prop="positive">
               <custom-upload
@@ -108,43 +108,43 @@
             企业基本信息
           </div>
           <div class="content">
-              <el-form-item label="公司名称" prop="company_name">
-                <el-input v-model="form.company_name" placeholder="请输入公司名称" clearable></el-input>
-              </el-form-item>
-              <el-form-item label="所在地" prop="location">
-                <el-cascader
-                  size="large"
-                  :options="regionOptions"
-                  v-model="form.location"
-                  placeholder="请选择所在地"
-                />
-              </el-form-item>
-              <el-form-item label="详细地址" prop="address">
-                <el-input v-model="form.address" placeholder="请输入详细地址" clearable></el-input>
-              </el-form-item>
-              <el-form-item label="统一社会信用代码" prop="social_code">
-                <el-input v-model="form.social_code" maxlength="18" placeholder="请输入统一社会信用代码" show-word-limit clearable></el-input>
-              </el-form-item>
-              <el-form-item label="营业执照扫描" prop="business_license">
-                <custom-upload
-                  class-name="business-uploader avatar3"
-                  ref-name="business_license"
-                  @handleBeforeUpload="beforeAvatarUpload"
-                  @handleSuccess="handleAvatarSuccess"
-                >
-                  <img v-if="form.business_license" :src="domin + form.business_license" class="avatar">
-                  <i v-else class="el-icon-plus avatar-uploader-icon" />
-                </custom-upload>
-                <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar3', 'business_license')">上传图片</el-button>
-                <div class="describe">
-                  <div>
-                    1.营业执照正副本均可，文字/盖章需清晰可见
-                  </div>
-                  <div>
-                    2.原件照片或彩色扫描件，格式为png、jpg、jpeg，大小不超过2MB
-                  </div>
+            <el-form-item label="公司名称" prop="company_name">
+              <el-input v-model="form.company_name" placeholder="请输入公司名称" clearable />
+            </el-form-item>
+            <el-form-item label="所在地" prop="location">
+              <el-cascader
+                v-model="form.location"
+                size="large"
+                :options="regionOptions"
+                placeholder="请选择所在地"
+              />
+            </el-form-item>
+            <el-form-item label="详细地址" prop="address">
+              <el-input v-model="form.address" placeholder="请输入详细地址" clearable />
+            </el-form-item>
+            <el-form-item label="统一社会信用代码" prop="social_code">
+              <el-input v-model="form.social_code" maxlength="18" placeholder="请输入统一社会信用代码" show-word-limit clearable />
+            </el-form-item>
+            <el-form-item label="营业执照扫描" prop="business_license">
+              <custom-upload
+                class-name="business-uploader avatar3"
+                ref-name="business_license"
+                @handleBeforeUpload="beforeAvatarUpload"
+                @handleSuccess="handleAvatarSuccess"
+              >
+                <img v-if="form.business_license" :src="domin + form.business_license" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon" />
+              </custom-upload>
+              <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar3', 'business_license')">上传图片</el-button>
+              <div class="describe">
+                <div>
+                  1.营业执照正副本均可，文字/盖章需清晰可见
                 </div>
-              </el-form-item>
+                <div>
+                  2.原件照片或彩色扫描件，格式为png、jpg、jpeg，大小不超过2MB
+                </div>
+              </div>
+            </el-form-item>
           </div>
 
           <div class="title">
@@ -199,23 +199,23 @@
             </el-form-item>
           </div>
         </div>
-          
+
         <div v-if="[0, 1].includes(form.type)">
           <div class="title">
             短信验证
           </div>
           <div class="content">
-              <el-form-item label="手机号" prop="phone">
-                <el-input v-model.number="form.phone" maxlength="11" placeholder="请输入手机号" show-word-limit clearable></el-input>
+            <el-form-item label="手机号" prop="phone">
+              <el-input v-model.number="form.phone" maxlength="11" placeholder="请输入手机号" show-word-limit clearable />
+            </el-form-item>
+            <div class="code-box">
+              <el-form-item label="验证码" prop="code">
+                <el-input v-model.number="form.code" maxlength="6" placeholder="请输入验证码" show-word-limit clearable />
               </el-form-item>
-              <div class="code-box">
-                <el-form-item label="验证码" prop="code">
-                  <el-input v-model.number="form.code" maxlength="6" placeholder="请输入验证码" show-word-limit clearable></el-input>
-                </el-form-item>
-                <el-button type="primary" size="medium" :disabled="codeStatus" :loading="codeStatusLoading" plain @click="onSendCode">
-                  {{ codeText }}
-                </el-button>
-              </div>
+              <el-button type="primary" size="medium" :disabled="codeStatus" :loading="codeStatusLoading" plain @click="onSendCode">
+                {{ codeText }}
+              </el-button>
+            </div>
           </div>
           <div class="identify-type">
             <el-button type="primary" size="medium" :loading="btnLoading" @click="onSumbit">确认提交</el-button>
@@ -242,7 +242,7 @@ import { regionData } from 'element-china-area-data'
 import { getIdentification, postIdentification, putIdentification } from '@/api/tenant'
 import { getCode } from '@/api/common'
 import Cookies from 'js-cookie'
-import { validUsername, validIdentity, validPhone, validENumber } from '@/utils/validate'
+import { validUsername, validIdentity, validPhone } from '@/utils/validate'
 
 export default {
   name: 'Identification',
@@ -295,7 +295,6 @@ export default {
       count: 60,
       curCount: '',
       interValObj: '',
-      codeText: '获取验证码',
       codeStatus: false,
       codeStatusLoading: false,
       btnLoading: false,
@@ -379,7 +378,7 @@ export default {
         this.codeText = `${this.curCount}s 后重发`
         this.interValObj = setInterval(this.setRemainTime, 1000)
       }
-      
+
       this.getList()
     },
     getList() {
@@ -439,7 +438,7 @@ export default {
       }
     },
     onSumbit() {
-       this.$refs['form'].validate(valid => {
+      this.$refs['form'].validate(valid => {
         if (valid) {
           this.btnLoading = true
           let api
@@ -458,10 +457,10 @@ export default {
             })
             this.form.status = 0
           })
-          .catch(() => {})
-          .finally(() => {
-            this.btnLoading = false
-          })
+            .catch(() => {})
+            .finally(() => {
+              this.btnLoading = false
+            })
         }
       })
     },
@@ -470,7 +469,7 @@ export default {
       document.querySelector(`.${className} input`).click()
     },
     handleAvatarSuccess(response, file) {
-      this.form[this.currentName] = response.name
+      this.form[this.currentName] = response
     },
     beforeAvatarUpload(file, cb, refName) {
       const type = ['image/jpeg', 'image/jpg', 'image/png']

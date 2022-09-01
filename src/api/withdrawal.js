@@ -16,7 +16,7 @@ export function statusPass(id, data) {
 
 // 审核驳回
 export function statusReject(id, reason) {
-  return request.put(`/cny_withdrawals/${id}/reject`,{
+  return request.put(`/cny_withdrawals/${id}/reject`, {
     reason
   })
 }

@@ -2,6 +2,7 @@
   <el-upload
     v-if="refresh"
     :ref="refName"
+    v-loading="loading"
     :class="className"
     :data="{}"
     action=""
@@ -28,7 +29,8 @@
 <script>
 import { getToken, OssKey, setToken } from '@/utils/auth'
 import { getQiniuToken } from '@/api/qiniu'
-import OSS from 'ali-oss'
+// import OSS from 'ali-oss'
+import COS from 'cos-js-sdk-v5'
 
 export default {
   props: {
@@ -73,18 +75,17 @@ export default {
       default: () => {
         return []
       }
-    },
-
+    }
   },
   data() {
     return {
       oss: {
-        AccessKeyId: '',
-        AccessKeySecret: '',
-        BucketName: '',
-        Expiration: '',
-        SecurityToken: ''
-      }
+        SecretId: '',
+        SecretKey: '',
+        Bucket: '',
+        Region: ''
+      },
+      loading: false
     }
   },
   created() {
@@ -95,6 +96,7 @@ export default {
   methods: {
     handleBeforeUpload(file) {
       return new Promise((resolve, reject) => {
+        this.loading = true
         this.$emit('handleBeforeUpload', file, res => {
           res ? resolve(file) : reject(false)
         }, this.refName)
@@ -126,37 +128,43 @@ export default {
         if (getToken(OssKey)) {
           this.oss = JSON.parse(getToken(OssKey))
         }
-        const client = new OSS({
-          region: 'oss-cn-hangzhou',
-          accessKeyId: this.oss.AccessKeyId,
-          accessKeySecret: this.oss.AccessKeySecret,
-          stsToken: this.oss.SecurityToken,
-          bucket: this.oss.BucketName,
-          refreshSTSToken: async() => {
-          }
+        const cos = new COS({
+          SecretId: this.oss.credentials.tmpSecretId,
+          SecretKey: this.oss.credentials.tmpSecretKey,
+          SecurityToken: this.oss.credentials.sessionToken
         })
 
-        let _this = this
         const filename = `${String(+new Date()) + Math.random().toString(36).substr(2)}.${options.file.name.split('.').pop()}`
 
-        client.multipartUpload(filename, options.file, {
-          progress: function (p, cpt, res) {
-            _this.$emit('elProgress', p, cpt, res)
+        cos.putObject(
+          {
+            Bucket: this.oss.bucket,
+            Region: this.oss.region,
+            Key: filename,
+            Body: options.file,
+            onProgress: function(progressData) {
+              options.onProgress(progressData.percent)
+            }
+          },
+          (err, data) => {
+            if (err) {
+              this.$message.error('上传失败，请重新上传')
+              getQiniuToken()
+                .then((data) => {
+                  setToken(data.data, OssKey)
+                })
+              this.loading = false
+              return
+            }
+            if (data.statusCode === 200) {
+              const newData = data.Location.split('/')
+              options.onSuccess(newData[1])
+            } else {
+              options.onError('上传失败')
+            }
+            this.loading = false
           }
-        }).then(res => {
-          if (res.res.statusCode === 200) {
-            options.onSuccess(res)
-          } else {
-            options.onError('上传失败')
-          }
-        })
-          .catch((e) => {
-            this.$message.error('上传失败，请重新上传')
-            getQiniuToken()
-              .then((data) => {
-                setToken(data.data, OssKey)
-              })
-          })
+        )
       } catch (e) {
         options.onError('上传失败')
       }
@@ -177,7 +185,7 @@ export default {
 .single-upload:hover {
   border-color: #409EFF;
 }
-.single-upload >>> .el-upload {
+.single-upload ::v-deep .el-upload {
   width: 100%;
   height: 100%;
   display: -webkit-box;
@@ -193,7 +201,7 @@ export default {
   -webkit-align-items: center;
   align-items: center;
 }
-.single-upload >>> .el-upload>img {
+.single-upload ::v-deep .el-upload>img {
   width: 100%;
 }
 .upload-big {

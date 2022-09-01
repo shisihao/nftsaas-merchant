@@ -1,16 +1,15 @@
 <template>
   <el-dialog title="" :visible.sync="visible" @closed="onClose()">
-    <JwChat :taleList="list" @enter="bindEnter" v-model="inputMsg" :toolConfig="tool"></JwChat>
+    <JwChat v-model="inputMsg" :tale-list="list" :tool-config="tool" @enter="bindEnter" />
     <div class="up-img">
-      <div class="img-box" v-for="(item, index) in sendImgs" :key="index">
+      <div v-for="(item, index) in sendImgs" :key="index" class="img-box">
         <i class="el-icon-close close" @click="onCloseImg(index)" />
         <el-image
           class="img-item"
           :src="domin + item"
           fit="cover"
           :preview-src-list="[domin + item]"
-        >
-        </el-image>
+        />
       </div>
     </div>
     <div style="display: none;">
@@ -18,8 +17,7 @@
         class-name="up_uploader"
         @handleBeforeUpload="beforeAvatarUpload"
         @handleSuccess="handleAvatarSuccess"
-      >
-      </custom-upload>
+      />
     </div>
   </el-dialog>
 </template>
@@ -44,7 +42,7 @@ export default {
       tool: {
         show: ['img'],
         showEmoji: false,
-        callback: this.toolEvent   
+        callback: this.toolEvent
       },
       form: {
         id: 0,
@@ -83,10 +81,10 @@ export default {
       detailList(this.form.id)
         .then(response => {
           response.data.forEach(item => {
-            this.list.push(this.tem(item.created_at, item.type === 'user' ? false : true, this.form.user.name, this.avatar(item.type), item.content))
+            this.list.push(this.tem(item.created_at, item.type !== 'user', this.form.user.name, this.avatar(item.type), item.content))
             if (item.images.length > 0) {
               item.images.forEach(v => {
-                this.list.push(this.tem(item.created_at, item.type === 'user' ? false : true, this.form.user.name, this.avatar(item.type), v, 'img'))
+                this.list.push(this.tem(item.created_at, item.type !== 'user', this.form.user.name, this.avatar(item.type), v, 'img'))
               })
             }
           })
@@ -96,33 +94,33 @@ export default {
         .finally(() => {
         })
     },
-    bindEnter (e) {
+    bindEnter(e) {
       const msg = this.inputMsg
       if (!msg) {
         this.$message.error('必须输入回复')
         return false
       }
       this.$confirm(`确定进行回复操作?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
         .then(() => {
           setReply({ id: this.form.id, content: msg, images: this.sendImgs })
-          .then(({ data, msg = '跟进成功' }) => {
-            this.sendImgs = []
-            this.list.push(this.tem(data.created_at, true, this.info.name, this.domin + this.info.icon, data.content))
-            if (data.images.length > 0) {
-              data.images.forEach(item => {
-                this.list.push(this.tem(data.created_at, true, this.info.name, this.domin + this.info.icon, item, 'img'))
-              })
-            }
-            this.$message.success(msg)
-          })
-          .catch(() => {
-            console.log(12112312)
-            this.inputMsg = msg
-          })
+            .then(({ data, msg = '跟进成功' }) => {
+              this.sendImgs = []
+              this.list.push(this.tem(data.created_at, true, this.info.name, this.domin + this.info.icon, data.content))
+              if (data.images.length > 0) {
+                data.images.forEach(item => {
+                  this.list.push(this.tem(data.created_at, true, this.info.name, this.domin + this.info.icon, item, 'img'))
+                })
+              }
+              this.$message.success(msg)
+            })
+            .catch(() => {
+              console.log(12112312)
+              this.inputMsg = msg
+            })
         })
         .catch(() => {
           console.log(3333333)
@@ -139,7 +137,7 @@ export default {
       } else {
         newText = text
       }
-      return { 
+      return {
         date: date,
         mine: mine,
         name: name,
@@ -147,17 +145,17 @@ export default {
         text: { text: newText }
       }
     },
-    avatar(type) { 
-      if(type === 'user') {
+    avatar(type) {
+      if (type === 'user') {
         return this.form.user.avatar ? this.domin + this.form.user.avatar : require('@/assets/images/20211014141547@2x.png')
-      } else if(type === 'system') {
+      } else if (type === 'system') {
         return this.domin + this.info.icon
       }
       return ''
     },
-    toolEvent (type, plyload) {
+    toolEvent(type, plyload) {
       if (type === 'img') {
-        if(this.sendImgs.length < 3) {
+        if (this.sendImgs.length < 3) {
           document.querySelector('.up_uploader input').click()
         } else {
           this.$message.error('最多上传3张图片')
@@ -168,7 +166,7 @@ export default {
       this.sendImgs.splice(index, 1)
     },
     handleAvatarSuccess(response, file) {
-      this.sendImgs.push(response.name)
+      this.sendImgs.push(response)
     },
     beforeAvatarUpload(file, cb) {
       const type = ['image/jpeg', 'image/jpg', 'image/png']

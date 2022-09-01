@@ -381,7 +381,6 @@ import EditTinymce from './EditTinymce'
 import { powerCategoryList } from '@/api/category'
 import { powerAgreementList } from '@/api/agreement'
 import { powerZoneList } from '@/api/zone'
-import { validUsername } from '@/utils/validate'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -419,7 +418,7 @@ export default {
         callback()
       }
     }
-    
+
     const validatePower = (rule, value, callback) => {
       if (this.form.power_status === 1 && !value) {
         callback(new Error('不能为空'))
@@ -743,7 +742,7 @@ export default {
           if (data.zone !== 'fil') {
             data.cate = ''
           }
-          
+
           addOrUpdate(data)
             .then(({ msg }) => {
               this.$message.success(msg)
@@ -760,7 +759,7 @@ export default {
       this.$reset()
     },
     handleAvatarSuccess(response, file) {
-      this.form.images.push(response.name)
+      this.form.images.push(response)
       this.$refs.form.validateField('images')
     },
     beforeAvatarUpload(file, cb) {

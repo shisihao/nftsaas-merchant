@@ -51,7 +51,7 @@
                             <i class="el-icon-check vip-right" />
                           </div>
                         </div>
-                        <div class="vip-item" v-for="(value, index) in mealsOptions" :key="index">
+                        <div v-for="(value, index) in mealsOptions" :key="index" class="vip-item">
                           <div class="vip-box" :class="form.meal_id === value.id ? 'active' : ''" @click="form.meal_id = value.id;form.index = index">
                             <div class="vip-header">
                               <div class="vip-name ellipsis">
@@ -87,8 +87,8 @@
                         v-for="item in couponOptions"
                         :key="item.value"
                         :label="item.label"
-                        :value="item.value">
-                      </el-option>
+                        :value="item.value"
+                      />
                     </el-select>
                   </el-form-item>
                   <el-form-item label="支付方式">
@@ -174,7 +174,7 @@
     </div>
 
     <el-dialog title="会员服务协议" top="30px" width="80%" :visible.sync="dialogRenewalVisible">
-      <div v-html="configInfo.renewal_agreement"></div>
+      <div v-html="configInfo.renewal_agreement" />
     </el-dialog>
   </div>
 </template>
@@ -278,16 +278,16 @@ export default {
     getCoupons() {
       getCoupons({ limit: 9999, status: 0 })
         .then((response) => {
-          let data, isCoupon = false
+          let isCoupon = false
           this.oldCouponOptions = response.data.data
           this.couponOptions = [{ label: '不使用优惠券', value: '' }]
-          data = response.data.data.map(v => {
+          const datas = response.data.data.map(v => {
             return {
               label: `${v.title}-${v.amount}元`,
               value: v.id
             }
           })
-          this.couponOptions = this.couponOptions.concat(data)
+          this.couponOptions = this.couponOptions.concat(datas)
 
           isCoupon = this.couponOptions.some(v => {
             return v.value === this.form.coupon_id
@@ -305,7 +305,7 @@ export default {
         return this.$message.warning('请阅读并勾选协议')
       }
 
-      if(this.form.coupon_id > 0) {
+      if (this.form.coupon_id > 0) {
         this.coupon = parseFloat(this.oldCouponOptions.find(v => this.form.coupon_id === v.id).amount) || 0
         if (this.form.meal_id > 0) {
           if (parseFloat(this.mealsOptions[this.form.index].price) > this.coupon) {
@@ -363,7 +363,7 @@ export default {
       })
     },
     handleAvatarSuccess(response, file) {
-      this.form[this.currentName] = response.name
+      this.form[this.currentName] = response
     },
     beforeAvatarUpload(file, cb, refName) {
       const type = ['image/jpeg', 'image/jpg', 'image/png']

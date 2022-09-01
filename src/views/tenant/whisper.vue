@@ -44,7 +44,7 @@
         header-align="center"
       >
         <template slot-scope="{ row, $index }">
-          <div class="RichContent-collapsedText" :class="{ellipsis: row.ellipsis}" >
+          <div class="RichContent-collapsedText" :class="{ellipsis: row.ellipsis}">
             {{ row.message.content }}
             <div class="RichContent-lookText" @click="onLookAll($index)">
               {{ row.ellipsis ? '查看全部' : '收起内容' }}
@@ -63,7 +63,7 @@
         width="100"
         align="center"
       >
-        <template slot-scope="{ row, $index }">
+        <template slot-scope="{ row }">
           <el-button type="danger" :loading="row.loadingDel" @click="onDelete(row)">删除</el-button>
         </template>
       </el-table-column>
@@ -80,7 +80,7 @@ import { DominKey, getToken } from '@/utils/auth'
 import { pickerOptions } from '@/utils/explain'
 
 export default {
-  name: 'whisper',
+  name: 'Whisper',
   components: { Pagination },
   data() {
     return {
@@ -116,7 +116,7 @@ export default {
         .then(response => {
           if (response.code !== 0) return
           this.list = response.data.data.map(v => {
-            return Object.assign(v,{ ellipsis: true, loadingDel: false })
+            return Object.assign(v, { ellipsis: true, loadingDel: false })
           })
           this.pages.total = response.data.total
 
@@ -170,7 +170,6 @@ export default {
       } else {
         this.list[index].ellipsis = true
       }
-
     }
   }
 }

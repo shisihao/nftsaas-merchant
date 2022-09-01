@@ -104,7 +104,7 @@ export default {
       this.$refs['form'].resetFields()
     },
     handleAvatarSuccess(response, file) {
-      this.form.icon = response.name
+      this.form.icon = response
     },
     handleAvatarError(error) {
       if (JSON.parse(error.message).error.indexOf('token') !== -1) {

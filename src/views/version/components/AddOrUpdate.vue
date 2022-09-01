@@ -18,8 +18,8 @@
       </el-form-item>
       <el-form-item v-if="form.type === 0" label="上传APK" prop="link">
         <custom-upload
-          className=""
-          :showFileList="true"
+          class-name=""
+          :show-file-list="true"
           :limit="1"
           @handleBeforeUpload="beforeAvatarUpload"
           @handleSuccess="handleAvatarSuccess"
@@ -28,7 +28,7 @@
         >
           <el-button type="primary">点击上传</el-button>
         </custom-upload>
-        <el-progress v-if="![0, 1].includes(percentage)" :percentage="percentage * 100"></el-progress>
+        <el-progress v-if="![0, 1].includes(percentage)" :percentage="percentage * 100" />
       </el-form-item>
       <el-form-item v-if="form.type === 1" label="链接地址" prop="link">
         <el-input v-model="form.link" placeholder="链接地址" clearable />
@@ -150,7 +150,7 @@ export default {
       this.percentage = p
     },
     handleAvatarSuccess(response, file) {
-      this.form.link = response.name
+      this.form.link = response
     },
     handleAvatarError(error) {
       if (JSON.parse(error.message).error.indexOf('token') !== -1) {

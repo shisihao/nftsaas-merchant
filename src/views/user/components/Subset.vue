@@ -1,16 +1,15 @@
 <template>
   <el-dialog title="查看邀请" :visible.sync="visible" @closed="onClose()">
     <el-form :inline="true" :model="search">
-        <el-form-item label="专区">
-          <el-select v-model="search.currency" @change="onChangeCurrency">
-            <el-option v-for="item in zoneOptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
-        <el-button icon="el-icon-search" @click="getList(1)">
-          {{ $t('table.search') }}
-        </el-button>
-      </el-form>
-    </div>
+      <el-form-item label="专区">
+        <el-select v-model="search.currency" @change="onChangeCurrency">
+          <el-option v-for="item in zoneOptions" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+      </el-form-item>
+      <el-button icon="el-icon-search" @click="getList(1)">
+        {{ $t('table.search') }}
+      </el-button>
+    </el-form>
     <el-row>
       <el-col :span="24">
         <span>
@@ -66,12 +65,12 @@
         <el-divider v-if="node.data.certification" direction="vertical" />
         {{ node.data.certification ? node.data.certification.name : '' }}
         <el-divider direction="vertical" />
-          自购设备：{{ (node.data.self_kj_num || 0) | cutZero }}
-          <el-divider direction="vertical" />
-          市场业绩：{{ (node.data.performance || 0) | cutZero }}
-          <el-divider direction="vertical" />
-          直接销售：{{ (node.data.direct || 0) | cutZero }}
-          <!-- <el-divider direction="vertical" />
+        自购设备：{{ (node.data.self_kj_num || 0) | cutZero }}
+        <el-divider direction="vertical" />
+        市场业绩：{{ (node.data.performance || 0) | cutZero }}
+        <el-divider direction="vertical" />
+        直接销售：{{ (node.data.direct || 0) | cutZero }}
+        <!-- <el-divider direction="vertical" />
           间接销售：{{ (node.data.indirect || 0) | cutZero }} -->
       </span>
     </el-tree>

@@ -582,9 +582,9 @@ export default {
     },
     handleAvatarSuccess(response, file) {
       if (this.currentName === 'images') {
-        this.form[this.currentName].push(response.name)
+        this.form[this.currentName].push(response)
       } else {
-        this.form[this.currentName] = response.name
+        this.form[this.currentName] = response
       }
     },
     beforeAvatarUpload(file, cb, refName) {

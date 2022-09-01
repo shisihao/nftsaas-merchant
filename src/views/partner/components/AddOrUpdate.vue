@@ -22,10 +22,9 @@
       </el-form-item>
       <el-form-item label="省市区" prop="location">
         <el-cascader
-          :options="regionData"
           v-model="form.location"
-        >
-        </el-cascader>
+          :options="regionData"
+        />
       </el-form-item>
       <el-form-item label="详细地址" prop="address">
         <el-input v-model="form.address" placeholder="详细地址" clearable />
@@ -115,7 +114,7 @@ export default {
         ],
         location: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
-        ], 
+        ],
         address: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ]
@@ -159,7 +158,7 @@ export default {
       }
     },
     handleAvatarSuccess(response, file) {
-      this.form.business_license = response.name
+      this.form.business_license = response
     },
     beforeAvatarUpload(file, cb) {
       const type = ['image/jpeg', 'image/jpg', 'image/png']

@@ -295,7 +295,8 @@ export default {
       if (!this.search.transfer || !this.search.receiver) {
         return false
       }
-      let transfer = this.search.transfer, receiver = this.search.receiver
+      const transfer = this.search.transfer
+      const receiver = this.search.receiver
       this.search.transfer = receiver
       this.search.receiver = transfer
       this.reverseBtn = !this.reverseBtn
