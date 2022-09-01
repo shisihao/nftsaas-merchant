@@ -146,3 +146,22 @@ export function getCnyWithdrawalExport(params) {
     params
   })
 }
+
+// 分类列表
+export function publicCategory(params) {
+  return request.get('/public/category')
+}
+
+// 标签列表
+export function tagList(params) {
+  return request.get('/public/tag', {
+    params
+  })
+}
+
+// 盲盒分类列表
+export function boxCategoryList(params) {
+  return request.get('/public/box/category', {
+    params
+  })
+}

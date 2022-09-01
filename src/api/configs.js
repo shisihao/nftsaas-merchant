@@ -7,7 +7,7 @@ export function addAuthenticator() {
 
 // 删除谷歌验证
 export function delAuthenticator(data) {
-  return request.delete('/configs/delete_google_png',{
+  return request.delete('/configs/delete_google_png', {
     data
   })
 }
@@ -364,3 +364,107 @@ export function putSign(data) {
   })
 }
 
+// 合约地址
+export function changeAddress() {
+  return request.get('/configs/address')
+}
+
+// 修改合约地址
+export function putChangeAddress(data) {
+  return request.put('/configs/address', {
+    ...data
+  })
+}
+
+// 链上说明配置
+export function chainList() {
+  return request.get('/configs/chain_query')
+}
+
+// 链上说明配置
+export function addChainList(data) {
+  return request.put('/configs/chain_query', {
+    ...data
+  })
+}
+
+// 订单失信配置
+export function orderLimit() {
+  return request.get('/configs/order_limit')
+}
+
+// 修改订单失信配置
+export function putOrderLimit(data) {
+  return request.put('/configs/order_limit', {
+    ...data
+  })
+}
+
+// 转移配置
+export function putDestroy(data) {
+  return request.put('/configs/user_goods/destroy', {
+    ...data
+  })
+}
+
+// 转移配置
+export function destroy() {
+  return request.get('/configs/user_goods/destroy')
+}
+
+// 解除失信
+export function blacklistCancel(data) {
+  return request.post('/configs/blacklist/cancel', {
+    ...data
+  })
+}
+
+// 订单失信列表
+export function blacklist(params) {
+  return request.get('/configs/blacklist', {
+    params
+  })
+}
+
+// 顶象开关配置
+export function dxConfig() {
+  return request.get('/configs/dx_config')
+}
+
+// 顶象开关配置
+export function putDxConfig(data) {
+  return request.put('/configs/dx_config', {
+    ...data
+  })
+}
+
+// 奇藏果转赠配置
+export function qcgGive() {
+  return request.get('/configs/qcg_give')
+}
+
+// 奇藏果转赠配置
+export function putQcgGive(data) {
+  return request.put('/configs/qcg_give', {
+    ...data
+  })
+}
+
+// 铸造藏品列表
+export function castGoodsList(params) {
+  return request.get('/public/filter/cast_goods', {
+    params
+  })
+}
+
+// 赠送配置
+export function giveList() {
+  return request.get('/configs/give')
+}
+
+// 赠送配置
+export function addGiveList(data) {
+  return request.put('/configs/give', {
+    ...data
+  })
+}

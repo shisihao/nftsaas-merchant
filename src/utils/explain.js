@@ -102,6 +102,52 @@ export const examineStatusOptions = [
   { label: '驳回', value: 2, type: 'danger' }
 ]
 
+export const payTypeOptions = [
+  { label: '全部', value: '' },
+  { label: '藏豆', value: 'integral' },
+  { label: '铸造券', value: 'cast' },
+  { label: '兑换券', value: 'voucher' },
+  { label: '商品券', value: 'commodity' }
+]
+
+export const typeOptions = [
+  { label: '全部', value: '' },
+  { label: '常规藏品', value: 0, type: 'primary' },
+  { label: '盲盒藏品', value: 1, type: 'warning' },
+  { label: '合成藏品', value: 3, type: 'success' },
+  { label: '专属藏品', value: 4, type: 'info' },
+  { label: '资格券', value: 5, type: 'danger' },
+  { label: '兑换藏品', value: 6, type: 'danger' },
+  { label: '活动藏品', value: 7, type: 'danger' }
+]
+
+export const statusOptions = [
+  { label: '全部', value: '' },
+  { label: '上架', value: 0 },
+  { label: '下架', value: 1 }
+]
+
+export const activityTypeOptions = [
+  { label: '指定藏品', value: 'goods', type: 'primary' },
+  { label: '指定专区', value: 'issuer', type: 'warning' }
+]
+
+export const interestsGiveOptions = [
+  { label: '长期', value: 'long' },
+  { label: '一次性', value: 'once' }
+]
+
+export const interestsOptions = [
+  { label: '一次性', value: 'once', type: 'warning' },
+  { label: '长期', value: 'long', type: 'success' },
+  { label: '指定藏品', value: 'appoint', type: 'primary' }
+]
+
+export const goodShowTypeOptions = [
+  { label: '普通', value: 0, type: 'info' },
+  { label: '3D', value: 1, type: 'primary' },
+  { label: '视频', value: 2, type: 'warning' }
+]
 export const streamTypeOptions = [
   { label: '全部', value: '' },
   { label: '充值', value: 'recharge' },

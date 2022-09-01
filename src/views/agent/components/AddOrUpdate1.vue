@@ -42,19 +42,16 @@
 </template>
 
 <script>
-import { QiniuUrl, QiniuKey, DominKey, getToken } from '@/utils/auth'
-import { addOrUpdate, addOrUpdate2, getAgentPlan } from '@/api/agent'
-import CustomUpload from '@/components/Upload/CustomUpload'
+import { DominKey, getToken } from '@/utils/auth'
+import { addOrUpdate } from '@/api/agent'
 
 export default {
   name: 'AddOrUpdate',
-  components: { CustomUpload },
+
   data() {
     return {
       visible: false,
       btnLoading: false,
-      QiniuUrl,
-      qiniu: getToken(QiniuKey),
       domin: getToken(DominKey),
       scheme: 0,
       form: {
@@ -74,19 +71,19 @@ export default {
         ],
         buy_sale: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] },
-          { type: 'number', message: '必须为数字', trigger: ['blur', 'change']}
+          { type: 'number', message: '必须为数字', trigger: ['blur', 'change'] }
         ],
         total_performance: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] },
-          { type: 'number', message: '必须为数字', trigger: ['blur', 'change']}
+          { type: 'number', message: '必须为数字', trigger: ['blur', 'change'] }
         ],
         sale_commission: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] },
-          { type: 'number', message: '必须为数字', trigger: ['blur', 'change']}
+          { type: 'number', message: '必须为数字', trigger: ['blur', 'change'] }
         ],
         team_commission: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] },
-          { type: 'number', message: '必须为数字', trigger: ['blur', 'change']}
+          { type: 'number', message: '必须为数字', trigger: ['blur', 'change'] }
         ]
       }
     }
@@ -95,22 +92,19 @@ export default {
     init(data) {
       this.visible = true
       if (data) {
-        
         this.oldFrom = data
-        let newAgent = {}
+        const newAgent = {}
         data.condition.forEach(v => {
-          let key = v.key.replace(':','_')
-          Object.assign(newAgent, { [key] : v.value })
+          const key = v.key.replace(':', '_')
+          Object.assign(newAgent, { [key]: v.value })
         })
 
         data.equities.forEach(v => {
-          //let key = v.key.replace(':','_')
+          // let key = v.key.replace(':','_')
           Object.assign(newAgent, { [v.key]: v.value })
         })
 
-        this.form = Object.assign({ id: data.id ,name: data.name }, newAgent)
-        
-        
+        this.form = Object.assign({ id: data.id, name: data.name }, newAgent)
       }
     },
     onFormSubmit() {
@@ -118,16 +112,16 @@ export default {
         if (valid) {
           this.btnLoading = true
 
-          let form = Object.assign({},this.form)
-          let newData = {id: this.form.id, condition: [], equities: []}
+          const form = Object.assign({}, this.form)
+          const newData = { id: this.form.id, condition: [], equities: [] }
 
-          for(let k in form ) {
+          for (const k in form) {
             if (!form[k] || ['id', 'name'].includes(k)) {
               delete form[k]
-            } else if (['buy_sale','total_performance','train_region'].includes(k)) {
-              newData.condition.push({key: k.replace('_',':'), value: form[k]})
+            } else if (['buy_sale', 'total_performance', 'train_region'].includes(k)) {
+              newData.condition.push({ key: k.replace('_', ':'), value: form[k] })
             } else {
-              newData.equities.push({key: k, value: form[k]})
+              newData.equities.push({ key: k, value: form[k] })
             }
           }
 

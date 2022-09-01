@@ -4,7 +4,7 @@
 
       <el-form-item label="所属专区" prop="zone">
         <el-select v-model="form.zone">
-          <el-option v-for="item in zoneOptions" :label="item.label" :value="item.value" />
+          <el-option v-for="(item,index) in zoneOptions" :key="index" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
 
@@ -15,7 +15,7 @@
       <el-form-item label="协议内容" prop="content">
         <tinymce v-if="visible" v-model="form.content" :classname="info.template_id === 3 ? 'temp3-body' : ''" :height="400" />
       </el-form-item>
-      
+
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" :loading="btnLoading" @click="onFormSubmit()">
@@ -92,7 +92,7 @@ export default {
               } else {
                 this.$message.success(msg)
               }
-              
+
               this.visible = false
               this.$emit('refreshList')
             })

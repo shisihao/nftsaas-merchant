@@ -163,6 +163,7 @@
         <template slot-scope="{ row }">
           <el-button v-if="[0].includes(row.status)" type="success" @click="onPassOrReject(row,1)">通过</el-button>
           <el-button v-if="[0, 1].includes(row.status)" type="danger" @click="onPassOrReject(row,2)">驳回</el-button>
+          <el-button v-if="![1].includes(row.status)" type="warning" @click="onRelease(row)">解除上限</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -172,7 +173,7 @@
 
 <script>
 import Pagination from '@/components/Pagination'
-import { dataList, statusPass, statusReject } from '@/api/certification'
+import { dataList, statusPass, statusReject, statusRelease } from '@/api/certification'
 import { getToken, DominKey } from '@/utils/auth'
 import { examineStatusOptions } from '@/utils/explain'
 
@@ -254,6 +255,24 @@ export default {
             })
             .catch(error => {
               this.$message.error(error.msg)
+            })
+        })
+        .catch(() => {})
+    },
+    onRelease({ id, name, user }) {
+      this.$confirm(`确定对用户姓名「${name}」进行[解除上限]操作?`, '解除上限', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        cancelButtonClass: 'btn-custom-cancel'
+      })
+        .then(() => {
+          statusRelease(id)
+            .then(({ msg = '解除成功' }) => {
+              this.$message.success(msg)
+              this.getList()
+            })
+            .catch(() => {
             })
         })
         .catch(() => {})

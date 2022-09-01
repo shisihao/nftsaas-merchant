@@ -18,3 +18,8 @@ export function statusReject(id, reason) {
     reason
   })
 }
+
+// 解除上限
+export function statusRelease(id) {
+  return request.put(`/certifications/${id}/release`)
+}

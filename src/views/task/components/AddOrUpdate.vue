@@ -35,19 +35,15 @@
 </template>
 
 <script>
-import { QiniuUrl, QiniuKey, DominKey, getToken } from '@/utils/auth'
+import { DominKey, getToken } from '@/utils/auth'
 import { addOrUpdate } from '@/api/task'
-import CustomUpload from '@/components/Upload/CustomUpload'
 
 export default {
   name: 'AddOrUpdate',
-  components: { CustomUpload },
   data() {
     return {
       visible: false,
       btnLoading: false,
-      QiniuUrl,
-      qiniu: getToken(QiniuKey),
       domin: getToken(DominKey),
       form: {
         id: 0,

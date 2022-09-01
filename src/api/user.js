@@ -78,3 +78,10 @@ export function exportExcel(params) {
     params
   })
 }
+
+// 用户资产空投
+export function airBalance(data) {
+  return request.post('/users/air_balance', {
+    ...data
+  })
+}

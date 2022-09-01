@@ -31,7 +31,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
-import { QiniuUrl, QiniuKey, DominKey, getToken } from '@/utils/auth'
+import { DominKey, getToken } from '@/utils/auth'
 import { roleAddOrUpdate } from '@/api/user'
 import CustomUpload from '@/components/Upload/CustomUpload'
 
@@ -49,8 +49,6 @@ export default {
     return {
       visible: false,
       btnLoading: false,
-      QiniuUrl,
-      qiniu: getToken(QiniuKey),
       domin: getToken(DominKey),
       form: {
         id: 0,

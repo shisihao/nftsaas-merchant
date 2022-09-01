@@ -37,6 +37,7 @@
         <el-button :loading="downloadLoading" type="success" icon="el-icon-document" @click="onHandleDownload">
           {{ $t('table.export') }} Excel
         </el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="airBalanceBtn">用户资产空投</el-button>
       </el-form>
     </div>
 
@@ -62,15 +63,14 @@
             <div>
               {{ row.name }}
               <span v-if="row.certification">
-                <el-divider direction="vertical"></el-divider>
+                <el-divider direction="vertical" />
                 <el-tag effect="plain">{{ row.certification.name }}</el-tag>
               </span>
             </div>
             <div>
-              {{ row.phone || row.email}}
+              {{ row.phone || row.email }}
             </div>
-            <div>
-            </div>
+            <div />
           </div>
         </template>
       </el-table-column>
@@ -96,15 +96,14 @@
               <div>
                 {{ row.parent.name }}
                 <span v-if="row.parent.certification">
-                  <el-divider direction="vertical"></el-divider>
+                  <el-divider direction="vertical" />
                   <el-tag effect="plain">{{ row.parent.certification.name }}</el-tag>
                 </span>
               </div>
               <div>
                 {{ row.parent.phone || row.parent.email }}
               </div>
-              <div>
-              </div>
+              <div />
             </div>
           </div>
         </template>
@@ -143,7 +142,7 @@
       >
         <template slot-scope="{ row: { withdrawal } }">
           <div v-if="withdrawal">
-            <span :key="index" v-for="(value, key, index) in withdrawal">
+            <span v-for="(value, key, index) in withdrawal" :key="index">
               <span v-if="value === 0" style="margin-right: 2px;display: inline-block;text-decoration:line-through;">{{ key.toUpperCase() }}</span>
             </span>
           </div>
@@ -234,6 +233,11 @@
       ref="wallet"
     />
 
+    <!-- 空投 -->
+    <air-balance
+      v-if="airBalanceVisible"
+      ref="airBalance"
+    />
   </div>
 </template>
 
@@ -246,10 +250,11 @@ import Subset from './components/Subset'
 import Wallet from './components/Wallet'
 import { getToken, DominKey } from '@/utils/auth'
 import { pickerOptions } from '@/utils/explain'
+import airBalance from '@/views/user/components/airBalance'
 
 export default {
-  name: 'user',
-  components: { Pagination, AddOrUpdate, Subset, Wallet },
+  name: 'User',
+  components: { Pagination, AddOrUpdate, Subset, Wallet, airBalance },
   data() {
     return {
       domin: getToken(DominKey),
@@ -279,6 +284,7 @@ export default {
       subsetVisible: false,
       walletVisible: false,
       downloadLoading: false,
+      airBalanceVisible: false,
       updateAddressVisible: false
     }
   },
@@ -348,11 +354,11 @@ export default {
     onDelete({ name, id }) {
       this.$confirm(`确定对(#${id})[${name}]进行[删除]操作？删除用户对整个市场关系影响较大？
       <div style="color: #f56c6c;">注：删除用户之后无法找回，并且该用户原有伞下用户整体向上移动层级，请谨慎操作</div>`, '删除', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          dangerouslyUseHTMLString: true,
-          type: 'error'
-        }
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        dangerouslyUseHTMLString: true,
+        type: 'error'
+      }
       )
         .then(() => {
           deleteData(id)
@@ -371,16 +377,16 @@ export default {
       } else if (type === 'sales_status') {
         text = '关闭之后用户将无法获得您在[市场管理-代理管理]中设置的<b style="color: #f56c6c;">直推和间推奖励</b>，是否确认禁用？'
       }
-      
-      if (row[type] === 1 ) {
+
+      if (row[type] === 1) {
         this.handleMoreStatus(row, type)
       } else {
         this.$confirm(`确定对[(#${row.id})]进行操作?${text}`, '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            dangerouslyUseHTMLString: true,
-            type: 'warning'
-          }
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          dangerouslyUseHTMLString: true,
+          type: 'warning'
+        }
         )
           .then(() => {
             this.handleMoreStatus(row, type)
@@ -391,7 +397,7 @@ export default {
       }
     },
     handleMoreStatus(row, type) {
-      moreStatus({id: row.id, type: type, status: row[type] })
+      moreStatus({ id: row.id, type: type, status: row[type] })
         .then(({ msg }) => {
           this.$message.success(msg)
         })
@@ -409,6 +415,12 @@ export default {
         .finally(_ => {
           this.downloadLoading = false
         })
+    },
+    airBalanceBtn() {
+      this.airBalanceVisible = true
+      this.$nextTick(() => {
+        this.$refs.airBalance && this.$refs.airBalance.init()
+      })
     }
   }
 }

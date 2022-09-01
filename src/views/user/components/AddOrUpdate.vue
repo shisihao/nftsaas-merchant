@@ -64,7 +64,7 @@
         </div>
       </el-form-item>
       <el-form-item label="提现状态">
-        <el-checkbox v-model="form.withdrawal[key]" :key="index" v-for="(value, key, index) in form.withdrawal" :true-label="1" :false-label="0">{{ key.toUpperCase() }}</el-checkbox>
+        <el-checkbox v-for="(value, key, index) in form.withdrawal" :key="index" v-model="form.withdrawal[key]" :true-label="1" :false-label="0">{{ key.toUpperCase() }}</el-checkbox>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -80,8 +80,8 @@
 
 <script>
 import elDragDialog from '@/directive/el-drag-dialog'
-import { validUsername1, validPhone, validEmail, validENumber } from '@/utils/validate'
-import { QiniuUrl, QiniuKey, DominKey, getToken } from '@/utils/auth'
+import { validUsername1, validPhone, validEmail } from '@/utils/validate'
+import { DominKey, getToken } from '@/utils/auth'
 import { addOrUpdate } from '@/api/user'
 import CustomUpload from '@/components/Upload/CustomUpload'
 
@@ -99,7 +99,7 @@ export default {
         callback()
       }
     }
-    const validateAccount= (rule, value, callback) => {
+    const validateAccount = (rule, value, callback) => {
       if (!validPhone(value) && !validEmail(value)) {
         callback(new Error('请输入正确的手机号或邮箱'))
       } else {
@@ -217,7 +217,7 @@ export default {
             this.$confirm(`没有上级邀请码的用户，将成为平台一级用户，是否确认添加`, `确认添加`, {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
-              type: 'warning',
+              type: 'warning'
             })
               .then(() => {
                 addOrUpdate(data)
@@ -246,7 +246,6 @@ export default {
                 this.btnLoading = false
               })
           }
-
         }
       })
     },
