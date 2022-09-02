@@ -48,6 +48,30 @@ export function putPay(data) {
   })
 }
 
+// 支付宝支付配置
+export function aliPay() {
+  return request.get('/configs/alipay')
+}
+
+// 支付宝支付设置
+export function setAliPay(data) {
+  return request.put('/configs/alipay', {
+    ...data
+  })
+}
+
+// 微信支付配置
+export function wxPay() {
+  return request.get('/configs/wxpay')
+}
+
+// 微信支付设置
+export function setWxPay(data) {
+  return request.put('/configs/wxpay', {
+    ...data
+  })
+}
+
 // 提现配置
 export function withdrawal() {
   return request.get('/configs/withdrawal')

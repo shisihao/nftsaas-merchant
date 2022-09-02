@@ -32,11 +32,7 @@
     </el-form> -->
     <el-table :data="tableData" border style="width: 800px">
       <el-table-column fixed prop="method" label="支付方式名称" width="300" />
-      <el-table-column
-        prop="desc"
-        label="支付方式描述"
-        width="400"
-      />
+      <el-table-column prop="desc" label="支付方式描述" width="400" />
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-button
@@ -52,65 +48,129 @@
       top="30px"
       title="配置"
       :visible.sync="visible"
-      @closed="onClose()"
+      @closed="visible = false"
     >
-      <el-form ref="form" :model="form" :rules="rules" label-width="160px">
-        <el-form-item label="支付宝应用ID：" prop="name">
-          <el-input
-            v-model="form.name"
-            :precision="0"
-            :min="0"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="应用私钥：" prop="name">
-          <el-input
-            v-model="form.name"
-            :precision="0"
-            :min="0"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="应用证书：" prop="name">
-          <el-input
-            v-model="form.name"
-            :precision="0"
-            :min="0"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="公钥证书：" prop="name">
-          <el-input
-            v-model="form.name"
-            :precision="0"
-            :min="0"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="根证书：" prop="name">
-          <el-input
-            v-model="form.name"
-            :precision="0"
-            :min="0"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="通知地址：" prop="name">
-          <el-input
-            v-model="form.name"
-            :precision="0"
-            :min="0"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="是否启用支付：" prop="name">
-          <el-switch
-            v-model="form.usdt"
-            active-value="on"
-            inactive-value="off"
-          />
-        </el-form-item>
-      </el-form>
+      <div v-if="active === 1">
+        <el-form ref="form" :model="form" :rules="rules" label-width="160px">
+          <el-form-item label="支付宝应用ID：" prop="app_id">
+            <el-input v-model="form.app_id" :precision="0" :min="0" clearable />
+          </el-form-item>
+          <el-form-item label="应用私钥：" prop="private_key">
+            <el-input
+              v-model="form.private_key"
+              type="textarea"
+              :rows="5"
+              :precision="0"
+              :min="0"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="应用证书：" prop="public_key">
+            <el-input
+              v-model="form.public_key"
+              type="textarea"
+              :rows="5"
+              :precision="0"
+              :min="0"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="公钥证书：" prop="public_key_rsa">
+            <el-input
+              v-model="form.public_key_rsa"
+              type="textarea"
+              :rows="5"
+              :precision="0"
+              :min="0"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="根证书：" prop="root_cert">
+            <el-input
+              v-model="form.root_cert"
+              type="textarea"
+              :rows="5"
+              :precision="0"
+              :min="0"
+              clearable
+            />
+          </el-form-item>
+        </el-form>
+      </div>
+      <div v-else-if="active === 2">
+        <el-form ref="form" :model="form" :rules="rules" label-width="160px">
+          <el-form-item label=" 微信应用ID：" prop="app_id">
+            <el-input v-model="form.app_id" :precision="0" :min="0" clearable />
+          </el-form-item>
+          <el-form-item label="商户私钥：" prop="name">
+            <el-input
+              v-model="form.private_key"
+              type="textarea"
+              :rows="5"
+              :precision="0"
+              :min="0"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="商户编号：" prop="name">
+            <el-input
+              v-model="form.name"
+              type="textarea"
+              :rows="5"
+              :precision="0"
+              :min="0"
+              clearable
+            />
+          </el-form-item>
+        </el-form>
+      </div>
+      <div v-else-if="active === 3">
+        <el-form ref="form" :model="form" :rules="rules" label-width="160px">
+          <el-form-item label="杉德商户号：" prop="name">
+            <el-input v-model="form.app_id" :precision="0" :min="0" clearable />
+          </el-form-item>
+          <el-form-item label="商户公钥：" prop="name">
+            <el-input
+              v-model="form.private_key"
+              type="textarea"
+              :rows="5"
+              :precision="0"
+              :min="0"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="杉德公钥：" prop="name">
+            <el-input
+              v-model="form.name"
+              type="textarea"
+              :rows="5"
+              :precision="0"
+              :min="0"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="私钥：" prop="name">
+            <el-input
+              v-model="form.name"
+              type="textarea"
+              :rows="5"
+              :precision="0"
+              :min="0"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="key1keyMD5K：" prop="name">
+            <el-input
+              v-model="form.root_cert"
+              type="textarea"
+              :rows="5"
+              :precision="0"
+              :min="0"
+              clearable
+            />
+          </el-form-item>
+        </el-form>
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" :loading="btnLoading" @click="onFormSubmit()">
           {{ $t("table.confirm") }}
@@ -124,64 +184,78 @@
 </template>
 
 <script>
-import { pay, putPay } from '@/api/configs'
+import { aliPay, setAliPay, wxPay, setWxPay } from '@/api/configs'
 export default {
   name: 'Pay',
   data() {
     return {
-      visible: true,
+      visible: false,
       btnLoading: false,
-      form: {
-        // on-开启 off-关闭
-        cny: 'off',
-        bank: 'off'
-      },
+      form: {},
       rules: {},
       tableData: [
         {
           method: '支付宝支付',
-          desc: '支付宝网站（alipay.com）是国内先进的网上支付平台'
-        },
-        {
-          method: '微信支付',
-          desc: '微信支付（pay.weixin.qq..com）是国内先进的网上支付平台'
-        },
-        {
-          method: '杉德支付',
-          desc: '杉德支付（sandpay.com.cn）是国内先进的网上支付平台'
+          desc: '支付宝网站（alipay.com）是国内先进的网上支付平台',
+          key: 1
         }
-      ]
+        // {
+        //   method: "微信支付",
+        //   desc: "微信支付（pay.weixin.qq..com）是国内先进的网上支付平台",
+        //   key: 2,
+        // },
+        // {
+        //   method: "杉德支付",
+        //   desc: "杉德支付（sandpay.com.cn）是国内先进的网上支付平台",
+        //   key: 3,
+        // },
+      ],
+      active: ''
     }
   },
   created() {
     this.init()
   },
   methods: {
-    init() {
-      this.getList()
-    },
-    getList() {
-      pay()
-        .then((response) => {
-          this.form = response.data.value
-        })
-        .catch(() => {})
-    },
+    init() {},
     onFormSubmit() {
       this.btnLoading = true
-      putPay({ switch: this.form })
-        .then(({ msg }) => {
-          this.$message.success(msg)
-        })
-        .catch(() => {
-          this.getList()
-        })
-        .finally(() => {
-          this.btnLoading = false
-        })
+      if (this.active === 1) {
+        this.setAli()
+      } else if (this.active === 2) {
+        this.setWx()
+      }
     },
-    handleClick(key) {
-      console.log(key)
+    handleClick(row) {
+      this.active = row.key
+      this.visible = true
+      if (this.active === 1) {
+        this.getAli()
+      } else if (this.active === 2) {
+        this.getWx()
+      }
+    },
+    getAli() {
+      aliPay().then((res) => {
+        this.form = res.data.value
+      })
+    },
+    setAli() {
+      setAliPay(this.form).then(({ msg }) => {
+        this.$message.success(msg)
+        this.visible = false
+      })
+    },
+    getWx() {
+      wxPay().then((res) => {
+        this.form = res.data.value
+      })
+    },
+    setWx() {
+      setWxPay(this.form).then(({ msg }) => {
+        this.$message.success(msg)
+        this.visible = false
+      })
     }
   }
 }
