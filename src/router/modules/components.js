@@ -74,5 +74,7 @@ export const localMap = {
   helps: () => import('@/views/helps/index'), // 常见问题
   posters: () => import('@/views/poster/index'), // 分享海报
   give: () => import('@/views/give/index'), // 转赠记录
-  inviteActivity: () => import('@/views/activity/invite') // 邀新活动
+  inviteActivity: () => import('@/views/activity/invite'), // 邀新活动
+  authentication: () => import('@/views/configs/authentication'),
+  integral: () => import('@/views/configs/integral')
 }

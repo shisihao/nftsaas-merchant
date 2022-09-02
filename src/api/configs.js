@@ -468,3 +468,13 @@ export function addGiveList(data) {
     ...data
   })
 }
+// 获取积分配置
+export function getIntegralConfig() {
+  return request.get('/configs/integral')
+}
+// 设置积分配置
+export function integralConfig(data) {
+  return request.put('/configs/integral', {
+    ...data
+  })
+}
