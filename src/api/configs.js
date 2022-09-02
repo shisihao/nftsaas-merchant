@@ -502,3 +502,14 @@ export function integralConfig(data) {
     ...data
   })
 }
+
+// 获取展台配置
+export function getBackImage() {
+  return request.get('/configs/back_image')
+}
+// 设置展台配置
+export function setBackImage(data) {
+  return request.put('/configs/back_image', {
+    ...data
+  })
+}

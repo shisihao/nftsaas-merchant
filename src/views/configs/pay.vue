@@ -198,17 +198,17 @@ export default {
           method: '支付宝支付',
           desc: '支付宝网站（alipay.com）是国内先进的网上支付平台',
           key: 1
+        },
+        {
+          method: '微信支付',
+          desc: '微信支付（pay.weixin.qq..com）是国内先进的网上支付平台',
+          key: 2
+        },
+        {
+          method: '杉德支付',
+          desc: '杉德支付（sandpay.com.cn）是国内先进的网上支付平台',
+          key: 3
         }
-        // {
-        //   method: "微信支付",
-        //   desc: "微信支付（pay.weixin.qq..com）是国内先进的网上支付平台",
-        //   key: 2,
-        // },
-        // {
-        //   method: "杉德支付",
-        //   desc: "杉德支付（sandpay.com.cn）是国内先进的网上支付平台",
-        //   key: 3,
-        // },
       ],
       active: ''
     }

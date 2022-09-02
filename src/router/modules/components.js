@@ -68,6 +68,8 @@ export const localMap = {
   qcgGive: () => import('@/views/configs/qcgGive'), // 奇藏果转赠配置
   dxConfig: () => import('@/views/configs/dxConfig'), // 顶象开关配置
   gives: () => import('@/views/configs/give'), // 赠送配置
+  integral: () => import('@/views/configs/integral'),
+  booth: () => import('@/views/configs/booth'), // 展台配置
   interest: () => import('@/views/interest/index'), // 藏品权益
   interestManagement: () => import('@/views/interestManagement/index'), // 权益管理列表
   task: () => import('@/views/task/index'), // 藏豆任务管理
@@ -75,6 +77,5 @@ export const localMap = {
   posters: () => import('@/views/poster/index'), // 分享海报
   give: () => import('@/views/give/index'), // 转赠记录
   inviteActivity: () => import('@/views/activity/invite'), // 邀新活动
-  authentication: () => import('@/views/configs/authentication'),
-  integral: () => import('@/views/configs/integral')
+  authentication: () => import('@/views/configs/authentication')
 }
