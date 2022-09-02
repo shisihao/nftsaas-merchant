@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-      <tips-item />
+      <!-- <tips-item /> -->
       <panel-group :common="data.common" />
       <history-item :statistics="data" />
       <order-item :statistics="data" />
@@ -15,7 +15,7 @@
 import HistoryItem from './components/HistoryItem'
 import OrderItem from './components/OrderItem'
 import AssetsItem from './components/AssetsItem'
-import TipsItem from './components/TipsItem'
+// import TipsItem from './components/TipsItem'
 import PanelGroup from './components/PanelGroup'
 import { getHome, putFirst, getHomeOrderCount } from '@/api/common'
 import Driver from 'driver.js' // import driver.js
@@ -30,8 +30,7 @@ export default {
     HistoryItem,
     OrderItem,
     AssetsItem,
-    PanelGroup,
-    TipsItem
+    PanelGroup
   },
   data() {
     return {

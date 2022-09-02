@@ -1,84 +1,65 @@
 <template>
   <el-row :gutter="20" class="panel-group">
-    <el-col :xs="12" :span="3" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('/orders?status=1')">
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            订单待审核
+    <el-col :xs="24" :md="19">
+      <el-row :gutter="20">
+        <el-col :sm="12" :xs="24" :md="6" class="card-panel-col">
+          <div class="card-panel">
+            <div class="card-panel-description">
+              <div class="card-panel-text"> 本月销售额（元） </div>
+              <count-to :start-val="0" :end-val="common.order" :duration="2000" :class="common.order > 0 ? 'card-panel-warning' : ''" class="card-panel-num" />
+              <div class="card-panel-desc">累计销售额 </div>
+            </div>
           </div>
-          <count-to :start-val="0" :end-val="common.order" :duration="2000" :class="common.order > 0 ? 'card-panel-warning' : ''" class="card-panel-num" />
-        </div>
-      </div>
+        </el-col>
+        <el-col :sm="12" :xs="24" :md="6" class="card-panel-col">
+          <div class="card-panel">
+            <div class="card-panel-description">
+              <div class="card-panel-text"> 上月销售额（元） </div>
+              <count-to :start-val="0" :end-val="common.withdrawal" :duration="2000" :class="common.withdrawal > 0 ? 'card-panel-warning' : ''" class="card-panel-num" />
+            </div>
+          </div>
+        </el-col>
+        <el-col :sm="12" :xs="24" :md="6" class="card-panel-col">
+          <div class="card-panel">
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                本月平均峰值 UV
+                <el-popover placement="bottom" width="180" trigger="hover" content="月平均峰值UV1000以下无需缴纳补充费用">
+                  <i slot="reference" class="el-icon-question" />
+                </el-popover>
+              </div>
+              <count-to :start-val="0" :end-val="common.cnyWithdrawal" :duration="2000" :class="common.cnyWithdrawal > 0 ? 'card-panel-warning' : ''" class="card-panel-num" />
+              <div class="card-panel-desc">当前峰值UV </div>
+            </div>
+          </div>
+        </el-col>
+        <el-col :sm="12" :xs="24" :md="6" class="card-panel-col">
+          <div class="card-panel">
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                本月运维费用预计
+                <el-popover placement="bottom" width="100" trigger="hover">
+                  <div>当前比例：15%</div>
+                  <i slot="reference" class="el-icon-question" />
+                </el-popover>
+              </div>
+              <count-to :start-val="0" :end-val="common.electric" :duration="2000" :class="common.electric > 0 ? 'card-panel-warning' : ''" class="card-panel-num" />
+            </div>
+          </div>
+        </el-col>
+      </el-row>
     </el-col>
-    <el-col :xs="12" :span="3" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('/coinWithdrawals?status=0')">
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            提资产待审核
+    <el-col :xs="24" :md="5">
+      <el-row :gutter="20">
+        <el-col :sm="12" :xs="24" :md="24" class="card-panel-col last-card-panel">
+          <div class="card-panel">
+            <div class="card-panel-description">
+              <div class="card-panel-text"> 上月运维费用（元） </div>
+              <count-to :start-val="0" :end-val="common.electric" :duration="2000" :class="common.electric > 0 ? 'card-panel-warning' : ''" class="card-panel-num" />
+            </div>
           </div>
-          <count-to :start-val="0" :end-val="common.withdrawal" :duration="2000" :class="common.withdrawal > 0 ? 'card-panel-warning' : ''" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :span="3" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('/withdrawals?status=0')">
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            提现待审核
-          </div>
-          <count-to :start-val="0" :end-val="common.cnyWithdrawal" :duration="2000" :class="common.cnyWithdrawal > 0 ? 'card-panel-warning' : ''" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :span="3" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('/electrics?status=1')">
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            电费待审核
-          </div>
-          <count-to :start-val="0" :end-val="common.electric" :duration="2000" :class="common.electric > 0 ? 'card-panel-warning' : ''" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :span="3" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('/certifications?status=0')">
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            认证待审核
-          </div>
-          <count-to :start-val="0" :end-val="common.certification" :duration="2000" :class="common.certification > 0 ? 'card-panel-warning' : ''" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :span="3" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('/transfers?status=0')">
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            转账待审核
-          </div>
-          <count-to :start-val="0" :end-val="common.transfer" :duration="2000" :class="common.transfer > 0 ? 'card-panel-warning' : ''" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :span="3" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('/feedbacks?status=0')">
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            反馈未解决
-          </div>
-          <count-to :start-val="0" :end-val="common.feedback" :duration="2000" :class="common.feedback > 0 ? 'card-panel-warning' : ''" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :span="3" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('/aheads')">
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            今日提前归还
-          </div>
-          <count-to :start-val="0" :end-val="common.todayAheadReturn" :duration="2000" :class="common.todayAheadReturn > 0 ? 'card-panel-warning' : ''" class="card-panel-num" />
-        </div>
-      </div>
+        </el-col>
+      </el-row>
     </el-col>
   </el-row>
 </template>
@@ -106,14 +87,11 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
-  created() {
-  },
+  created() {},
   methods: {
-    init() {
-    },
+    init() {},
     handleSetLineChartData(path) {
       this.$router.push({ path: path })
     }
@@ -123,108 +101,79 @@ export default {
 
 <style lang="scss" scoped>
 .panel-group {
+	.card-panel-col {
+		margin-bottom: 20px;
+	}
+	.card-panel {
+		min-height: 117px;
+		// cursor: pointer;
+		font-size: 12px;
+		// position: relative;
+		overflow: hidden;
+		color: #666;
+		background: #fff;
+		box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+		border-color: rgba(0, 0, 0, 0.05);
+		border-radius: 4px;
 
-  .card-panel-col {
-    margin-bottom: 20px;
-  }
-  .card-panel {
-    height: 108px;
-    cursor: pointer;
-    font-size: 12px;
-    position: relative;
-    overflow: hidden;
-    color: #666;
-    background: #fff;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
-    border-color: rgba(0, 0, 0, .05);
-    border-radius: 4px;
-    &:hover {
-      .card-panel-icon-wrapper {
-        color: #fff;
-      }
+		.card-panel-icon-wrapper {
+			float: left;
+			margin: 14px 0 0 14px;
+			padding: 16px;
+			transition: all 0.38s ease-out;
+			border-radius: 6px;
+		}
 
-      .icon-people {
-        background: #40c9c6;
-      }
+		.card-panel-icon {
+			float: left;
+			font-size: 48px;
+		}
 
-      .icon-message {
-        background: #36a3f7;
-      }
+		.card-panel-description {
+			font-weight: bold;
+			margin: 19px;
+			text-align: left;
+			.card-panel-text {
+				line-height: 18px;
+				color: #333;
+				font-size: 14px;
+				margin-bottom: 12px;
+				// font-weight: normal;
+			}
 
-      .icon-money {
-        background: #f4516c;
-      }
-
-      .icon-shopping {
-        background: #34bfa3
-      }
-    }
-
-    .icon-people {
-      color: #40c9c6;
-    }
-
-    .icon-message {
-      color: #36a3f7;
-    }
-
-    .icon-money {
-      color: #f4516c;
-    }
-
-    .icon-shopping {
-      color: #34bfa3
-    }
-
-    .card-panel-icon-wrapper {
-      float: left;
-      margin: 14px 0 0 14px;
-      padding: 16px;
-      transition: all 0.38s ease-out;
-      border-radius: 6px;
-    }
-
-    .card-panel-icon {
-      float: left;
-      font-size: 48px;
-    }
-
-    .card-panel-description {
-      float: left;
-      font-weight: bold;
-      margin: 26px 20px;
-      text-align: left;
-      .card-panel-text {
-        line-height: 18px;
-        color: #262626;
-        font-size: 14px;
-        margin-bottom: 12px;
-        font-weight: normal;
-      }
-
-      .card-panel-num {
-        font-size: 20px;
-      }
-      .card-panel-warning {
-        color: red;
-      }
-    }
-  }
+			.card-panel-num {
+				font-size: 20px;
+			}
+			.card-panel-warning {
+				color: red;
+			}
+		}
+	}
 }
 
-@media (max-width:550px) {
+@media (max-width: 550px) {
+	.card-panel-icon-wrapper {
+		float: none !important;
+		width: 100%;
+		height: 100%;
+		margin: 0 !important;
 
-  .card-panel-icon-wrapper {
-    float: none !important;
-    width: 100%;
-    height: 100%;
-    margin: 0 !important;
+		.svg-icon {
+			display: block;
+			margin: 14px auto !important;
+			float: none !important;
+		}
+	}
+}
 
-    .svg-icon {
-      display: block;
-      margin: 14px auto !important;
-      float: none !important;
-    }
-  }
+.card-panel-desc {
+	font-weight: normal;
+	margin-top: 12px;
+}
+.el-icon-question {
+	width: 10px;
+	height: 10px;
+	margin-left: 5px;
+	cursor: pointer;
 }
 </style>
