@@ -54,5 +54,7 @@ export const localMap = {
   texpoint: () => import('@/views/configs/texpoint'),
   invite: () => import('@/views/configs/invite'),
   register: () => import('@/views/configs/register'),
-  partner: () => import('@/views/partner/index')  // 合作商
+  authentication: () => import('@/views/configs/authentication'),
+  integral: () => import('@/views/configs/integral'),
+  partner: () => import('@/views/partner/index') // 合作商
 }
