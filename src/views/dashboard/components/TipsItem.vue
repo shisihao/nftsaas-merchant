@@ -5,12 +5,12 @@
       :closable="false"
     >
       <div slot="title">
-        <i class="el-icon-message-solid message-solid"></i>
+        <i class="el-icon-message-solid message-solid" />
         尊敬的品牌商，实名认证功能已经上线，请尽快点击
         <el-link type="primary" :underline="false" @click="onGoto('/identification')">个人中心-实名认证</el-link>
         完成品牌商实名认证
       </div>
-  </el-alert>
+    </el-alert>
   </div>
 </template>
 
@@ -18,15 +18,15 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'tipsitem',
+  name: 'Tipsitem',
+  data() {
+    return {
+    }
+  },
   computed: {
     ...mapGetters([
       'configInfo', 'info'
     ])
-  },
-  data() {
-    return {
-    }
   },
   created() {
 
@@ -34,7 +34,7 @@ export default {
   methods: {
     onGoto(path) {
       this.$router.push({ path: path })
-    },
+    }
   }
 }
 </script>

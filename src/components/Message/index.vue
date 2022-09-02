@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-badge :value="msgCount" :hidden="msgCount === 0" :max="99" class="item">
-      <i class="el-icon-message-solid" title="消息中心" @click="click"/>
+      <i class="el-icon-message-solid" title="消息中心" @click="click" />
     </el-badge>
   </div>
 </template>
@@ -10,7 +10,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'whispers',
+  name: 'Whispers',
   computed: {
     ...mapGetters([
       'msgCount'
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     init() {
-      this.$store.dispatch('user/getMsgCount')
+      // this.$store.dispatch('user/getMsgCount')
     },
     click() {
       this.$router.push({ path: '/whisper' })

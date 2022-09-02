@@ -26,9 +26,29 @@ export function deleteData(id) {
   return request.delete(`/users/${id}/delete`)
 }
 
-export function moreStatus({ id, ...data }) {
-  return request.post(`/users/${id}/switch`, {
-    ...data
+// 用户喜欢的
+export function userLikes(id, params) {
+  return request.get(`/users/like/${id}`, {
+    params
+  })
+}
+// 用户收藏的
+export function userCollection(id, params) {
+  return request.get(`/users/collection/${id}`, {
+    params
+  })
+}
+
+// 用户关注的
+export function userAttention(id, params) {
+  return request.get(`/users/attention/${id}`, {
+    params
+  })
+}
+// 用户的粉丝
+export function userFans(id, params) {
+  return request.get(`/users/fans/${id}`, {
+    params
   })
 }
 
@@ -47,35 +67,51 @@ export function exportOrder(params) {
 }
 
 // 钱包详情
-export function wallet(id) {
-  return request.get(`/wallets/${id}`)
-}
-
-// 某用户钱包列表
-export function walletList(params) {
-  return request.get(`/wallets/logs`, {
+export function wallet(params) {
+  return request.get('/users/wallet', {
     params
   })
 }
 
-// 全部用户钱包列表
-export function walletsList(params) {
-  return request.get('/wallets', {
+// 某用户钱包列表
+export function walletList(params) {
+  return request.get('/users/wallet/logs', {
     params
   })
 }
 
 // 资产增加/扣除
-export function setWallet({ id, ...data }) {
-  return request.post(`wallets/${id}/adjust`, {
+export function setWallet({ ...data }) {
+  return request.post(`/users/wallet/adjust`, {
     ...data
   })
 }
 
 // 数据导出
 export function exportExcel(params) {
-  return request.get('/wallets/export/recharge', {
+  return request.get(`/users/wallet/export`, {
     params
+  })
+}
+
+// 销毁
+export function onDestroy(data) {
+  return request.put(`/users/collection/destroy`, {
+    ...data
+  })
+}
+
+// 指定藏品导出
+export function exportSerialExcel(params) {
+  return request.get(`/users/serial/export`, {
+    params
+  })
+}
+
+// 冻结开关
+export function setStatus(data) {
+  return request.put(`/users/collection/frozen`, {
+    ...data
   })
 }
 

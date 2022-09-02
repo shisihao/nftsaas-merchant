@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-el-drag-dialog top="30px" :title="form.id ? $t('table.edit') : $t('table.add') " :visible.sync="visible" @closed="onClose()">
+  <el-dialog top="30px" :title="form.id ? $t('table.edit') : $t('table.add') " :visible.sync="visible" @closed="onClose()">
     <el-form ref="form" :model="form" :rules="rules" label-width="120px">
       <el-form-item label="头像" prop="avatar">
         <custom-upload
@@ -11,24 +11,24 @@
           <i v-else class="el-icon-plus avatar-uploader-icon" />
         </custom-upload>
         <div class="notice">
-          建议比例 1:1，不超过2M
+          建议比例 1:1，不超过20M
         </div>
       </el-form-item>
       <el-form-item label="昵称" prop="name">
         <el-input v-model="form.name" placeholder="昵称" maxlength="10" show-word-limit clearable />
       </el-form-item>
-      <el-form-item label="代理商等级" prop="agency_id">
-        <el-select v-model="form.agency_id" placeholder="请选择">
+      <!-- <el-form-item label="用户身份" prop="identity_id">
+        <el-select v-model="form.identity_id" placeholder="请选择">
           <el-option
-            v-for="(item, index) in agencyOptions"
+            v-for="(item, index) in identityOptions"
             :key="index"
             :label="item.label"
             :value="item.value"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item label="账号" prop="account">
-        <el-input v-model="form.account" placeholder="手机号/邮箱" clearable />
+      </el-form-item> -->
+      <el-form-item label="手机号" prop="account">
+        <el-input v-model="form.account" placeholder="手机号" maxlength="11" show-word-limit clearable />
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input v-model="form.password" type="password" placeholder="密码" clearable />
@@ -39,21 +39,6 @@
       <el-form-item v-if="form.id === 0" label="上级邀请码" prop="code">
         <el-input v-model="form.code" :disabled="form.id > 0" placeholder="上级邀请码" clearable />
       </el-form-item>
-      <!-- <el-form-item label="FIL提现地址" prop="fil_address">
-        <el-input v-model="form.currency_address.fil_address" placeholder="FIL提现地址" clearable />
-      </el-form-item>
-      <el-form-item label="ERC20提现地址" prop="erc_address">
-        <el-input v-model="form.currency_address.erc_address" placeholder="ERC20提现地址" clearable />
-      </el-form-item>
-      <el-form-item label="BTC提现地址" prop="btc_address">
-        <el-input v-model="form.currency_address.btc_address" placeholder="BTC提现地址" clearable />
-      </el-form-item>
-      <el-form-item label="TRX提现地址" prop="usdt_trx_address">
-        <el-input v-model="form.currency_address.usdt_trx_address" placeholder="TRX提现地址" clearable />
-      </el-form-item>
-      <el-form-item label="XCH提现地址" prop="xch_address">
-        <el-input v-model="form.currency_address.xch_address" placeholder="XCH提现地址" clearable />
-      </el-form-item> -->
       <el-form-item label="状态" prop="state">
         <el-radio-group v-model="form.state">
           <el-radio :label="0">正常</el-radio>
@@ -62,9 +47,6 @@
         <div class="notice1">
           注意：禁用之后用户无法登录
         </div>
-      </el-form-item>
-      <el-form-item label="提现状态">
-        <el-checkbox v-for="(value, key, index) in form.withdrawal" :key="index" v-model="form.withdrawal[key]" :true-label="1" :false-label="0">{{ key.toUpperCase() }}</el-checkbox>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -79,15 +61,14 @@
 </template>
 
 <script>
-import elDragDialog from '@/directive/el-drag-dialog'
-import { validUsername1, validPhone, validEmail } from '@/utils/validate'
+import { validUsername1, validPhone } from '@/utils/validate'
 import { DominKey, getToken } from '@/utils/auth'
 import { addOrUpdate } from '@/api/user'
 import CustomUpload from '@/components/Upload/CustomUpload'
 
 export default {
   name: 'AddOrUpdate',
-  directives: { elDragDialog },
+  // directives: { elDragDialog },
   components: { CustomUpload },
   data() {
     const validateUsername = (rule, value, callback) => {
@@ -100,8 +81,8 @@ export default {
       }
     }
     const validateAccount = (rule, value, callback) => {
-      if (!validPhone(value) && !validEmail(value)) {
-        callback(new Error('请输入正确的手机号或邮箱'))
+      if (!validPhone(value)) {
+        callback(new Error('请输入正确的手机号'))
       } else {
         callback()
       }
@@ -136,31 +117,20 @@ export default {
         account: '',
         password: '',
         password_confirmation: '',
-        agency_id: 0,
-        state: 0,
-        /* currency_address: {
-          erc_address: '',
-          fil_address: '',
-          btc_address: '',
-          usdt_trx_address: '',
-          xch_address: ''
-        }, */
-        withdrawal: {
-          usdt: 1,
-          fil: 1,
-          btc: 1,
-          eth: 1,
-          xch: 1
-        }
+        // identity_id: 1,
+        state: 0
       },
-      agencyOptions: [],
+      identityOptions: [],
       rules: {
         name: [
           { required: true, message: '名称不能为空', trigger: ['blur', 'change'] },
           { validator: validateUsername, trigger: ['blur', 'change'] }
         ],
+        // identity_id: [
+        //   { required: true, message: '请选择用户身份', trigger: ['blur', 'change'] }
+        // ],
         account: [
-          { required: true, message: '账号不能为空', trigger: ['blur', 'change'] },
+          { required: true, message: '手机不能为空', trigger: ['blur', 'change'] },
           { validator: validateAccount, trigger: ['blur', 'change'] }
         ],
         password: [
@@ -175,7 +145,7 @@ export default {
   methods: {
     init(data, options) {
       this.visible = true
-      this.agencyOptions = options.slice(1)
+      this.identityOptions = options.slice(1)
       if (data) {
         const newKeys = Object.keys(this.form).filter(v => {
           return !['password', 'password_confirmation', 'currency_address', 'withdrawal'].includes(v)
@@ -187,13 +157,6 @@ export default {
             this.form[v] = data[v]
           }
         })
-        /* if (data.currency_address) {
-          Object.keys(this.form.currency_address).map(v => {
-            if (data.currency_address[v]) {
-              this.form.currency_address[v] = data.currency_address[v]
-            }
-          })
-        } */
         if (data.withdrawal) {
           Object.keys(this.form.withdrawal).map(v => {
             if (data.withdrawal[v] >= 0) {
@@ -253,19 +216,22 @@ export default {
       this.$reset()
     },
     handleAvatarSuccess(response, file) {
+      console.log(response)
       this.form.avatar = response
     },
     beforeAvatarUpload(file, cb) {
-      const type = ['image/jpeg', 'image/jpg', 'image/png']
-      const isLt2M = file.size / 1024 / 1024 < 2
+      const type = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
+      const isLt2M = file.size / 1024 / 1024 < 20
 
       if (!type.includes(file.type)) {
         this.$message.error('上传图片只能是 ' + type.join(',') + ' 格式!')
         cb(false)
+        return
       }
       if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 2M')
+        this.$message.error('上传图片大小不能超过 20M')
         cb(false)
+        return
       }
       cb(true)
     }

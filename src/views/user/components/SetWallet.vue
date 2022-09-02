@@ -1,21 +1,21 @@
 <template>
   <el-dialog title="资产操作" :visible.sync="visible" @closed="onClose()">
     <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-      <el-form-item label="操作类型" prop="action">
-        <el-select v-model="form.action">
-          <el-option v-for="item in actionOptions" :key="item.value" :label="item.label" :value="item.value" />
+      <el-form-item label="资产类型" prop="currency">
+        <el-select v-model="form.currency" clearable placeholder="请选择">
+          <el-option v-for="item in currencyOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
-      <el-form-item label="资产类型" prop="currency">
-        <el-select v-model="form.currency" clearable>
-          <el-option v-for="item in currencyReportOptions" :key="item.value" :label="item.label" :value="item.value" />
+      <el-form-item label="操作类型" prop="action">
+        <el-select v-model="form.action" clearable placeholder="请选择">
+          <el-option v-for="item in actionOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="流水标题" prop="name">
         <el-input v-model="form.name" type="text" placeholder="请输入" maxlength="20" show-word-limit clearable />
       </el-form-item>
-      <el-form-item :label="`${form.action === 1 ? '增加' : '扣除'}${ ['dfb', 'cny'].includes(form.currency) ? '金额' : '数量'}`" prop="num">
-        <el-input-number v-model="form.num" :min="0" :precision="['cny'].includes(form.currency) ? 2 : 8" placeholder="请输入数量" clearable />
+      <el-form-item v-if="form.currency && form.action" :label="`${form.action === 1 ? '增加' : '扣除'}${$options.filters.paraphrase(form.currency, currencyOptions)}`" prop="num">
+        <el-input-number v-model="form.num" :min="0" :precision="form.currency === 'cast'? 0 : 2" placeholder="请输入数量" clearable />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -31,8 +31,8 @@
 
 <script>
 import { setWallet } from '@/api/user'
-import { currencyReportOptions, streamTypeOptions } from '@/utils/explain'
 import { validUsername2 } from '@/utils/validate'
+import { payTypeOptions } from '@/utils/explain'
 
 export default {
   name: 'SetWallet',
@@ -56,32 +56,31 @@ export default {
     return {
       visible: false,
       btnLoading: false,
-      streamTypeOptions: streamTypeOptions.slice(1),
-      currencyReportOptions: currencyReportOptions.slice(1),
       form: {
-        id: 0,
-        action: 1,
-        currency: '',
+        user_id: 0,
+        action: '',
         num: '',
         name: ''
       },
+      name: '',
       actionOptions: [
         { label: '增加', value: 1 },
         { label: '扣除', value: 2 }
       ],
+      currencyOptions: payTypeOptions.slice(1),
       rules: {
-        action: [
-          { required: true, message: '操作类型不能为空', trigger: ['blur', 'change'] }
-        ],
         currency: [
-          { required: true, message: '资产类型不能为空', trigger: ['blur', 'change'] }
+          { required: true, message: '请选择资产类型', trigger: ['blur', 'change'] }
+        ],
+        action: [
+          { required: true, message: '请选择操作类型', trigger: ['blur', 'change'] }
         ],
         num: [
           { required: true, message: '数量不能为空', trigger: ['blur', 'change'] },
           { validator: validateReplace, trigger: ['blur', 'change'] }
         ],
         name: [
-          { required: true, message: '不能为空', trigger: ['blur', 'change'] },
+          { required: true, message: '流水标题不能为空', trigger: ['blur', 'change'] },
           { validator: validateUsername, trigger: ['blur', 'change'] }
         ]
       }
@@ -90,14 +89,14 @@ export default {
   methods: {
     init(data) {
       if (data.id) {
+        this.form.user_id = data.id
         this.visible = true
-        this.form.id = data.id
       }
     },
     onFormSubmit() {
       this.$refs['form'].validate(valid => {
         if (valid) {
-          this.$confirm(`确认${this.form.action === 1 ? '增加' : '扣除'}${this.currencyReportOptions.filter(v => v.value === this.form.currency)[0].label}资产 ${this.form.num}`, `确认操作`, {
+          this.$confirm(`确认${this.form.action === 1 ? '增加' : '扣除'}用户[#${this.form.user_id}]${this.$options.filters.paraphrase(this.form.currency, this.currencyOptions)}${this.form.num}？`, `确认操作`, {
             type: this.form.action === 1 ? 'warning' : 'error'
           }).then(() => {
             this.btnLoading = true

@@ -1,72 +1,41 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-
       <tips-item />
-
-      <panel-group
-        :common="data.common"
-      />
-
-      <history-item
-        :statistics="data.statistics"
-      />
-
-      <assets-item
-        :asset="data.asset"
-        :statistics="data.statistics"
-      />
-
-      <wallet-item />
-
-      <electric-item />
-
-      <withdrawal-item />
-
-      <copyright />
-
-      <vip-tip
-        v-if="vipTipVisible"
-        ref="vipTip"
-      />
+      <panel-group :common="data.common" />
+      <history-item :statistics="data" />
+      <order-item :statistics="data" />
+      <assets-item :asset="data.asset" :statistics="data.statistics" />
     </div>
   </div>
 </template>
 
 <script>
-import PanelGroup from './components/PanelGroup'
+
 import HistoryItem from './components/HistoryItem'
+import OrderItem from './components/OrderItem'
 import AssetsItem from './components/AssetsItem'
-import WalletItem from './components/WalletItem'
-import ElectricItem from './components/ElectricItem'
-import WithdrawalItem from './components/WithdrawalItem'
 import TipsItem from './components/TipsItem'
-import Copyright from '@/components/Copyright'
-import VipTip from '@/components/VipTip'
-import { getHome, putFirst } from '@/api/common'
+import PanelGroup from './components/PanelGroup'
+import { getHome, putFirst, getHomeOrderCount } from '@/api/common'
 import Driver from 'driver.js' // import driver.js
 import 'driver.js/dist/driver.min.css' // import driver.js css
-import steps from './steps.js'
+import steps from './steps'
 import { addClass, removeClass } from '@/utils'
 import { getToken, removeToken } from '@/utils/auth'
 
 export default {
   name: 'Dashboard',
   components: {
-    PanelGroup,
     HistoryItem,
+    OrderItem,
     AssetsItem,
-    WalletItem,
-    ElectricItem,
-    WithdrawalItem,
-    Copyright,
-    VipTip,
+    PanelGroup,
     TipsItem
   },
   data() {
     return {
       driver: null,
-      vipTipVisible: false,
       data: {
         common: {
           certification: 0,
@@ -78,93 +47,49 @@ export default {
           withdrawal: 0,
           todayAheadReturn: 0
         },
-        statistics: {
-          user: {
-            total: 0,
-            yesterday_increase: 0
+        order: {
+          total: 0,
+          yesterday: 0
+        },
+        user: {
+          total: 0,
+          total_buy: 0,
+          yesterday: 0,
+          yesterday_buy: 0
+        },
+        sale: {
+          cny: {
+            yesterday: 0,
+            total: 0
           },
-          spend_user: {
+          integral: {
             total: 0,
-            yesterday_increase: 0
-          },
-          order: {
-            total: 0,
-            yesterday_increase: 0
-          },
-          miner_order: {
-            total: 0,
-            yesterday_increase: 0
-          },
-          sale_cny: {
-            total: 0,
-            yesterday_increase: 0
-          },
-          miner_sale_cny: {
-            total: 0,
-            yesterday_increase: 0
-          },
-          sale_usdt: {
-            total: 0,
-            yesterday_increase: 0
-          },
-          miner_sale_usdt: {
-            total: 0,
-            yesterday_increase: 0
-          },
-          eth_miner: {
-            total: 0,
-            yesterday_increase: 0
-          },
-          fil_miner: {
-            total: 0,
-            yesterday_increase: 0
-          },
-          btc_miner: {
-            total: 0,
-            yesterday_increase: 0
-          },
-          xch_miner: {
-            total: 0,
-            yesterday_increase: 0
+            yesterday: 0
           }
         },
-        asset: {
-          btc: {
-            total: 0,
-            total_miner: 0
-          },
-          cny: {
-            total: 0
-          },
-          dfb: {
-            total: 0
-          },
-          eth: {
-            total: 0,
-            total_miner: 0
-          },
-          fil: {
-            total: 0,
-            frozen: 0,
-            lock: 0,
-            pawn: 0,
-            withdrawable: 0,
-            total_miner: 0
-          },
-          usdt: {
-            total: 0
-          },
-          xch: {
-            total: 0,
-            total_miner: 0
-          }
+        collect: {
+          on: 0,
+          off: 0,
+          sell_out: 0,
+          total: 0
+        },
+        box: {
+          on: 0,
+          off: 0,
+          sell_out: 0,
+          total: 0
+        },
+
+        integral: {
+          income: 0,
+          balance: 0.00,
+          expend: 0.00
         }
       }
     }
   },
   created() {
     this.init()
-    this.onVipTip()
   },
   mounted() {
     this.driver = new Driver({
@@ -194,6 +119,7 @@ export default {
   methods: {
     init() {
       this.getList()
+      this.getHomeOrder()
     },
     getList() {
       getHome()
@@ -201,10 +127,9 @@ export default {
           this.data = response.data
         })
     },
-    onVipTip() {
-      this.vipTipVisible = true
-      this.$nextTick(() => {
-        this.$refs.vipTip && this.$refs.vipTip.init()
+    getHomeOrder() {
+      getHomeOrderCount().then(response => {
+
       })
     }
   }

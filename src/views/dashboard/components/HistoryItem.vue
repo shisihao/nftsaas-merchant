@@ -8,10 +8,10 @@
               昨日新增用户（人）
             </div>
             <div class="user-num">
-              {{ statistics.user.yesterday_increase }}
+              {{ statistics.user.yesterday }}
             </div>
             <div class="user-text">
-              其中消费用户数量 <span>{{ statistics.spend_user.yesterday_increase }}</span>
+              其中消费用户数量 <span>{{ statistics.user.yesterday_buy }}</span>
             </div>
             <el-divider />
             <div class="user-title">
@@ -21,30 +21,30 @@
               {{ statistics.user.total }}
             </div>
             <div class="user-text">
-              其中消费用户数量 <span>{{ statistics.spend_user.total }}</span>
+              其中消费用户数量 <span>{{ statistics.user.total_buy }}</span>
             </div>
           </el-card>
         </el-col>
         <el-col :xs="24" :span="12">
           <el-card shadow="never" class="card-boder">
             <div class="user-title">
-              昨日新增订单
+              昨日销售额（元）
             </div>
             <div class="user-num">
-              <span>{{ statistics.order.yesterday_increase }}</span>
+              <span>{{ statistics.sale.cny.yesterday | moneyToFormat }}</span>
             </div>
             <div class="user-text">
-              设备订单数量 <span>{{ statistics.miner_order.yesterday_increase }}</span>
+              累计销售额 <span> {{ statistics.sale.cny.total | moneyToFormat }}</span>
             </div>
             <el-divider />
             <div class="user-title">
-              累计订单数量
+              昨日销售藏豆（个）
             </div>
             <div class="user-num">
-              {{ statistics.order.total }}
+              <span>{{ statistics.sale.integral.yesterday }}</span>
             </div>
             <div class="user-text">
-              其中设备订单数量 <span>{{ statistics.miner_order.total }}</span>
+              累计销售藏豆 <span> {{ statistics.sale.integral.total }}</span>
             </div>
           </el-card>
         </el-col>
@@ -55,47 +55,70 @@
         <el-col :xs="24" :span="12">
           <el-card shadow="never" class="card-boder">
             <div class="user-title">
-              昨日销售现金金额（元）
+              用户剩余藏豆数量（个）
             </div>
             <div class="user-num">
-              <b>{{ statistics.sale_cny.yesterday_increase | moneyToFormat }}</b>
+              <b>{{ statistics.integral.balance }}</b>
             </div>
-            <div class="user-text">
-              设备订单现金金额 <span>{{ statistics.miner_sale_cny.yesterday_increase | moneyToFormat }}</span>
-            </div>
+            <div class="user-text" />
             <el-divider />
             <div class="user-title">
-              累计销售现金金额（元）
+              支出(个)
             </div>
             <div class="user-num">
-              {{ statistics.sale_cny.total | moneyToFormat }}
+              <b>{{ statistics.integral.expend | cutZero }}</b>
             </div>
             <div class="user-text">
-              设备订单现金金额 <span>{{ statistics.miner_sale_cny.total | moneyToFormat }}</span>
+              用户藏豆数量累计(个) <b>{{ statistics.integral.income }}</b>
             </div>
           </el-card>
         </el-col>
         <el-col :xs="24" :span="12">
           <el-card shadow="never" class="card-boder">
-            <div class="user-title">
-              昨日销售USDT金额（U）
-            </div>
-            <div class="user-num">
-              <b>{{ statistics.sale_usdt.yesterday_increase | cutZero }}</b>
-            </div>
-            <div class="user-text">
-              设备订单USDT金额 <span>{{ statistics.miner_sale_usdt.yesterday_increase | cutZero }}</span>
-            </div>
-            <el-divider />
-            <div class="user-title">
-              累计销售USDT金额（U）
-            </div>
-            <div class="user-num">
-              {{ statistics.sale_usdt.total | cutZero }}
-            </div>
-            <div class="user-text">
-              设备订单USDT金额 <span>{{ statistics.miner_sale_usdt.total | cutZero }}</span>
-            </div>
+            <el-row>
+              <el-col :xs="12" :span="12">
+                <div class="user-title">
+                  藏品上架
+                </div>
+                <div class="user-num">
+                  <b>{{ statistics.collect.on }}</b>
+                </div>
+                <div class="user-text">
+                  藏品下架 <span>{{ statistics.collect.off }}</span>
+                </div>
+                <el-divider />
+                <div class="user-title">
+                  藏品累计
+                </div>
+                <div class="user-num">
+                  <b>{{ statistics.collect.total }}</b>
+                </div>
+                <div class="user-text">
+                  藏品售罄<span> {{ statistics.collect.sell_out }}</span>
+                </div>
+              </el-col>
+              <el-col :xs="12" :span="12">
+                <div class="user-title">
+                  盲盒上架
+                </div>
+                <div class="user-num">
+                  <b>{{ statistics.box.on }}</b>
+                </div>
+                <div class="user-text">
+                  盲盒下架 <span>{{ statistics.box.off }}</span>
+                </div>
+                <el-divider />
+                <div class="user-title">
+                  盲盒累计
+                </div>
+                <div class="user-num">
+                  <b>{{ statistics.box.total }}</b>
+                </div>
+                <div class="user-text">
+                  盲盒售罄<span> {{ statistics.box.sell_out }}</span>
+                </div>
+              </el-col>
+            </el-row>
           </el-card>
         </el-col>
       </el-row>
@@ -111,35 +134,36 @@ export default {
       default: () => ({
         user: {
           total: 0,
-          yesterday_increase: 0
+          total_buy: 0,
+          yesterday: 0,
+          yesterday_buy: 0
         },
-        spend_user: {
-          total: 0,
-          yesterday_increase: 0
+        sale: {
+          cny: {
+            yesterday: 0,
+            total: 0
+          },
+          integral: {
+            yesterday: 0,
+            total: 0
+          }
         },
-        order: {
-          total: 0,
-          yesterday_increase: 0
+        collect: {
+          on: 0,
+          off: 0,
+          sell_out: 0,
+          total: 0
         },
-        miner_order: {
-          total: 0,
-          yesterday_increase: 0
+        box: {
+          on: 0,
+          off: 0,
+          sell_out: 0,
+          total: 0
         },
-        sale_cny: {
-          total: 0,
-          yesterday_increase: 0
-        },
-        miner_sale_cny: {
-          total: 0,
-          yesterday_increase: 0
-        },
-        sale_usdt: {
-          total: 0,
-          yesterday_increase: 0
-        },
-        miner_sale_usdt: {
-          total: 0,
-          yesterday_increase: 0
+        integral: {
+          income: 0.00,
+          balance: 0.00,
+          expend: 0.00
         }
       })
     }
@@ -163,6 +187,7 @@ export default {
 }
 .card-boder {
   border: 0px;
+  min-height: 280px!important;
   .el-divider {
     margin: 20px 0;
   }
@@ -182,7 +207,12 @@ export default {
   }
   .user-text {
     font-size: 14px;
+    height: 16px;
     color: #8C8C8C;
+    b {
+      color: #f56c6c;
+      font-weight: normal;
+    }
     span {
       color: #000;
     }

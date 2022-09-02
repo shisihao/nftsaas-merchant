@@ -6,11 +6,10 @@
           <template v-for="item in payTypeOptions">
             <el-option v-if="item.label!=='全部'" :key="item.value" :label="item.label" :value="item.value" />
           </template>
-
         </el-select>
       </el-form-item>
       <el-form-item label="数量" prop="amount">
-        <el-input-number v-model="form.amount" :min="1" :precision="0" label="label" />
+        <el-input-number v-model="form.amount" :min="1" :precision="2" label="label" />
       </el-form-item>
       <el-form-item label="是否去重" prop="is_unique">
         <el-radio-group v-model="form.is_unique">
@@ -19,17 +18,18 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="上传Excel文件" prop="file_path">
-        <el-upload
-          :action="fileDmoin + 'public/upload'"
+        <custom-upload
+          class-name=""
           :limit="1"
+          :show-file-list="true"
           :file-list="fileList"
-          :before-upload="handleBeforeUpload"
-          :on-exceed="handleExceed"
-          :on-success="handleSuceess"
+          @handleExceed="handleExceed"
+          @handleRemove="handleRemove"
+          @handleBeforeUpload="beforeAvatarUpload"
+          @handleSuccess="handleAvatarSuccess"
         >
           <el-button type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传xlsx文件</div>
-        </el-upload>
+        </custom-upload>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -46,13 +46,15 @@
 <script>
 import { payTypeOptions } from '@/utils/explain'
 import { airBalance } from '@/api/user'
+import CustomUpload from '@/components/Upload/CustomUpload'
+
 export default {
   name: 'AirBalance',
+  components: { CustomUpload },
   data() {
     return {
       visible: false,
       btnLoading: false,
-      fileDmoin: process.env.NODE_ENV === 'development' ? process.env.VUE_APP_BASE_API : `${location.origin}/admin/`,
       fileList: [],
       form: {
         type: 'integral',
@@ -99,20 +101,26 @@ export default {
     handleExceed() {
       this.$message.warning(`当前限制选择 1 个文件，请删除后在上传`)
     },
-    handleBeforeUpload(file) {
+    beforeAvatarUpload(file, cb) {
       const a = file.name.split('.')
       const isLt2M = file.size / 1024 / 1024 < 3
       if (a[a.length - 1] !== 'xlsx') {
         this.$message.error('上传文件只能是 xlsx 格式!')
-        return false
+        cb(false)
+        return
       }
       if (!isLt2M) {
         this.$message.error('上传文件大小不能超过 3M')
-        return false
+        cb(false)
+        return
       }
+      cb(true)
     },
-    handleSuceess(file, fileList) {
-      this.form.file_path = file.data.path || ''
+    handleRemove(file, fileList) {
+      this.form.file_path = ''
+    },
+    handleAvatarSuccess(res, fileList) {
+      this.form.file_path = res
     }
   }
 }

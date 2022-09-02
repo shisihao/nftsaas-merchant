@@ -74,12 +74,12 @@
       <div class="card-panel" @click="handleSetLineChartData('/aheads')">
         <div class="card-panel-description">
           <div class="card-panel-text">
-            今日提前归还  
+            今日提前归还
           </div>
           <count-to :start-val="0" :end-val="common.todayAheadReturn" :duration="2000" :class="common.todayAheadReturn > 0 ? 'card-panel-warning' : ''" class="card-panel-num" />
         </div>
       </div>
-    </el-col> 
+    </el-col>
   </el-row>
 </template>
 

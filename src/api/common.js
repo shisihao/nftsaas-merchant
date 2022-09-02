@@ -165,3 +165,34 @@ export function boxCategoryList(params) {
     params
   })
 }
+
+// 身份列表
+export function identityList(params) {
+  return request.get('/public/identity')
+}
+
+// 订单数据
+export function getHomeOrderCount(params) {
+  return request.get('/home/order/count', {
+    params
+  })
+}
+// 订单报表
+export function homeOrder(params) {
+  return request.get('/home/order', {
+    params
+  })
+}
+// 销售报表
+export function homeSales(params) {
+  return request.get('/home/sales', {
+    params
+  })
+}
+
+// 用户报表
+export function usersSales(params) {
+  return request.get('/home/users', {
+    params
+  })
+}

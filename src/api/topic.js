@@ -25,3 +25,8 @@ export function addOrUpdate({ id, ...data }) {
 export function deleteData(id) {
   return request.delete(`/topics/${id}`)
 }
+
+// 解除禁言
+export function forbidCancel(id) {
+  return request.put(`/${id}/forbid/cancel`)
+}

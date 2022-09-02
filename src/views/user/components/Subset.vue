@@ -1,15 +1,5 @@
 <template>
   <el-dialog title="查看邀请" :visible.sync="visible" @closed="onClose()">
-    <el-form :inline="true" :model="search">
-      <el-form-item label="专区">
-        <el-select v-model="search.currency" @change="onChangeCurrency">
-          <el-option v-for="item in zoneOptions" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-      </el-form-item>
-      <el-button icon="el-icon-search" @click="getList(1)">
-        {{ $t('table.search') }}
-      </el-button>
-    </el-form>
     <el-row>
       <el-col :span="24">
         <span>
@@ -20,16 +10,6 @@
           {{ data.name }}
           <el-divider v-if="data.phone || data.email" direction="vertical" />
           {{ data.phone || data.email }}
-          <el-divider v-if="data.userCer" direction="vertical" />
-          {{ data.userCer }}
-          <el-divider direction="vertical" />
-          自购设备：{{ (data.self_kj_num || 0) | cutZero }}
-          <el-divider direction="vertical" />
-          市场业绩：{{ (data.performance || 0) | cutZero }}
-          <el-divider direction="vertical" />
-          直接销售：{{ (data.direct || 0) | cutZero }}
-          <!-- <el-divider direction="vertical" />
-          间接销售：{{ (data.indirect || 0) | cutZero }} -->
         </span>
       </el-col>
     </el-row>
@@ -62,16 +42,6 @@
         {{ node.data.name }}
         <el-divider direction="vertical" />
         {{ node.data.phone }}
-        <el-divider v-if="node.data.certification" direction="vertical" />
-        {{ node.data.certification ? node.data.certification.name : '' }}
-        <el-divider direction="vertical" />
-        自购设备：{{ (node.data.self_kj_num || 0) | cutZero }}
-        <el-divider direction="vertical" />
-        市场业绩：{{ (node.data.performance || 0) | cutZero }}
-        <el-divider direction="vertical" />
-        直接销售：{{ (node.data.direct || 0) | cutZero }}
-        <!-- <el-divider direction="vertical" />
-          间接销售：{{ (node.data.indirect || 0) | cutZero }} -->
       </span>
     </el-tree>
   </el-dialog>
@@ -80,7 +50,6 @@
 <script>
 import { subset } from '@/api/user'
 import { DominKey, getToken } from '@/utils/auth'
-import { zoneOptions } from '@/utils/explain'
 
 export default {
   name: 'Subset',
@@ -89,21 +58,12 @@ export default {
       visible: false,
       openPanel: false,
       domin: getToken(DominKey),
-      zoneOptions,
       id: 0,
-      search: {
-        currency: 'fil'
-      },
       data: {
         id: 0,
         name: '',
         avatar: '',
-        phone: '',
-        userCer: '',
-        self_kj_num: 0,
-        performance: 0,
-        direct: 0,
-        indirect: 0
+        phone: ''
       },
       child: [],
       total_count: 0,
@@ -123,7 +83,7 @@ export default {
       this.visible = true
       this.openPanel = true
       if (data) {
-        this.data = Object.assign(this.data, data, { userCer: data.certification ? data.certification.name : '' })
+        this.data = Object.assign(this.data, data)
         this.id = data.id
       }
     },
@@ -149,10 +109,6 @@ export default {
           this.parentData.id = response.data.items.pid
           this.parentData.name = response.data.items.pname
           this.parentData.avatar = response.data.items.avatar
-          this.data.self_kj_num = response.data.items.self_kj_num
-          this.data.performance = response.data.items.performance
-          this.data.direct = response.data.items.direct
-          this.data.indirect = response.data.items.indirect
         }
         resolve(response.data.items.child)
       })

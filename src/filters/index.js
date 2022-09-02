@@ -104,12 +104,12 @@ export function paraphrase(value, options = [], v = 'value', l = 'label') {
  * @param {*} decimalLength
  * @returns
  */
-export function cutZero(value = 0, decimalLength = 8){
-  const val = typeof(value) === 'number' ? value : parseFloat(value)
+export function cutZero(value = 0, decimalLength = 8) {
+  const val = typeof (value) === 'number' ? value : parseFloat(value)
   const valArray = val.toFixed(decimalLength).split('.')
-  const decimalArray =  valArray[1].split('').reverse()
+  const decimalArray = valArray[1].split('').reverse()
   const result = []
-  for(let i = 0; i < decimalArray.length; i ++) {
+  for (let i = 0; i < decimalArray.length; i++) {
     if ((decimalArray[i] > 0 && result.length === 0) || result.length > 0) {
       result.push(decimalArray[i])
     }
@@ -120,9 +120,9 @@ export function cutZero(value = 0, decimalLength = 8){
 
 /**
  * 金额格式化 1,000.00
- * @param {*} value 
- * @param {*} length 
- * @returns 
+ * @param {*} value
+ * @param {*} length
+ * @returns
  */
 export function moneyToFormat(value, length = 2) {
   const x = new BigNumber(`${value}`)
