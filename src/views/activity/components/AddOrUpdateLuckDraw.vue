@@ -585,9 +585,9 @@ export default {
     },
     handleAvatarSuccess(response, file) {
       if (this.currentName === 'icon') {
-        this.selectRewardList.icon = response.name
+        this.selectRewardList.icon = response
       } else if (this.currentName === 'images') {
-        this.form.image = response.name
+        this.form.image = response
       }
     },
     onInfo(value) {

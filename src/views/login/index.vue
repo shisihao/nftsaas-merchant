@@ -151,7 +151,7 @@ import SocialSign from './components/SocialSignin'
 import GoogleCode from './components/GoogleCode'
 import { mapGetters } from 'vuex'
 import Cookies from 'js-cookie'
-import { checkBind, setBind, getGt, getCode } from '@/api/common'
+import { checkBind, getCode } from '@/api/common'
 import '@/utils/gt'
 
 export default {
@@ -242,7 +242,6 @@ export default {
     }
 
     this.initGT()
-
   },
   mounted() {
   },
@@ -250,33 +249,33 @@ export default {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
-    initGT(){
-      let handler = function (captcha_obj,vm) {
-          captcha_obj.onReady(function () {
-              //把这个obj放入了vue实例里管理
-              vm.captcha_obj = captcha_obj
-          }).onSuccess(function(){
-              var result = captcha_obj.getValidate();
-              if (!result) {
-                  return alert('请完成验证');
-              }
-              vm.getSms(result.geetest_challenge, result.geetest_validate, result.geetest_seccode)
-          }).onError(function () {
-              captcha_obj.reset()
-          })
-      }
-      getGt()
-        .then(({ data }) => {
-          initGeetest({
-              // 以下配置参数来自服务端 SDK
-              gt: data.gt,
-              challenge: data.challenge,
-              offline: !data.success,
-              new_captcha: true,
-              product: 'bind'
-          }, handler, this)
-        })
-        .catch(() => {})
+    initGT() {
+      // const handler = function(captcha_obj, vm) {
+      //   captcha_obj.onReady(function() {
+      //     // 把这个obj放入了vue实例里管理
+      //     vm.captcha_obj = captcha_obj
+      //   }).onSuccess(function() {
+      //     var result = captcha_obj.getValidate()
+      //     if (!result) {
+      //       return alert('请完成验证')
+      //     }
+      //     vm.getSms(result.geetest_challenge, result.geetest_validate, result.geetest_seccode)
+      //   }).onError(function() {
+      //     captcha_obj.reset()
+      //   })
+      // }
+      // getGt()
+      //   .then(({ data }) => {
+      //     initGeetest({
+      //       // 以下配置参数来自服务端 SDK
+      //       gt: data.gt,
+      //       challenge: data.challenge,
+      //       offline: !data.success,
+      //       new_captcha: true,
+      //       product: 'bind'
+      //     }, handler, this)
+      //   })
+      //   .catch(() => {})
     },
     checkCapslock(e) {
       const { key } = e
@@ -384,7 +383,7 @@ export default {
     },
     onStep(val) {
       this.step = val
-    },
+    }
 
     // afterQRScan() {
     //   if (e.key === 'x-admin-oauth-code') {

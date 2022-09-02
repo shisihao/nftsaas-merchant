@@ -148,6 +148,7 @@ export default {
           },
           (err, data) => {
             if (err) {
+              console.log(err)
               this.$message.error('上传失败，请重新上传')
               getQiniuToken()
                 .then((data) => {

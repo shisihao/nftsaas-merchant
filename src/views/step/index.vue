@@ -110,13 +110,14 @@
         title="使用协议"
         width="80%"
         :visible.sync="dialogRenewalVisible"
-        append-to-body>
-        <div v-html="configInfo.use_agreement"></div>
+        append-to-body
+      >
+        <div v-html="configInfo.use_agreement" />
       </el-dialog>
 
       <div>
         <p>
-          APP产品名：{{form.app_name}}，模版：{{ templateList[activeIndex] ? templateList[activeIndex].name : '' }}，设计风格选择之后暂不可修改，确认选择？
+          APP产品名：{{ form.app_name }}，模版：{{ templateList[activeIndex] ? templateList[activeIndex].name : '' }}，设计风格选择之后暂不可修改，确认选择？
         </p>
         <p>
           <el-checkbox v-model="form.agree" label="我已阅读并同意" name="type" />
@@ -142,6 +143,7 @@ import 'swiper/swiper-bundle.css'
 import phoneBox from '@/assets/images/step2_phone_bg2.png'
 import { temList, setTem } from '@/api/design'
 import { mapGetters } from 'vuex'
+import { putFirst } from '@/api/common'
 
 export default {
   name: 'Step',
@@ -165,7 +167,6 @@ export default {
       agreementVisible: false,
       dialogRenewalVisible: false,
       btnLoading: false,
-      domin: getToken(DominKey),
       step: 0,
       activeName: 'tem_0',
       activeIndex: 0,
@@ -293,7 +294,6 @@ export default {
       this.activeIndex = this.activeName.split('_')[1]
       this.form.template_id = this.templateList[this.activeIndex].id
       this.agreementVisible = true
-      
     },
     getAppLogoInfo(val) {
       for (const key in val) {
@@ -310,14 +310,15 @@ export default {
       setTem(this.form)
         .then(({ msg }) => {
           this.$message.success(msg)
-          this.$router.replace({ path: '/apps' })
+          this.$router.replace({ path: '/' })
         })
         .catch(error => {
           if (error.toString().indexOf('设计风格已设置，请前往编辑') >= 0) {
-            this.$router.replace({ path: '/apps' })
+            this.$router.replace({ path: '/' })
           }
         })
         .finally(() => {
+          putFirst()
           this.btnLoading = false
         })
     }

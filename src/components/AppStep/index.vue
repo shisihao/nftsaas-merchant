@@ -175,7 +175,7 @@ export default {
       this.imageIndex = data
     },
     handleAvatarSuccess(response, file) {
-      this.form[this.currentName] = response.name
+      this.form[this.currentName] = response
     },
     beforeAvatarUpload(file, cb, refName) {
       const type = ['image/jpeg', 'image/jpg', 'image/png']

@@ -307,7 +307,7 @@ export default {
       cb(true)
     },
     handleAvatarSuccess(response, file) {
-      this.form.image = response.name
+      this.form.image = response
     },
     onTinymce(data) {
       this.editTinymceVisible = true

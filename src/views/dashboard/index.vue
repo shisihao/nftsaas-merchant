@@ -3,7 +3,7 @@
     <div class="app-container">
 
       <tips-item />
-      
+
       <panel-group
         :common="data.common"
       />
@@ -46,10 +46,9 @@ import VipTip from '@/components/VipTip'
 import { getHome, putFirst } from '@/api/common'
 import Driver from 'driver.js' // import driver.js
 import 'driver.js/dist/driver.min.css' // import driver.js css
-import steps from './steps'
+import steps from './steps.js'
 import { addClass, removeClass } from '@/utils'
 import { getToken, removeToken } from '@/utils/auth'
-
 
 export default {
   name: 'Dashboard',
