@@ -2,9 +2,9 @@
   <div class="app-container">
     <el-tabs v-model="search.status" type="card" @tab-click="handleClick">
       <el-tab-pane v-for="(v, i) in statusOptions" :key="i" :label="v.label" :name="v.value">
-        <el-empty v-if="list.length === 0" v-loading="loading" description="暂无数据"></el-empty>
+        <el-empty v-if="list.length === 0" v-loading="loading" description="暂无数据" />
         <div v-else>
-          <div class="voucher-box" v-for="item in list" :key="item.id">
+          <div v-for="item in list" :key="item.id" class="voucher-box">
             <div class="voucher" :class="item.status === 0 ? '' : 'voucher-disable'">
               <div class="left">
                 <div>
@@ -39,7 +39,7 @@ import { getCoupons } from '@/api/tenant'
 import { getToken, DominKey } from '@/utils/auth'
 
 export default {
-  name: 'coupon',
+  name: 'Coupon',
   components: { Pagination },
   data() {
     return {
@@ -88,7 +88,7 @@ export default {
       this.getList()
     },
     onGoto(item) {
-      this.$router.push({ path: '/tenants', query: { coupon_id: item.id, path: this.$route.path } })
+      this.$router.push({ path: '/tenants', query: { coupon_id: item.id, path: this.$route.path }})
     }
   }
 }

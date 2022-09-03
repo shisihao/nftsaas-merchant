@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     init() {
-      // this.$store.dispatch('user/getMsgCount')
+      this.$store.dispatch('user/getMsgCount')
     },
     click() {
       this.$router.push({ path: '/whisper' })
