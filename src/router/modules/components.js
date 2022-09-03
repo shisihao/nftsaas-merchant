@@ -77,5 +77,6 @@ export const localMap = {
   posters: () => import('@/views/poster/index'), // 分享海报
   give: () => import('@/views/give/index'), // 转赠记录
   inviteActivity: () => import('@/views/activity/invite'), // 邀新活动
-  authentication: () => import('@/views/configs/authentication')
+  authentication: () => import('@/views/configs/authentication'),
+  uvStatistics: () => import('@/views/tenant/uvStatistics') // 日uv统计
 }

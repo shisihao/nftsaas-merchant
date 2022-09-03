@@ -102,3 +102,10 @@ export function putIdentification(data) {
     ...data
   })
 }
+
+// uv列表
+export function uvList(params) {
+  return request.get('/tenant/uv', {
+    params
+  })
+}
