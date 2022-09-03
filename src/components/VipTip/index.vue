@@ -4,7 +4,8 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :visible.sync="dialogVisible"
-    width="400px">
+    width="400px"
+  >
     <span>
       您的会员距离到期还剩 <b style="color: #f56c6c;">{{ info.due_day }}</b> 天
       <p>为了避免过期无法正常使用本产品，请尽快续费</p>
@@ -23,7 +24,7 @@ export default {
   name: 'VipTip',
   data() {
     return {
-      dialogVisible: false,
+      dialogVisible: false
     }
   },
   computed: {
@@ -36,12 +37,12 @@ export default {
       if (!this.info) {
         this.$store.dispatch('user/getTenant')
           .then(data => {
-            if(data.day > data.due_day ) {
+            if (data.day > data.due_day) {
               this.showTip()
             }
           })
       } else {
-        if(this.info.day > this.info.due_day) {
+        if (this.info.day > this.info.due_day) {
           this.showTip()
         }
       }

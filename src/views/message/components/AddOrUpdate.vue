@@ -88,7 +88,7 @@ export default {
         if (valid) {
           this.btnLoading = true
           const data = this.form
-          if (data.type === 0  && data.period_id === '') {
+          if (data.type === 0 && data.period_id === '') {
             delete data.period_id
           }
           addOrUpdate(data)
@@ -109,7 +109,7 @@ export default {
     },
     onSelectType(val) {
       this.form.period_id = ''
-    },
+    }
   }
 }
 </script>

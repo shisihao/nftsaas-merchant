@@ -95,10 +95,15 @@ export default {
   },
   methods: {
     handleBeforeUpload(file) {
+      this.loading = true
       return new Promise((resolve, reject) => {
-        this.loading = true
         this.$emit('handleBeforeUpload', file, res => {
-          res ? resolve(file) : reject(false)
+          if (res) {
+            resolve(file)
+          } else {
+            this.loading = false
+            reject(false)
+          }
         }, this.refName)
       })
     },

@@ -311,14 +311,15 @@ export default {
         .then(({ msg }) => {
           this.$message.success(msg)
           this.$router.replace({ path: '/' })
+          putFirst()
         })
         .catch(error => {
           if (error.toString().indexOf('设计风格已设置，请前往编辑') >= 0) {
+            putFirst()
             this.$router.replace({ path: '/' })
           }
         })
         .finally(() => {
-          putFirst()
           this.btnLoading = false
         })
     }

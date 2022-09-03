@@ -12,7 +12,7 @@
         :collapse-transition="false"
         mode="vertical"
       >
-        <sidebar-item :class="route.name" v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
+        <sidebar-item v-for="route in permission_routes" :key="route.path" :class="route.name" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
   </div>
@@ -52,3 +52,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+::v-deep .el-scrollbar .scrollbar-wrapper{
+    margin-right:-16px;
+  }
+</style>

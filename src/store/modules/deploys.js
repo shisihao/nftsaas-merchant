@@ -22,7 +22,7 @@ const actions = {
             data.forEach(element => {
               configInfo[element.key] = element.value
               if (element.key === 'oss') {
-                setToken(element.value.DoMain, DominKey)
+                setToken(element.value.domain, DominKey)
                 setToken(element.value, OssKey)
               }
             })

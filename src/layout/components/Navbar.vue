@@ -111,7 +111,7 @@ export default {
       this.$router.push(`/login?redirect=dashboard`)
     },
     onGoRenew() {
-      this.$router.push({path: `/tenants`,  query: { path: this.$route.path } })
+      this.$router.push({ path: `/tenants`, query: { path: this.$route.path }})
     },
     onGoRenewList() {
       this.$router.push({ path: `/renew` })
