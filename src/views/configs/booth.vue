@@ -158,10 +158,11 @@ export default {
     position: relative;
     width: 350px;
     height: 700px;
+    overflow: hidden;
   }
   .preview-content .preview_image {
     width: 350px;
-    border-radius: 10px;
+    border-radius: 65px;
   }
   .preview_bg {
     position: absolute;
