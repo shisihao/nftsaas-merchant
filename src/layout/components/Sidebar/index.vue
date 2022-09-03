@@ -53,7 +53,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-::v-deep .el-scrollbar .scrollbar-wrapper{
-    margin-right:-16px;
-  }
+::v-deep .scrollbar-wrapper {
+	margin-right: -16px !important;
+}
 </style>

@@ -1,5 +1,5 @@
 module.exports = {
-  title: '模版',
+  title: '商户后台',
 
   /**
    * @type {boolean} true | false
