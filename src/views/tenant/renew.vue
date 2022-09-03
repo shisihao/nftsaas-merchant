@@ -99,8 +99,7 @@
             fit="cover"
             :src="row.credential ? domin + row.credential : ''"
             :preview-src-list="[row.credential ? domin + row.credential : '']"
-          >
-          </el-image>
+          />
           <div v-else>
             -
           </div>
@@ -150,14 +149,13 @@
 </template>
 
 <script>
-import { BigNumber } from 'bignumber.js'
 import Pagination from '@/components/Pagination'
 import { DominKey, getToken } from '@/utils/auth'
-import { pickerOptions, payOptions, examineStatusOptions } from '@/utils/explain'
+import { pickerOptions, payOptions } from '@/utils/explain'
 import { getRenewList } from '@/api/tenant'
 
 export default {
-  name: 'renew',
+  name: 'Renew',
   components: { Pagination },
   data() {
     return {
@@ -169,7 +167,7 @@ export default {
         { label: '已支付(待确认)', value: 1, type: 'warning' },
         { label: '通过', value: 2, type: 'success' },
         { label: '驳回', value: 3, type: 'danger' },
-        { label: '关闭', value: 4, type: 'info' },
+        { label: '关闭', value: 4, type: 'info' }
       ],
       list: [],
       search: {

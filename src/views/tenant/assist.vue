@@ -1,20 +1,20 @@
 <template>
-  <div class="app-container" v-loading="cateLoading">
-    <el-empty v-if="noCateData" description="暂无数据"></el-empty>
+  <div v-loading="cateLoading" class="app-container">
+    <el-empty v-if="noCateData" description="暂无数据" />
     <div v-else>
       <el-tabs v-model="cateActiveName" type="card" @tab-click="handleCateTab">
-        <el-tab-pane :label="value.name" :name="`cate_${index}`" :key="index" v-for="(value, index) in cateOptions"></el-tab-pane>
+        <el-tab-pane v-for="(value, index) in cateOptions" :key="index" :label="value.name" :name="`cate_${index}`" />
       </el-tabs>
       <div v-loading="helpLoading">
-        <el-empty v-if="noHelpData" description="暂无数据"></el-empty>
+        <el-empty v-if="noHelpData" description="暂无数据" />
         <div v-else class="app-content">
           <div class="tab-box">
             <el-tabs v-model="activeName" tab-position="left">
-              <el-tab-pane :label="value.title" :name="`help_${index}`" :key="index" v-for="(value, index) in list"/>
+              <el-tab-pane v-for="(value, index) in list" :key="index" :label="value.title" :name="`help_${index}`" />
             </el-tabs>
           </div>
           <div class="app-box">
-            <div v-html="list[0] ? list[activeName.split('_')[1]].content : ''"></div>
+            <div v-html="list[0] ? list[activeName.split('_')[1]].content : ''" />
           </div>
         </div>
       </div>
@@ -29,7 +29,7 @@ import { pickerOptions } from '@/utils/explain'
 import BackToTop from '@/components/BackToTop'
 
 export default {
-  name: 'assist',
+  name: 'Assist',
   components: { BackToTop },
   data() {
     return {
@@ -68,7 +68,7 @@ export default {
       this.cateLoading = true
       await getHelpCate()
         .then(response => {
-          if(response.data.length > 0) {
+          if (response.data.length > 0) {
             this.noCateData = false
             this.cateOptions = response.data
             this.search.cate_id = response.data[0].id

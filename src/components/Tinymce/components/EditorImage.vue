@@ -139,7 +139,7 @@ export default {
       const _URL = window.URL || window.webkitURL
       const fileName = file.uid
       this.listObj[fileName] = {}
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         if (file.type.indexOf('image/') >= 0) {
           const img = new Image()
           img.src = _URL.createObjectURL(file)
@@ -176,7 +176,7 @@ export default {
             options.onError('上传失败')
           }
         })
-          .catch((e) => {
+          .catch(() => {
             this.handleRemove1(options.file)
             this.$message.error('上传失败，请重新上传')
             getQiniuToken()
@@ -188,7 +188,7 @@ export default {
         options.onError('上传失败')
       }
     },
-    handleError(err, file, fileList) {
+    handleError() {
       this.$message.error('上传失败')
     }
   }

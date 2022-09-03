@@ -42,7 +42,7 @@
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img v-if="info.icon" :src="`${configInfo.oss ? configInfo.oss.DoMain : domin}` + info.icon" class="user-avatar">
+          <img v-if="info.icon && configInfo.oss" :src="`${configInfo.oss ? configInfo.oss.domain : ''}` + info.icon" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -111,7 +111,7 @@ export default {
       this.$router.push(`/login?redirect=dashboard`)
     },
     onGoRenew() {
-      this.$router.push({path: `/tenants`,  query: { path: this.$route.path } })
+      this.$router.push({ path: `/tenants`, query: { path: this.$route.path }})
     },
     onGoRenewList() {
       this.$router.push({ path: `/renew` })

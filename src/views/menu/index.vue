@@ -48,7 +48,7 @@
         align="center"
       >
         <template slot-scope="{ row }">
-          <svg-icon v-if="row.icon" :icon-class="row.icon"/>
+          <svg-icon v-if="row.icon" :icon-class="row.icon" />
         </template>
       </el-table-column>
       <el-table-column
@@ -66,9 +66,9 @@
         </template>
       </el-table-column>
       <el-table-column
-          prop="show"
-          label="是否显示"
-          align="center"
+        prop="show"
+        label="是否显示"
+        align="center"
       >
         <template slot-scope="{ row }">
           {{ row.show ? "是" : '否' }}
@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import { dataList, deleteData, menuItem } from '@/api/menu'
+import { dataList, deleteData } from '@/api/menu'
 import AddOrUpdate from './components/AddOrUpdate'
 import { listTree } from '@/utils/index'
 
@@ -139,7 +139,7 @@ export default {
         .then(response => {
           if (response.code !== 0) return
           this.rawList = response.data
-          this.list = listTree(response.data, "id")
+          this.list = listTree(response.data, 'id')
           if (this.lists.length === 0) {
             this.lists = this.list
           }

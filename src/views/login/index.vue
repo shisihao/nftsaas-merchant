@@ -5,7 +5,7 @@
         <el-form ref="form" :model="form" :rules="rules" class="login-form" autocomplete="on" label-position="left">
           <div class="title-container">
             <h3 class="title">
-              <img v-if="info.icon && configInfo.oss" :src="`${configInfo.oss ? configInfo.oss.DoMain : ''}` + info.icon" class="sidebar-logo">{{ info.name }}{{ $t('login.title') }}
+              <img v-if="info.icon && configInfo.oss" :src="`${configInfo.oss ? configInfo.oss.domain : ''}` + info.icon" class="sidebar-logo">{{ info.name }}{{ $t('login.title') }}
             </h3>
             <lang-select v-if="false" class="set-language" />
           </div>

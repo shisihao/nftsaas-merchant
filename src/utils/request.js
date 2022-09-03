@@ -7,7 +7,7 @@ import router from '@/router'
 // create an axios instance
 const service = axios.create({
   baseURL: (process.env.NODE_ENV === 'development' ? process.env.VUE_APP_BASE_API : `${location.origin}`) + '/admin/', // url = base url + request url
-  //baseURL: process.env.NODE_ENV === 'development' ? `/admin/` : `${location.origin}/admin/`,
+  // baseURL: process.env.NODE_ENV === 'development' ? `/admin/` : `${location.origin}/admin/`,
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 60 * 1e3 // request timeout
 })
@@ -63,6 +63,7 @@ service.interceptors.response.use(
           })
         }
       } else {
+        // eslint-disable-next-line no-inner-declarations
         function alertError() {
           if (!document.querySelector('.tips-message-box')) {
             Message({
@@ -84,14 +85,14 @@ service.interceptors.response.use(
           alertError()
           return false
         }
-        
+
         Message({
           message: res.msg || 'Error',
           type: 'error',
           customClass: 'tips-message-box',
           duration: 5 * 1000
         })
-        if (typeof(res) === 'string' && res.indexOf('404-') >= 0) {
+        if (typeof (res) === 'string' && res.indexOf('404-') >= 0) {
           document.querySelector('html').innerHTML = res
         }
       }
