@@ -1,56 +1,55 @@
 <template>
   <div class="app-container">
-    <label class="label">实名要素设置：</label>
-    <el-radio-group v-model="radio">
-      <el-radio :label="3">二要素</el-radio>
-      <el-radio :label="6">三要素</el-radio>
-      <el-radio :label="9">实人认证</el-radio>
-    </el-radio-group>
-    <div class="desc">
-      <p>说明</p>
-      <p>二要素：身份证+姓名 ；</p>
-      <p>三要素：手机号+身份证+姓名</p>
-      <p>实人认证：阿里实人认证</p>
-    </div>
-    <el-button type="primary" :loading="btnLoading" @click="onFormSubmit()">
-      {{ $t("table.confirm") }}
-    </el-button>
+    <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+      <el-form-item label="实名要素设置：" prop="key">
+        <el-input v-model="form.key" :rows="10" placeholder="请输入实名要素" style="width: 600px" clearable />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" :loading="btnLoading" @click="onFormSubmit()">
+          {{ $t('table.confirm') }}
+        </el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
+import { getCert, setCert } from '@/api/configs'
 export default {
   data() {
     return {
-      radio: '',
-      btnLoading: false
+      form: { key: '' },
+      btnLoading: false,
+      rules: {
+        key: [
+          { required: true, message: '请输入实名要素', trigger: 'blur' }
+        ]
+      }
     }
   },
+  mounted() {
+    this.getInfo()
+  },
   methods: {
+    getInfo() {
+      getCert().then(({ data }) => {
+        this.form.key = data.value
+      })
+    },
     onFormSubmit() {
       this.btnLoading = true
-      // api(this.form)
-      //   .then(({ msg }) => {
-      //     this.$message.success(msg)
-      //     this.getList()
-      //   })
-      //   .catch(() => {})
-      //   .finally(() => {
-      //     this.btnLoading = false
-      //   })
+      setCert(this.form)
+        .then(({ msg }) => {
+          this.$message.success(msg)
+          this.getInfo()
+        })
+        .catch(() => {})
+        .finally(() => {
+          this.btnLoading = false
+        })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-.label {
-  margin-right: 10px;
-  font-size: 14px;
-  color: #333;
-}
-.desc {
-  margin-top: 30px;
-  font-size: 14px;
-  color: #333;
-}
 </style>

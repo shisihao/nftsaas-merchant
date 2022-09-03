@@ -30,11 +30,13 @@
 <script>
 import { getIntegralConfig, integralConfig } from '@/api/configs'
 import CustomUpload from '@/components/Upload/CustomUpload'
+import { DominKey, getToken } from '@/utils/auth'
 export default {
   name: 'IntegralName',
   components: { CustomUpload },
   data() {
     return {
+      domin: getToken(DominKey),
       btnLoading: false,
       form: {
         name: '',
@@ -78,7 +80,7 @@ export default {
       })
     },
     handleSuccess(response, file) {
-      this.form.image = response.name
+      this.form.image = response
     },
     beforeUpload(file, cb) {
       const type = ['image/jpeg', 'image/jpg', 'image/png']

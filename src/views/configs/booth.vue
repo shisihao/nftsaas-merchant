@@ -15,7 +15,7 @@
           >
           <i v-else class="el-icon-plus avatar-uploader-icon" />
         </custom-upload>
-        <div class="notice">建议尺寸 180px * 44px</div>
+        <!-- <div class="notice">建议尺寸 180px * 44px</div> -->
       </el-form-item>
       <el-form-item>
         <el-button type="primary" :loading="btnLoading" @click="onFormSubmit()">
@@ -26,7 +26,8 @@
     <div class="preview">
       <p>效果预览</p>
       <div class="preview-content">
-        <img src="" alt="">
+        <img class="preview_bg" src="@/assets/images/preview.png" alt="">
+        <img v-if="form.image" class="preview_image" :src="domin + form.image" alt="">
       </div>
     </div>
   </div>
@@ -55,14 +56,15 @@ export default {
   },
   created() {
     this.init()
+    console.log(this.domin)
   },
   methods: {
     init() {
       this.getList()
     },
     getList() {
-      getBackImage().then((res) => {
-        this.form.image = res.value
+      getBackImage().then(({ data }) => {
+        this.form.image = data.value
       })
     },
     onFormSubmit() {
@@ -150,17 +152,20 @@ export default {
   }
   .preview {
     margin-left: 50px;
+    position: relative;
   }
   .preview-content {
+    position: relative;
     width: 350px;
     height: 700px;
-    background: url("../../assets/images/preview.png") no-repeat;
-    background-size: cover;
-    padding: 18px 19px;
-    box-sizing: border-box;
   }
-  .preview-content img {
-    width: 100%;
+  .preview-content .preview_image {
+    width: 350px;
     border-radius: 10px;
+  }
+  .preview_bg {
+    position: absolute;
+    width: 350px;
+    height: 700px;
   }
   </style>

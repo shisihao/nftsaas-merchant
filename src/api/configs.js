@@ -525,3 +525,14 @@ export function setBackImage(data) {
     ...data
   })
 }
+
+// 获取三要素配置
+export function getCert() {
+  return request.get('/configs/cert')
+}
+// 设置三要素配置
+export function setCert(data) {
+  return request.put('/configs/cert', {
+    ...data
+  })
+}
