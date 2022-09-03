@@ -228,6 +228,8 @@ export default {
       setAliPay(this.form).then(({ msg }) => {
         this.$message.success(msg)
         this.visible = false
+      }).finally(() => {
+        this.btnLoading = false
       })
     },
     getWx() {
@@ -239,6 +241,8 @@ export default {
       setWxPay(this.form).then(({ msg }) => {
         this.$message.success(msg)
         this.visible = false
+      }).finally(() => {
+        this.btnLoading = false
       })
     },
     getSand() {
@@ -250,6 +254,8 @@ export default {
       setSandPay(this.form).then(({ msg }) => {
         this.$message.success(msg)
         this.visible = false
+      }).finally(() => {
+        this.btnLoading = false
       })
     }
   }
