@@ -1,35 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- <el-form ref="form" :model="form" :rules="rules" label-position="left" label-width="100px">
-      <el-form-item label="USDT" prop="usdt">
-        <span slot="label">
-          <span class="svg">
-            <svg-icon icon-class="radius-usdt" style="color: #269A77;" />
-          </span>
-          USDT
-        </span>
-        <el-switch
-          v-model="form.usdt"
-          active-value="on"
-          inactive-value="off"
-          @change="onFormSubmit"
-        />
-      </el-form-item>
-      <el-form-item label="银行卡" prop="bank">
-        <span slot="label">
-          <span class="svg">
-            <svg-icon icon-class="radius-bank" style="color: #F59D03;" />
-          </span>
-          银行卡
-        </span>
-        <el-switch
-          v-model="form.bank"
-          active-value="on"
-          inactive-value="off"
-          @change="onFormSubmit"
-        />
-      </el-form-item>
-    </el-form> -->
     <el-table :data="tableData" border style="width: 800px">
       <el-table-column fixed prop="method" label="支付方式名称" width="300" />
       <el-table-column prop="desc" label="支付方式描述" width="400" />
@@ -126,10 +96,30 @@
       </div>
       <div v-else-if="active === 3">
         <el-form ref="form" :model="form" :rules="rules" label-width="160px">
-          <el-form-item label="杉德商户号：" prop="name">
-            <el-input v-model="form.app_id" :precision="0" :min="0" clearable />
+          <el-form-item label="杉德商户号：" prop="mer_no">
+            <el-input v-model="form.mer_no" :precision="0" :min="0" clearable />
           </el-form-item>
-          <el-form-item label="商户公钥：" prop="name">
+          <el-form-item label="商户公钥：" prop="mer_key">
+            <el-input
+              v-model="form.mer_key"
+              type="textarea"
+              :rows="5"
+              :precision="0"
+              :min="0"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="杉德公钥：" prop="public_key">
+            <el-input
+              v-model="form.public_key"
+              type="textarea"
+              :rows="5"
+              :precision="0"
+              :min="0"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="杉德私钥：" prop="private_key">
             <el-input
               v-model="form.private_key"
               type="textarea"
@@ -139,9 +129,9 @@
               clearable
             />
           </el-form-item>
-          <el-form-item label="杉德公钥：" prop="name">
+          <el-form-item label="MD5K：" prop="md5_key">
             <el-input
-              v-model="form.name"
+              v-model="form.md5_key"
               type="textarea"
               :rows="5"
               :precision="0"
@@ -149,19 +139,9 @@
               clearable
             />
           </el-form-item>
-          <el-form-item label="私钥：" prop="name">
+          <el-form-item label="two_public_key：" prop="two_public_key">
             <el-input
-              v-model="form.name"
-              type="textarea"
-              :rows="5"
-              :precision="0"
-              :min="0"
-              clearable
-            />
-          </el-form-item>
-          <el-form-item label="key1keyMD5K：" prop="name">
-            <el-input
-              v-model="form.root_cert"
+              v-model="form.two_public_key"
               type="textarea"
               :rows="5"
               :precision="0"
@@ -184,7 +164,7 @@
 </template>
 
 <script>
-import { aliPay, setAliPay, wxPay, setWxPay } from '@/api/configs'
+import { aliPay, setAliPay, wxPay, setWxPay, sandPay, setSandPay } from '@/api/configs'
 export default {
   name: 'Pay',
   data() {
@@ -199,11 +179,11 @@ export default {
           desc: '支付宝网站（alipay.com）是国内先进的网上支付平台',
           key: 1
         },
-        {
-          method: '微信支付',
-          desc: '微信支付（pay.weixin.qq..com）是国内先进的网上支付平台',
-          key: 2
-        },
+        // {
+        //   method: '微信支付',
+        //   desc: '微信支付（pay.weixin.qq..com）是国内先进的网上支付平台',
+        //   key: 2
+        // },
         {
           method: '杉德支付',
           desc: '杉德支付（sandpay.com.cn）是国内先进的网上支付平台',
@@ -224,6 +204,8 @@ export default {
         this.setAli()
       } else if (this.active === 2) {
         this.setWx()
+      } else if (this.active === 3) {
+        this.setSand()
       }
     },
     handleClick(row) {
@@ -233,6 +215,8 @@ export default {
         this.getAli()
       } else if (this.active === 2) {
         this.getWx()
+      } else if (this.active === 3) {
+        this.getSand()
       }
     },
     getAli() {
@@ -253,6 +237,17 @@ export default {
     },
     setWx() {
       setWxPay(this.form).then(({ msg }) => {
+        this.$message.success(msg)
+        this.visible = false
+      })
+    },
+    getSand() {
+      sandPay().then((res) => {
+        this.form = res.data.value
+      })
+    },
+    setSand() {
+      setSandPay(this.form).then(({ msg }) => {
         this.$message.success(msg)
         this.visible = false
       })

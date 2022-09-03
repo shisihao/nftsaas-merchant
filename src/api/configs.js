@@ -72,6 +72,18 @@ export function setWxPay(data) {
   })
 }
 
+// 杉德支付配置
+export function sandPay() {
+  return request.get('/configs/sandpay')
+}
+
+// 杉德支付设置
+export function setSandPay(data) {
+  return request.put('/configs/sandpay', {
+    ...data
+  })
+}
+
 // 提现配置
 export function withdrawal() {
   return request.get('/configs/withdrawal')
