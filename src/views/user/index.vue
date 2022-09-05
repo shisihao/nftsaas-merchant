@@ -295,11 +295,11 @@ import UserLikes from '@/views/user/components/UserLikes'
 import CollectionUpdate from '@/views/user/components/CollectionUpdate'
 import follow from '@/views/user/components/follow'
 import fans from '@/views/user/components/fans'
-import AirBalance from '@/views/user/components/AirBalance'
+import airBalance from '@/views/user/components/airBalance'
 
 export default {
   name: 'User',
-  components: { UserLikes, CollectionUpdate, Pagination, AddOrUpdate, Subset, Wallet, follow, fans, ExportSerial, AirBalance },
+  components: { UserLikes, CollectionUpdate, Pagination, AddOrUpdate, Subset, Wallet, follow, fans, ExportSerial, airBalance },
   data() {
     return {
       domin: getToken(DominKey),
