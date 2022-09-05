@@ -330,7 +330,7 @@ export default {
         is_abc: [
           { required: true, message: '请选择是否农行专区', trigger: ['blur', 'change'] }
         ],
-        video_url: [
+        'video_url.filename': [
           { required: true, message: '请上传mp4文件', trigger: ['blur', 'change'] }
         ],
         'three_url.three_type': [
@@ -569,6 +569,7 @@ export default {
       this.$message.warning(`当前限制选择 1 个文件，请删除后在上传`)
     },
     handleTypeChange(val) {
+      this.$refs.form.clearValidate(['video_url.filename', 'three_url.three_type', 'three_url.three_obj', 'three_url.three_mtl', 'three_url.three_gltf', 'three_url.three_bin', 'three_url.three_image'])
       switch (val) {
         case 0:
           this.form.is_three = 0
