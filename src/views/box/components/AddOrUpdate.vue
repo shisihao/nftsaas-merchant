@@ -53,7 +53,7 @@
         </el-form-item>
         <el-form-item label="标签" prop="tags">
           <el-select v-model="form.tags" style="width: 100%;" multiple clearable>
-            <el-option v-for="(item, index) in tagsOptions" :key="index" :label="item.label" :value="item.value" :disabled="form.tags.length >= 3" />
+            <el-option v-for="item in tagsOptions" :key="item.value" :label="item.label" :value="item.value" :disabled="form.tags.length >= 3" />
           </el-select>
         </el-form-item>
         <el-form-item label="创作者头像" prop="author_avatar">
@@ -78,7 +78,7 @@
               <el-tag type="primary">藏品</el-tag> <el-tag v-if="item.goodType" :type="item.goodType | paraphrase(typeOptions, 'value', 'type')">{{ item.goodType | paraphrase(typeOptions) }}</el-tag> <span class="box-name ellipsis">名称：{{ item.name }}</span> <span class="box-stock">库存：{{ item.stock }}</span><span class="box-stock">剩余：{{ item.stock - (item.sales_num || 0) }}</span>
             </span>
             <span v-show="item.goods_id === 0">
-              <el-tag type="warning">藏豆</el-tag> <span class="box-name ellipsis">数量：{{ item.integral_num }}</span><span class="box-stock">库存：{{ item.stock }}</span>
+              <el-tag type="warning">仙豆</el-tag> <span class="box-name ellipsis">数量：{{ item.integral_num }}</span><span class="box-stock">库存：{{ item.stock }}</span>
             </span>
             <i v-show="!form.id" class="el-icon-delete del-good" @click="onDelGood(index)" />
           </div>
@@ -94,8 +94,8 @@
               </el-select>
             </div>
             <div v-if="good.type === 1" class="add-box">
-              藏豆：
-              <el-input-number v-model="good.integral_num" :min="0" :precision="2" placeholder="藏豆" />
+              仙豆：
+              <el-input-number v-model="good.integral_num" :min="0" :precision="2" placeholder="仙豆" />
             </div>
             <div class="add-box">
               库存：
@@ -108,17 +108,14 @@
           </div>
           <div v-else>
             <el-button v-show="!form.id" type="primary" plain @click="onAddBoxType(0)">+ 藏品</el-button>
-            <el-button v-show="!form.id" type="warning" plain @click="onAddBoxType(1)">+ 藏豆</el-button>
+            <el-button v-show="!form.id" type="warning" plain @click="onAddBoxType(1)">+ 仙豆</el-button>
           </div>
         </el-form-item>
         <el-form-item label="库存" prop="stock">
           <el-input-number v-model="form.stock" disabled :min="0" :precision="0" placeholder="库存" />
         </el-form-item>
         <el-form-item label="预留库存" prop="reserve_stock">
-          <el-input-number v-model="form.reserve_stock" :disabled="!!form.id" :max="form.id?form.reserve_stock:Math.floor(form.stock*0.8)" :precision="0" :min="0" :step="1" placeholder="请输入预留库存" />
-        </el-form-item>
-        <el-form-item label="优先购库存" prop="prior_stock">
-          <el-input-number v-model="form.prior_stock" :disabled="!!form.id" :precision="0" :min="0" :step="1" placeholder="请输入优先购库存" />
+          <el-input-number v-model="form.reserve_stock" :disabled="!!form.id" :max="form.stock" :precision="0" :min="0" :step="1" placeholder="请输入预留库存" />
         </el-form-item>
         <el-form-item label="开售时间" prop="start_time">
           <el-date-picker
@@ -134,16 +131,6 @@
           <el-form-item label="发行方" prop="issuer">
             <el-input v-model="form.issuer" placeholder="发行方" clearable />
           </el-form-item>
-          <el-form-item label="发行方专区">
-            <el-select v-model="form.issuer_id" filterable clearable placeholder="请选择发行方专区">
-              <el-option
-                v-for="(item, index) in issuersOptions"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
         </div>
         <el-form-item label="权益说明" prop="desc">
           <el-input v-model="form.desc" clearable type="textarea" placeholder="权益说明" :rows="3" />
@@ -151,14 +138,14 @@
         <el-form-item label="人民币价格" prop="cny_price">
           <el-input-number v-model="form.cny_price" :min="0" :precision="2" placeholder="人民币价格" />
         </el-form-item>
-        <el-form-item label="藏豆价格" prop="integral_price">
-          <el-input-number v-model="form.integral_price" :min="0" :precision="2" placeholder="藏豆价格" />
+        <el-form-item label="仙豆价格" prop="integral_price">
+          <el-input-number v-model="form.integral_price" :min="0" :precision="2" placeholder="仙豆价格" />
         </el-form-item>
         <el-form-item label="限购数量" prop="limit_num">
           <el-input-number v-model="form.limit_num" :min="1" :precision="0" placeholder="限购数量" />
         </el-form-item>
-        <el-form-item label="优先购限购数量" prop="prior_limit_num">
-          <el-input-number v-model="form.prior_limit_num" :precision="0" :min="0" placeholder="请输入优先购限购数量" />
+        <el-form-item label="优先购库存" prop="prior_stock">
+          <el-input-number v-model="form.prior_stock" :disabled="!!form.id" :precision="0" :min="0" :step="1" placeholder="请输入优先购库存" />
         </el-form-item>
         <el-form-item label="是否预告" prop="is_pre">
           <el-radio-group v-model="form.is_pre">
@@ -219,7 +206,6 @@ import EditTinymce from './EditTinymce'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import { typeOptions } from '@/utils/explain'
 import { conditionList } from '@/api/collection'
-import { dataIssuersList } from '@/api/issuers'
 export default {
   name: 'AddOrUpdate',
   components: { CustomUpload, EditTinymce, draggable, ElImageViewer },
@@ -254,24 +240,21 @@ export default {
         stock: 0,
         max_stock: 0
       },
-      issuersOptions: [],
       form: {
         id: 0,
         cate_id: '',
         name: '',
         author: '',
         author_avatar: '',
+        type: '',
         issuer: '',
         desc: '',
         detail: '',
-        type: '',
         start_time: new Date(),
         condition_goods_id: '',
         images: [],
         cny_price: 0,
-        integral_price: 0,
-        limit_num: 1,
-        prior_limit_num: 0,
+        limit_num: '',
         stock: 0,
         reserve_stock: 0,
         prior_stock: 0,
@@ -281,7 +264,6 @@ export default {
         is_pre: 0,
         is_hot: 0,
         status: 0,
-        issuer_id: '',
         sort: 0
       },
       rules: {
@@ -315,22 +297,10 @@ export default {
         cny_price: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ],
-        integral_price: [
-          { required: true, message: '不能为空', trigger: ['blur', 'change'] }
-        ],
         limit_num: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ],
-        prior_limit_num: [
-          { required: true, message: '不能为空', trigger: ['blur', 'change'] }
-        ],
         stock: [
-          { required: true, message: '不能为空', trigger: ['blur', 'change'] }
-        ],
-        reserve_stock: [
-          { required: true, message: '不能为空', trigger: ['blur', 'change'] }
-        ],
-        prior_stock: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ],
         goods: [
@@ -339,10 +309,16 @@ export default {
         tags: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ],
-        type: [
+        is_pre: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ],
-        is_pre: [
+        reserve_stock: [
+          { required: true, message: '不能为空', trigger: ['blur', 'change'] }
+        ],
+        prior_stock: [
+          { required: true, message: '不能为空', trigger: ['blur', 'change'] }
+        ],
+        type: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ]
       }
@@ -404,8 +380,6 @@ export default {
                 })
               })
           })
-      } else {
-        this.dataIssuersLists()
       }
     },
     async getDetails() {
@@ -414,16 +388,6 @@ export default {
           this.form = Object.assign(response.data, { tags: response.data.tags.map(v => v.id) })
         })
         .catch(() => {})
-    },
-    dataIssuersLists() {
-      dataIssuersList().then((response) => {
-        this.issuersOptions = response.data.map(v => {
-          return {
-            label: v.name,
-            value: v.id
-          }
-        })
-      })
     },
     getAuthorList() {
       authorList()
@@ -522,7 +486,7 @@ export default {
           return false
         }
         if (this.good.integral_num <= 0) {
-          this.$message.warning('藏豆数量必须大于 0')
+          this.$message.warning('仙豆数量必须大于 0')
           return false
         }
       }
@@ -545,7 +509,6 @@ export default {
       this.$refs['form'].validate(valid => {
         if (valid) {
           this.btnLoading = true
-          this.form.issuer_id = this.form.issuer_id || 0
           addOrUpdate(this.form)
             .then(({ msg }) => {
               this.$message.success(msg)
@@ -582,9 +545,9 @@ export default {
     },
     handleAvatarSuccess(response, file) {
       if (this.currentName === 'images') {
-        this.form[this.currentName].push(response)
+        this.form[this.currentName].push(response.name)
       } else {
-        this.form[this.currentName] = response
+        this.form[this.currentName] = response.name
       }
     },
     beforeAvatarUpload(file, cb, refName) {

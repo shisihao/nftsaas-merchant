@@ -36,11 +36,13 @@ export const currencyReportOptions = [
 ]
 
 export const payOptions = [
+
   { label: '全部', value: '' },
-  { label: '银行卡', value: 'bank' },
-  /* { label: '支付宝', value: 'alipay' },
-  { label: '微信', value: 'wechat' }, */
-  { label: 'USDT', value: 'usdt' }
+  { label: '仙豆', value: 'integral' },
+  { label: '微信', value: 'wxpay' },
+  { label: '支付宝', value: 'alipay' },
+  // { label: '农行', value: 'abcpay' },
+  { label: '京东', value: 'jdpay' }
 ]
 
 export const whetherOptions = [
@@ -51,19 +53,18 @@ export const whetherOptions = [
 
 export const orderTypeOptions = [
   { label: '全部', value: '' },
-  { label: '自购', value: 0 },
-  { label: '导入', value: 1 }
+  { label: '藏品订单', value: 'goods', type: 'primary' },
+  { label: '盲盒订单', value: 'box', type: 'warning' }
+  /* { label: '铸造券订单', value: 'cast', type: 'success' } */
 ]
 
 export const orderStatusOptions = [
   { label: '全部', value: '' },
-  { label: '待付款', value: 0 },
-  { label: '已支付(待确认)', value: 1 },
-  { label: '已确认(部署中)', value: 2 },
-  { label: '工作中', value: 3 },
-  { label: '欠电费', value: 4 },
-  { label: '已关闭', value: 5 },
-  { label: '工作已结束', value: 6 }
+  { label: '待付款', value: 0, type: 'warning' },
+  { label: '待发放', value: 1, type: 'primary' },
+  { label: '已完成', value: 2, type: 'success' },
+  { label: '已关闭', value: 3, type: 'info' },
+  { label: '异常订单', value: 4, type: 'danger' }
 ]
 
 export const electricsStatusOptions = [

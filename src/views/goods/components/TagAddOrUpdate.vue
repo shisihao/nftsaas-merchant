@@ -1,8 +1,11 @@
 <template>
-  <el-dialog :title="(form.id ? $t('table.edit') : $t('table.add')) + '利率' " :visible.sync="visible" append-to-body @closed="onClose()">
-    <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-      <el-form-item label="利率" prop="interest_rate">
-        <el-input-number v-model="form.interest_rate" :min="0" :max="100" :precision="2" placeholder="利率" />
+  <el-dialog :title="form.id ? $t('table.edit') : $t('table.add') " :visible.sync="visible" @closed="onClose()">
+    <el-form ref="form" :model="form" :rules="rules" label-width="160px">
+      <el-form-item label="标签名称" prop="name">
+        <el-input v-model="form.name" placeholder="标签名称" clearable />
+      </el-form-item>
+      <el-form-item label="排序(越大越靠前)" prop="sort">
+        <el-input-number v-model="form.sort" :min="0" :precision="0" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -17,21 +20,26 @@
 </template>
 
 <script>
-import { setInterest } from '@/api/order'
+import { addOrUpdate } from '@/api/tag'
 
 export default {
-  name: 'Interest',
+  name: 'TagAddOrUpdate',
   data() {
     return {
       visible: false,
       btnLoading: false,
       form: {
         id: 0,
-        interest_rate: 0
+        name: '',
+        sort: 0
       },
+
       rules: {
-        interest_rate: [
-          { required: true, message: '请输入', trigger: ['blur', 'change'] }
+        name: [
+          { required: true, message: '请输入标签名称', trigger: ['blur', 'change'] }
+        ],
+        sort: [
+          { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ]
       }
     }
@@ -40,16 +48,15 @@ export default {
     init(data) {
       this.visible = true
       if (data) {
-        this.form.id = data.order_id
-        this.form.interest_rate = data.assets.interest_rate
+        this.form = Object.assign({}, data)
       }
     },
     onFormSubmit() {
       this.$refs['form'].validate(valid => {
         if (valid) {
           this.btnLoading = true
-          setInterest(this.form)
-            .then(({ msg = '设置成功' }) => {
+          addOrUpdate(this.form)
+            .then(({ msg }) => {
               this.$message.success(msg)
               this.visible = false
               this.$emit('refreshList')
@@ -61,12 +68,12 @@ export default {
       })
     },
     onClose() {
+      this.btnLoading = false
       this.$reset()
     }
   }
 }
 </script>
-
 <style scoped>
 .el-input-number {
   width: 200px;

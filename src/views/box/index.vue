@@ -10,11 +10,6 @@
             <el-option v-for="item in tagsOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="类型">
-          <el-select v-model="search.type" clearable @clear="getList(1)" @change="getList(1)">
-            <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
         <el-form-item label="是否售罄">
           <el-select v-model="search.sellout" clearable @clear="getList(1)" @change="getList(1)">
             <el-option v-for="item in whetherOptions" :key="item.value" :label="item.label" :value="item.value" />
@@ -32,16 +27,6 @@
             align="right"
             @change="onChangeDateRange"
           />
-        </el-form-item>
-        <el-form-item label="发行方专区">
-          <el-select v-model="search.issuer_id" filterable clearable placeholder="请选择发行方专区" @change="getList(1)">
-            <el-option
-              v-for="(item, index) in issuersOptions"
-              :key="index"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
         </el-form-item>
         <el-button icon="el-icon-search" @click="getList(1)">
           {{ $t('table.search') }}
@@ -105,7 +90,7 @@
             价格：¥ {{ row.cny_price }}
           </div>
           <div>
-            藏豆：{{ row.integral_price }}
+            仙豆：{{ row.integral_price }}
           </div>
           <div>
             库存：{{ row.stock }}
@@ -124,9 +109,6 @@
           </div>
           <div>
             发行方：{{ row.issuer }}
-          </div>
-          <div>
-            发行方专区：<el-tag :type="!!row.issuer_id ? 'primary' : 'info'"> {{ row.issuer_id | paraphrase(issuersOptions) }} </el-tag>
           </div>
           <div>
             限购: {{ row.limit_num }}
@@ -180,7 +162,7 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        width="220"
+        width="260"
         align="center"
         fixed="right"
       >
@@ -221,15 +203,14 @@ import { tagList } from '@/api/common'
 import { getToken, DominKey } from '@/utils/auth'
 import AddOrUpdate from './components/AddOrUpdate'
 import Pagination from '@/components/Pagination'
+import AirdropUpdate from './components/AirdropUpdate'
 import { pickerOptions, whetherOptions } from '@/utils/explain'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
-import { dataIssuersList } from '@/api/issuers'
-import AirdropUpdate from './components/AirdropUpdate'
 
 export default {
-  name: 'Box',
+  name: 'Task',
   components: { AddOrUpdate, Pagination, Swiper, SwiperSlide, ElImageViewer, AirdropUpdate },
   data() {
     return {
@@ -251,9 +232,7 @@ export default {
         start_time: '',
         end_time: '',
         tags: [],
-        type: '',
-        sellout: '',
-        issuer_id: ''
+        sellout: ''
       },
       pages: {
         total: 0,
@@ -263,26 +242,6 @@ export default {
       imageViewer: false,
       imageViewerList: [],
       dateRangeValue: [],
-      typeOptions: [
-        {
-          label: '常规',
-          value: 0
-        },
-        {
-          label: '活动',
-          value: 1
-        }
-      ],
-      issuersOptions: [
-        {
-          label: '全部',
-          value: ''
-        },
-        {
-          label: '非专区',
-          value: 0
-        }
-      ],
       list: [],
       addOrUpdateVisible: false,
       airUpdateVisible: false
@@ -302,19 +261,6 @@ export default {
     init() {
       this.getList()
       this.getTagList()
-      this.dataIssuersLists()
-    },
-    dataIssuersLists() {
-      dataIssuersList().then((response) => {
-        response.data.map(v => {
-          this.issuersOptions.push(
-            {
-              label: v.name,
-              value: v.id
-            }
-          )
-        })
-      })
     },
     getList(page = this.pages.current, loading = true) {
       if (this.loading) return
@@ -428,9 +374,6 @@ export default {
 .recommend-page {
   width: 291px;
   margin: 0 auto;
-  .swiper-container {
-    user-select: none;
-  }
   .swiper-button-prev,.swiper-button-next {
     display: none;
     pointer-events: auto;

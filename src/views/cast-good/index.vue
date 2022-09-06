@@ -5,16 +5,6 @@
         <el-form-item label="关键词">
           <el-input v-model="search.keywords" style="width: 240px;" placeholder="藏品编号/藏品名称/发行方/创作者" clearable @clear="getList(1)" @keyup.enter.native="getList(1)" />
         </el-form-item>
-        <el-form-item label="发行方专区">
-          <el-select v-model="search.issuer_id" filterable clearable placeholder="请选择发行方专区" @change="getList(1)">
-            <el-option
-              v-for="(item, index) in issuersOptions"
-              :key="index"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
         <el-button icon="el-icon-search" @click="getList(1)">
           {{ $t('table.search') }}
         </el-button>
@@ -72,9 +62,6 @@
           </div>
           <div>
             发行方：{{ row.issuer || '' }}
-          </div>
-          <div>
-            发行方专区：<el-tag :type="!!row.issuer_id ? 'primary' : 'info'"> {{ row.issuer_id | paraphrase(issuersOptions) }} </el-tag>
           </div>
         </template>
       </el-table-column>
@@ -172,10 +159,9 @@ import { pickerOptions, statusOptions, whetherOptions, typeOptions, goodShowType
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
-import { dataIssuersList } from '@/api/issuers'
 
 export default {
-  name: 'CastGood',
+  name: 'Collection',
   components: { AddOrUpdate, Pagination, ElImageViewer, Swiper, SwiperSlide, Preview3d },
   data() {
     return {
@@ -189,8 +175,7 @@ export default {
       },
       domin: getToken(DominKey),
       search: {
-        keywords: '',
-        issuer_id: ''
+        keywords: ''
       },
       pages: {
         total: 0,
@@ -198,19 +183,8 @@ export default {
         current: 1
       },
       typeOptions,
-      goodShowTypeOptions,
       list: [],
       dateRangeValue: [],
-      issuersOptions: [
-        {
-          label: '全部',
-          value: ''
-        },
-        {
-          label: '非专区',
-          value: 0
-        }
-      ],
       tagsOptions: [],
       addOrUpdateVisible: false,
       addMoreVisible: false,
@@ -220,7 +194,8 @@ export default {
       imageViewer: false,
       pickerOptions,
       whetherOptions,
-      statusOptions
+      statusOptions,
+      goodShowTypeOptions
     }
   },
   computed: {
@@ -242,19 +217,6 @@ export default {
   methods: {
     init() {
       this.getList()
-      this.dataIssuersLists()
-    },
-    dataIssuersLists() {
-      dataIssuersList().then((response) => {
-        response.data.map(v => {
-          this.issuersOptions.push(
-            {
-              label: v.name,
-              value: v.id
-            }
-          )
-        })
-      })
     },
     getList(page = this.pages.current, loading = true) {
       if (this.loading) return
@@ -377,7 +339,7 @@ export default {
 }
 .preview-btn {
   font-size: 12px;
-  margin-left: 10px;
+  margin-right: 10px;
 }
 ::v-deep .detail-content  img {
   width: 100%;
@@ -406,9 +368,6 @@ export default {
 .recommend-page {
   width: 291px;
   margin: 0 auto;
-  .swiper-container {
-    user-select: none;
-  }
   .swiper-button-prev,.swiper-button-next {
     display: none;
     pointer-events: auto;

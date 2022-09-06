@@ -2,30 +2,45 @@
   <div class="app-container">
     <div class="filter-container">
       <el-form :inline="true" :model="search">
-        <el-form-item label="名称">
-          <el-input v-model="search.keywords" placeholder="商品名称(支持模糊查询)" clearable @clear="getList(1)" @keyup.enter.native="getList(1)" />
+        <el-form-item label="关键词">
+          <el-input v-model="search.keywords" style="width: 300px;" placeholder="藏品编号/藏品名称/发行方/分类名称/合约地址" clearable @clear="getList(1)" @keyup.enter.native="getList(1)" />
         </el-form-item>
-        <el-form-item label="商品属性">
-          <el-select v-model="search.type" clearable @clear="getList(1)" @change="getList(1)">
-            <el-option v-for="item in catesOptions" :key="item.value" :label="item.label" :value="item.value" />
+        <el-form-item label="藏品类型">
+          <el-select v-model="search.type" clearable @change="getList(1)">
+            <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="专区/期数">
-          <el-cascader
-            clearable
-            :options="zoneSearchOptions"
-            :props="{ checkStrictly: true }"
-            @change="onhandleChangeZone"
-          >
-            <template slot-scope="{ node, data }">
-              <span>{{ data.label }}</span>
-              <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-            </template>
-          </el-cascader>
+        <el-form-item label="是否上架">
+          <el-select v-model="search.status" clearable @change="getList(1)">
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="商品分类">
-          <el-select v-model="search.cate_id" clearable @clear="getList(1)" @change="getList(1)">
-            <el-option v-for="item in cateOptions" :key="item.value" :label="item.label" :value="item.value" />
+        <el-form-item label="是否售罄">
+          <el-select v-model="search.sellout" clearable @change="getList(1)">
+            <el-option v-for="item in whetherOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="发表时间">
+          <el-date-picker
+            v-model="dateRangeValue"
+            type="datetimerange"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right"
+            @change="onChangeDateRange"
+          />
+        </el-form-item>
+        <el-form-item label="藏品标签">
+          <el-select v-model="search.tags" multiple clearable @change="getList(1)">
+            <el-option
+              v-for="item in tagsOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
           </el-select>
         </el-form-item>
         <el-button icon="el-icon-search" @click="getList(1)">
@@ -41,213 +56,201 @@
       border
       highlight-current-row
       :data="list"
-      :header-cell-style="headNone"
     >
       <el-table-column
         prop="id"
         label="ID"
-        width="80"
+        width="55"
         align="center"
       />
       <el-table-column
-        v-if="info.template_id !== 1"
         prop="images"
-        label="商品图片"
-        width="291"
+        label="藏品图片"
+        width="365"
         header-align="center"
       >
         <template slot-scope="{ row, $index }">
-          <div v-if="!loading" class="recommendPage">
+          <div v-if="!loading" class="recommend-page">
             <swiper :ref="'mySwiper' + $index" :options="swiperOption">
               <swiper-slide v-for="(item,index) in row.images" :key="index" class="images-list">
                 <el-image
                   class="image-item"
-                  :src="domin + item"
-                  @click="onPicturePreview(item)"
+                  fit="contain"
+                  :src="item && domin + item"
+                  @click="onPicturePreview(row.images, index)"
                 />
               </swiper-slide>
-              <div slot="pagination" class="swiper-pagination" />
-              <div slot="button-prev" class="swiper-button-prev" @click="prev($index)" />
-              <div slot="button-next" class="swiper-button-next" @click="next($index)" />
             </swiper>
+            <div v-if="row.images.length > 3" slot="button-prev" class="swiper-button-prev" @click="prev($index)" />
+            <div v-if="row.images.length > 3" slot="button-next" class="swiper-button-next" @click="next($index)" />
           </div>
         </template>
       </el-table-column>
       <el-table-column
-        prop="name"
-        label="商品名称"
+        label="藏品信息"
+        min-width="180"
         header-align="center"
-      />
+      >
+        <template slot-scope="{ row }">
+          <div>
+            名称：{{ row.name }}
+          </div>
+          <div>
+            类型：<el-tag :type="row.type | paraphrase(typeOptions, 'value', 'type')"> {{ row.type | paraphrase(typeOptions) }} </el-tag>
+          </div>
+          <div>
+            价格：¥{{ row.cny_price || 0.00 }}
+          </div>
+          <div>
+            幻晶：{{ row.integral_price || 0.00 }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column
-        label="已售"
+        label="藏品信息"
         width="180"
         header-align="center"
       >
         <template slot-scope="{ row }">
           <div>
-            数量：{{ row.sales_num }}
+            编号：{{ row.serial }}
           </div>
           <div>
-            USDT销售额：{{ row.sales_usdt | cutZero }}
+            库存：{{ row.stock || 0 }}
           </div>
           <div>
-            现金销售额  ：{{ row.sales_cny | moneyToFormat }}
+            已售：{{ row.sales_num || 0 }}
+          </div>
+          <div>
+            开售：{{ row.start_time }}
+          </div>
+          <div>
+            转赠：{{ row.give_time }}
+          </div>
+          <div>
+            类型：
+            <el-link class="preview-btn" :underline="false" :type="goodShowType(row) | paraphrase(goodShowTypeOptions, 'value', 'type')">{{ goodShowType(row) | paraphrase(goodShowTypeOptions) }}</el-link>
           </div>
         </template>
       </el-table-column>
+
       <el-table-column
+        label="创作者"
+        min-width="130"
         header-align="center"
       >
-        <template slot="header">
-          商品信息
-        </template>
-        <el-table-column
-          width="180"
-          header-align="center"
-        >
-          <template slot-scope="{ row }">
-            <div v-if="row.extend.market_price_status">
-              市场价格：￥<span style="text-decoration: line-through;">{{ row.extend.market_price | moneyToFormat }}</span>
-            </div>
-            <div>
-              商品单价：￥{{ row.price | moneyToFormat }}
-            </div>
-            <div>
-              {{ ['eth'].includes(row.zone) ? '算力(M)' : '算力(T)' }}：{{ row.spec | cutZero }}
-            </div>
-            <div>
-              年限数量(天)：{{ row.years }}
-            </div>
-            <div>
-              库存：{{ row.stock }}
-            </div>
-            <div>
-              限购数量：{{ row.limit_status ? row.limit_num : '不限购' }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          width="180"
-          header-align="center"
-        >
-          <template slot-scope="{ row }">
-            <div>
-              所属专区：{{ row.zone.toUpperCase() }}
-            </div>
-            <div>
-              商品分类：{{ row.cate_id | paraphrase(categoryOptions) }}
-            </div>
-            <div v-if="row.power_status">
-              {{ ['eth'].includes(row.zone) ? '设备算力(MH/S)' : '设备算力(T/S)' }}：{{ row.extend.power }}
-            </div>
-            <div v-if="row.cycle_status">
-              预计回本周期(天)：{{ row.cycle }}
-            </div>
-            <div>
-              期数：{{ row.period.id | paraphrase(levelOptions) }}
-            </div>
-            <div>
-              参与市场：{{ row.market_status ? '是' : '否' }}
-            </div>
-            <div>
-              设备功耗(KW)：{{ row.power_waste || 0 }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          width="200"
-          header-align="center"
-        >
-          <template slot-scope="{ row }">
-            <div v-if="row.daily_output_status">
-              {{ `预计日产出(${row.zone.toUpperCase()}/天)` }}：{{ row.daily_output }}
-            </div>
-            <div v-if="row.operate_status">
-              运营维护费状态：{{ row.operate }}
-            </div>
-            <div v-if="['eth', 'btc'].includes(row.zone)">
-              电费类型：{{ row.power_type | paraphrase(powerTypeOptions) }}
-            </div>
-            <div v-if="[0, 1, 2].includes(row.cate)">
-              商品类型：{{ row.cate | paraphrase(catesOptions) }}
-            </div>
-            <template v-if="row.zone === 'fil'&& row.cate === 1">
-              <div>
-                GAS费：{{ row.gass_fee | cutZero }}
-              </div>
-              <div>
-                抵押：{{ row.mortgage | cutZero }}
-              </div>
-            </template>
-            <div v-if="row.is_hide">
-              APP隐藏商品：<el-link type="primary" :underline="false">已隐藏</el-link>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table-column>
-      <el-table-column
-        label="限时优惠时间"
-        width="140"
-        align="center"
-      >
         <template slot-scope="{ row }">
-          <div v-if="row.discount_status">
-            <div>{{ row.discount_start_time }}</div>
-            <div>-</div>
-            <div>{{ row.discount_end_time }}</div>
+          <div style="display: flex;align-items: center;">
+            <el-avatar
+              icon="el-icon-user-solid"
+              style="flex-shrink: 0;"
+              :src="row.author_avatar ? domin + row.author_avatar : ''"
+            />
+            <div style="margin-left: 4px;flex-grow: 1;">{{ row.author || '-' }}</div>
           </div>
         </template>
       </el-table-column>
       <el-table-column
-        prop="sort"
-        label="排序"
-        width="180"
-        align="center"
+        label="链上HASH"
+        min-width="130"
+        header-align="center"
       >
         <template slot-scope="{ row }">
-          <template v-if="row.sortEdit">
-            <el-input-number v-model="row.sort" controls-position="right" class="edit-input" size="small" :min="0" :max="255" :precision="0" />
-            <el-button
-              class="cancel-btn"
-              type="warning"
-              @click="onCancelEdit(row)"
-            >
-              取消
-            </el-button>
-          </template>
-          <el-link v-else type="primary" :underline="false" @click="row.sortEdit = true">{{ row.sort }}</el-link>
+          <div>{{ row.hash || '-' }}</div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="商品标签"
+        header-align="center"
+      >
+        <template slot-scope="{ row: { tags } }">
+          <el-tag v-for="(item, index) in tags" :key="index" effect="plain">{{ item.name }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column width="70" label="是否售罄" align="center">
+        <template slot-scope="{ row }">
+          <el-switch
+            v-if="row.type === 0"
+            v-model="row.sell_out"
+            :active-value="1"
+            :inactive-value="0"
+            @change="onChangeSellOut(row, 'sell_out')"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column width="70" label="是否展示售罄" align="center">
+        <template slot-scope="{ row }">
+          <el-switch
+            v-if="row.type === 0"
+            v-model="row.sell_out_show"
+            :active-value="1"
+            :inactive-value="0"
+            @change="onChangeSellOut(row, 'sell_out_show')"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column width="70" label="上架状态" align="center">
+        <template slot-scope="{ row, $index }">
+          <el-switch
+            v-if="row.type === 0"
+            v-model="row.status"
+            :active-value="0"
+            :inactive-value="1"
+            @change="onChangeStatus(row, $index)"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column width="70" label="是否转赠" align="center">
+        <template slot-scope="{ row }">
+          <el-switch
+            v-model="row.give_status"
+            :active-value="0"
+            :inactive-value="1"
+            @change="onChangeSellOut(row, 'give_status')"
+          />
         </template>
       </el-table-column>
       <el-table-column
         label="操作"
-        width="150"
-        fixed="right"
+        width="220"
         align="center"
+        fixed="right"
       >
         <template slot-scope="{ row, $index }">
-          <template v-if="row.sortEdit">
-            <el-button type="success" @click="onConfirmSortEdit(row)">确定</el-button>
-          </template>
-          <template v-else>
-            <el-button type="primary" @click="onAddOrUpdate(row)">编辑</el-button>
-            <el-button type="danger" @click="onDelete({ row, $index })">删除</el-button>
-          </template>
+          <el-button-group>
+            <el-button v-if="[1].includes(row.is_more)" type="primary" plain @click="onMoreOrUpdate(row)">多次销售</el-button>
+            <el-button v-if="row.sell_out === 1 && row.stock > 0" type="warning" @click="onRecycle(row)">库存回收</el-button>
+            <el-button v-if="![4].includes(row.type)" type="primary" @click="onAddOrUpdate(row)">编辑</el-button>
+            <el-button type="danger" @click="onDelete(row, $index)">删除</el-button>
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
     <pagination v-show="pages.total > 0" :total="pages.total" :page.sync="pages.current" :limit.sync="pages.limit" @pagination="getList()" />
-
-    <el-image-viewer
-      v-if="imageViewer"
-      :on-close="closeViewer"
-      :url-list="imageViewerList"
-    />
-
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update
       v-if="addOrUpdateVisible"
       ref="addOrUpdate"
       @refreshList="getList()"
+    />
+    <!-- 弹窗, 多次销售 / 修改 -->
+    <add-more-list
+      v-if="addMoreVisible"
+      ref="AddMoreList"
+      @refreshList="getList()"
+    />
+
+    <look-all-tag
+      v-if="lookAllTagVisible"
+      ref="lookAllTag"
+      @refreshList="getList()"
+    />
+
+    <el-image-viewer
+      v-if="imageViewer"
+      :z-index="3000"
+      :on-close="closeViewer"
+      :url-list="imageViewerList"
     />
 
   </div>
@@ -255,25 +258,22 @@
 
 <script>
 import Pagination from '@/components/Pagination'
+import { dataList, deleteGoodsItem, setStatus, setSellOut, recycle } from '@/api/collection'
+import { getToken, DominKey } from '@/utils/auth'
 import AddOrUpdate from './components/AddOrUpdate'
-import { dataList, deleteData, sortGoods } from '@/api/goods'
-import { DominKey, getToken } from '@/utils/auth'
-import { zoneSearchOptions, powerTypeOptions, catesOptions } from '@/utils/explain'
+import AddMoreList from './components/AddMoreList'
+import LookAllTag from './components/LookAllTag'
+import { pickerOptions, statusOptions, whetherOptions, typeOptions, goodShowTypeOptions } from '@/utils/explain'
+import { tagList } from '@/api/common'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
-import { powerLevelList as filLevel } from '@/api/fil-level'
-import { powerCategoryList } from '@/api/category'
-import { mapGetters } from 'vuex'
 
 export default {
-  name: 'Goods',
-  components: { Pagination, AddOrUpdate, ElImageViewer, Swiper, SwiperSlide },
+  name: 'Collection',
+  components: { LookAllTag, AddOrUpdate, AddMoreList, Pagination, ElImageViewer, Swiper, SwiperSlide },
   data() {
     return {
-      domin: getToken(DominKey),
-      zoneSearchOptions,
-      powerTypeOptions,
       swiperOption: {
         slidesPerView: 3,
         spaceBetween: 10,
@@ -282,33 +282,35 @@ export default {
           prevEl: '.swiper-button-prev'
         }
       },
-      list: [],
+      domin: getToken(DominKey),
       search: {
-        keywords: '',
-        period_id: '',
         type: '',
-        cate_id: '',
-        zone: ''
+        keywords: '',
+        status: '',
+        sellout: '',
+        start_time: '',
+        end_time: '',
+        tags: []
       },
       pages: {
         total: 0,
         limit: 20,
         current: 1
       },
-      imageViewerList: [],
-      cateOptions: [],
-      catesOptions: catesOptions,
-      categoryOptions: [],
-      imageViewer: false,
-      levelOptions: [],
-      typeOptions: [
-        { label: '全部', value: '' },
-        { label: '普通', value: 'common' },
-        { label: '注册可领', value: 'register' },
-        { label: '新手特供', value: 'novice' }
-      ],
+      typeOptions,
+      list: [],
+      dateRangeValue: [],
+      tagsOptions: [],
+      addOrUpdateVisible: false,
+      addMoreVisible: false,
+      lookAllTagVisible: false,
       loading: false,
-      addOrUpdateVisible: false
+      imageViewerList: [],
+      imageViewer: false,
+      pickerOptions,
+      whetherOptions,
+      statusOptions,
+      goodShowTypeOptions
     }
   },
   computed: {
@@ -317,15 +319,11 @@ export default {
         return this.$refs[`mySwiper${v}`].$swiper
       }
     },
-    ...mapGetters([
-      'info'
-    ])
-  },
-  watch: {
-    'search.zone'(val) {
-      this.cateOptions = this.categoryOptions.filter(v => {
-        return v.zone === val
-      })
+    goodShowType() {
+      return (row) => {
+        const index = [0, row.is_three, row.is_video].findIndex(v => !!v)
+        return index > 0 ? index : 0
+      }
     }
   },
   created() {
@@ -333,59 +331,46 @@ export default {
   },
   methods: {
     init() {
-      Promise.all([this.getFileLevelList(), this.getCategoryList()])
-        .then(() => {
-          this.getList()
+      this.getList()
+      this.tagLists()
+    },
+    tagLists() {
+      tagList().then(response => {
+        this.tagsOptions = response.data.map(v => {
+          return {
+            label: v.name,
+            value: v.id
+          }
+        })
+      })
+    },
+    onChangeStatus(row) {
+      setStatus(row.id, { status: row.status })
+        .then(({ msg = '设置成功' }) => {
+          this.$message.success(msg)
+        })
+        .catch((msg = '设置失败') => {
+          row.status = row.status ? 0 : 1
+          this.$message.error(msg)
         })
     },
-    async getFileLevelList() {
-      await filLevel()
-        .then(response => {
-          this.levelOptions = response.data.map(v => {
-            return {
-              label: v.name,
-              value: v.id
-            }
-          })
-          this.zoneSearchOptions.forEach((item, index) => {
-            const level = []
-            response.data.forEach(val => {
-              if (item.value === val.type) {
-                level.push({ label: val.name, value: val.id })
-              }
-            })
-            if (level.length > 0) {
-              this.$set(this.zoneSearchOptions, index, Object.assign(item, { children: level }))
-            }
-          })
+    onChangeSellOut(row, name) {
+      setSellOut(row.id, { [name]: row[name] })
+        .then(({ msg = '设置成功' }) => {
+          this.$message.success(msg)
         })
-        .catch(() => {
-        })
-    },
-    async getCategoryList() {
-      await powerCategoryList()
-        .then(response => {
-          this.categoryOptions = response.data.map(v => {
-            return {
-              zone: v.zone,
-              label: v.name,
-              value: v.id
-            }
-          })
-        })
-        .catch(() => {
+        .catch((msg = '设置失败') => {
+          row[name] = row[name] ? 0 : 1
+          this.$message.error(msg)
         })
     },
     getList(page = this.pages.current, loading = true) {
       if (this.loading) return
       this.loading = loading
-      if (page === 1) this.pages.current = page
-      dataList({ page, ...this.search, limit: this.pages.limit })
+      dataList({ page, ...this.search, limit: this.pages.limit, tags: `${this.search.tags}` })
         .then(response => {
           if (response.code !== 0) return
-          this.list = response.data.data.map(v => {
-            return Object.assign(v, { sortEdit: false, sortOld: v.sort })
-          })
+          this.list = response.data.data
           this.pages.total = response.data.total
         })
         .catch(error => {
@@ -396,45 +381,40 @@ export default {
         })
     },
     onAddOrUpdate(data) {
-      if (this.levelOptions.length === 0) {
-        this.$message.warning('请先添加期数')
-        return false
-      }
-
-      if (this.categoryOptions.length === 0) {
-        this.$message.warning('请先添加商品分类')
-        return false
-      }
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate && this.$refs.addOrUpdate.init(data)
       })
     },
-    onDelete({ row, $index }) {
-      this.$confirm(
-        `确定对[(#${row.id})(${row.name})]进行[删除]操作?`,
-        '删除',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'error',
-          cancelButtonClass: 'btn-custom-cancel'
-        }
-      )
-        .then(() => {
-          deleteData(row.id)
-            .then(({ msg = '删除成功' }) => {
-              this.$message.success(msg)
-              this.init()
-            })
-            .catch(() => {
-              this.$message.error('删除失败')
-            })
-        })
-        .catch(() => {})
+    onMoreOrUpdate(data) {
+      this.addMoreVisible = true
+      this.$nextTick(() => {
+        this.$refs.AddMoreList && this.$refs.AddMoreList.init(data)
+      })
     },
-    onPicturePreview(img) {
-      this.imageViewerList = [this.domin + img]
+    lookAll(data) {
+      this.lookAllTagVisible = true
+      this.$nextTick(() => {
+        this.$refs.lookAllTag && this.$refs.lookAllTag.init(data)
+      })
+    },
+    onChangeDateRange(value) {
+      if (Array.isArray(value)) {
+        this.search.start_time = value[0]
+        this.search.end_time = value[1]
+      } else {
+        this.search.start_time = this.search.end_time = ''
+        this.getList(1)
+      }
+    },
+    onPicturePreview(imgArr, index) {
+      const newImgArr = imgArr.concat()
+      const currentItemArr = newImgArr.slice(index, index + 1)
+      newImgArr.splice(index, 1)
+      const currentArr = currentItemArr.concat(newImgArr).map((v) => {
+        return this.domin + v
+      })
+      this.imageViewerList = currentArr
       this.imageViewer = true
     },
     closeViewer() {
@@ -446,47 +426,62 @@ export default {
     next(index) {
       this.swiper(index).slideNext()
     },
-    headNone({ row, colunm, rowIndex, columnIndex }) {
-      if (rowIndex > 0) {
-        return { display: 'none' }
-      }
-    },
-    onCancelEdit(row) {
-      row.sortEdit = false
-      row.sort = row.sortOld
-    },
-    onConfirmSortEdit(row) {
-      sortGoods({ id: row.id, data: { sort: row.sort }})
-        .then(({ msg = '修改成功' }) => {
-          this.$message.success(msg)
-          row.sortEdit = false
+    onRecycle(row) {
+      this.$confirm(
+        `确定进行[库存回收]操作?`,
+        '库存回收',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          cancelButtonClass: 'btn-custom-cancel'
+        }
+      )
+        .then(() => {
+          recycle(row.id)
+            .then(({ msg = '库存回收成功' }) => {
+              this.$message.success(msg)
+              this.getList()
+            })
+            .catch(() => {})
         })
-        .catch(() => {
+        .catch(() => {})
+    },
+    onDelete(row) {
+      this.$confirm(
+        `确定进行[删除]操作?`,
+        '删除',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'error',
+          cancelButtonClass: 'btn-custom-cancel'
+        }
+      )
+        .then(() => {
+          deleteGoodsItem(row.id)
+            .then(({ msg = '删除成功' }) => {
+              this.$message.success(msg)
+              this.init()
+            })
+            .catch(() => {})
         })
-    },
-    onChangeZone(val) {
-      this.search.cate_id = ''
-      this.getList(1)
-    },
-    onhandleChangeZone(val) {
-      if (val[0]) {
-        this.search.zone = val[0]
-      } else {
-        this.search.zone = ''
-      }
-
-      if (val[1]) {
-        this.search.period_id = val[1]
-      } else {
-        this.search.period_id = ''
-      }
-
-      this.getList(1)
+        .catch(() => {})
     }
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+::v-deep .image-slot {
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: #f5f7fa;
+  color: #909399;
+}
 .images-list {
   width: 80px;
   height: 80px;
@@ -538,5 +533,54 @@ export default {
 }
 ::v-deep .edit-input.is-controls-right .el-input__inner {
   padding: 0;
+}
+
+.preview-btn {
+  font-size: 12px;
+  margin-right: 10px;
+}
+
+.recommend-page {
+  width: 291px;
+  margin: 0 auto;
+  .swiper-button-prev,.swiper-button-next {
+    display: none;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+  .swiper-button-prev::after, .swiper-button-next::after {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  &:hover .swiper-button-prev, &:hover .swiper-button-next {
+    display: flex;
+  }
+  .images-list {
+    width: 80px;
+    height: 80px;
+    .image-item {
+      height: 100%;
+      cursor: pointer;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      img {
+        height: auto;
+      }
+    }
+  }
+}
+.el-tag {
+  margin-right: 4px;
 }
 </style>

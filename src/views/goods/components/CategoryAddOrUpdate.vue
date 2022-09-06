@@ -1,16 +1,11 @@
 <template>
   <el-dialog :title="form.id ? $t('table.edit') : $t('table.add') " :visible.sync="visible" @closed="onClose()">
     <el-form ref="form" :model="form" :rules="rules" label-width="160px">
-      <el-form-item label="所属专区" prop="zone">
-        <el-select v-model="form.zone" :disabled="form.id > 0" clearable>
-          <el-option v-for="item in zoneOptions" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-      </el-form-item>
       <el-form-item label="分类名称" prop="name">
         <el-input v-model="form.name" placeholder="分类名称" clearable />
       </el-form-item>
       <el-form-item label="排序(越大越靠前)" prop="sort">
-        <el-input-number v-model="form.sort" :precision="0"/>
+        <el-input-number v-model="form.sort" :min="0" :precision="0" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -26,7 +21,6 @@
 
 <script>
 import { addOrUpdate } from '@/api/category'
-import { zoneOptions } from '@/utils/explain'
 
 export default {
   name: 'CategoryAddOrUpdate',
@@ -36,15 +30,11 @@ export default {
       btnLoading: false,
       form: {
         id: 0,
-        zone: '',
         name: '',
         sort: 0
       },
-      zoneOptions: zoneOptions.slice(1),
+
       rules: {
-        zone: [
-          { required: true, message: '请选择所属专区', trigger: ['blur', 'change'] }
-        ],
         name: [
           { required: true, message: '请输入分类名称', trigger: ['blur', 'change'] }
         ],

@@ -21,7 +21,12 @@
       />
       <el-table-column
         prop="name"
-        label="分类名称"
+        label="标签名称"
+        align="center"
+      />
+      <el-table-column
+        prop="goods_num"
+        label="藏品数量"
         align="center"
       />
       <el-table-column
@@ -74,9 +79,9 @@
     <pagination v-show="pages.total > 0" :total="pages.total" :page.sync="pages.current" :limit.sync="pages.limit" @pagination="getList()" />
 
     <!-- 弹窗, 新增 / 修改 -->
-    <category-add-or-update
-      v-if="addOrUpdateVisible"
-      ref="addOrUpdate"
+    <tag-add-or-update
+      v-if="tagAddOrUpdateVisible"
+      ref="tagAddOrUpdate"
       @refreshList="getList()"
     />
 
@@ -84,14 +89,14 @@
 </template>
 
 <script>
-import { dataList, deleteData, sortCategory } from '@/api/category'
+import { dataList, deleteData, sortTag } from '@/api/tag'
 import { getToken, DominKey } from '@/utils/auth'
-import CategoryAddOrUpdate from './components/CategoryAddOrUpdate'
+import TagAddOrUpdate from './components/TagAddOrUpdate'
 import Pagination from '@/components/Pagination/index'
 
 export default {
-  name: 'Category',
-  components: { Pagination, CategoryAddOrUpdate },
+  name: 'Tag',
+  components: { Pagination, TagAddOrUpdate },
   data() {
     return {
       domin: getToken(DominKey),
@@ -104,8 +109,7 @@ export default {
         limit: 20,
         current: 1
       },
-      addOrUpdateVisible: false,
-      commentsVisible: false,
+      tagAddOrUpdateVisible: false,
       loading: false
     }
   },
@@ -136,9 +140,9 @@ export default {
         })
     },
     onAddOrUpdate(data) {
-      this.addOrUpdateVisible = true
+      this.tagAddOrUpdateVisible = true
       this.$nextTick(() => {
-        this.$refs.addOrUpdate && this.$refs.addOrUpdate.init(data)
+        this.$refs.tagAddOrUpdate && this.$refs.tagAddOrUpdate.init(data)
       })
     },
     onDelete(row) {
@@ -169,7 +173,7 @@ export default {
       row.sort = row.sortOld
     },
     onConfirmSortEdit(row) {
-      sortCategory({ id: row.id, data: { sort: row.sort }})
+      sortTag({ id: row.id, data: { sort: row.sort }})
         .then(({ msg = '修改成功' }) => {
           this.$message.success(msg)
           row.sortEdit = false
@@ -181,19 +185,19 @@ export default {
 }
 </script>
 <style scoped>
-::v-deep .edit-input {
-  padding-right: 50px;
-}
-::v-deep .cancel-btn {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  margin-top: -14px;
-}
-::v-deep .edit-input .el-input-number__decrease,::v-deep .edit-input .el-input-number__increase{
-  display: none;
-}
-::v-deep .edit-input.is-controls-right .el-input__inner {
-  padding: 0;
-}
+    ::v-deep .edit-input {
+        padding-right: 50px;
+    }
+    ::v-deep .cancel-btn {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        margin-top: -14px;
+    }
+    ::v-deep .edit-input .el-input-number__decrease,::v-deep .edit-input .el-input-number__increase{
+        display: none;
+    }
+    ::v-deep .edit-input.is-controls-right .el-input__inner {
+        padding: 0;
+    }
 </style>

@@ -4,13 +4,6 @@
       <el-form-item v-if="!form.id" label="库存" prop="stock">
         <el-input-number v-model="form.stock" :precision="0" :min="0" :max="10000" :step="1" placeholder="请输入库存(<10000)" />
       </el-form-item>
-      <el-form-item label="是否农行专区" prop="is_abc">
-        <el-switch
-          v-model="form.is_abc"
-          :inactive-value="0"
-          :active-value="1"
-        />
-      </el-form-item>
       <el-form-item label="类型" prop="">
         <el-radio-group v-model="typeValue" @change="handleTypeChange">
           <el-radio v-for="(item, index) in goodShowTypeOptions" :key="index" :label="item.value"> {{ item.label }} </el-radio>
@@ -148,9 +141,9 @@
       <div v-if="!form.id">
         <el-form-item label="藏品图片" prop="images">
           <div class="filter-list-box">
-            <draggable v-model="form.images" v-bind="dragOptions" @start="drag = true" @end="drag = false">
+            <draggable v-model="form.images" v-bind="dragOptions" class="wrapper" @start="drag = true" @end="drag = false">
               <transition-group>
-                <div v-for="(item,index) in form.images" :key="item" class="upload-images">
+                <div v-for="(item,index) in form.images" :key="index" class="upload-images">
                   <div class="upload-image">
                     <el-image :src="item && domin + item" />
                   </div>
@@ -212,21 +205,9 @@
         </el-form-item>
       </template>
       <el-divider />
-      <div v-if="!form.id">
-        <el-form-item label="发行方" prop="issuer">
-          <el-input v-model="form.issuer" />
-        </el-form-item>
-        <el-form-item label="发行方专区">
-          <el-select v-model="form.issuer_id" filterable clearable placeholder="请选择发行方专区">
-            <el-option
-              v-for="(item, index) in issuersOptions"
-              :key="index"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-      </div>
+      <el-form-item v-if="!form.id" label="发行方" prop="issuer">
+        <el-input v-model="form.issuer" />
+      </el-form-item>
       <el-form-item label="权益说明" prop="desc">
         <el-input v-model="form.desc" type="textarea" :rows="8" placeholder="权益说明" clearable />
       </el-form-item>
@@ -261,13 +242,12 @@
 <script>
 import CustomUpload from '@/components/Upload/CustomUpload'
 import { addOrUpdate, details } from '@/api/cast'
-import { dataIssuersList } from '@/api/issuers'
 import { DominKey, getToken } from '@/utils/auth'
-import { goodShowTypeOptions } from '@/utils/explain'
+import CalcVideo from '@/utils/calcVideo'
 import EditTinymce from './EditTinymce'
 import draggable from 'vuedraggable'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
-import CalcVideo from '@/utils/calcVideo'
+import { goodShowTypeOptions } from '@/utils/explain'
 
 export default {
   name: 'AddOrUpdate',
@@ -280,8 +260,6 @@ export default {
       imageViewer: false,
       imageViewerList: [],
       domin: getToken(DominKey),
-      goodShowTypeOptions,
-      typeValue: 0,
       currentName: '',
       videoList: [],
       oldVideoList: [],
@@ -297,11 +275,11 @@ export default {
         { label: 'obj', value: 'obj' },
         { label: 'gltf', value: 'gltf' }
       ],
-      issuersOptions: [],
+      typeValue: 0,
+      goodShowTypeOptions,
       form: {
-        is_video: 0,
-        is_abc: 0,
         is_three: 0,
+        is_video: 0,
         name: '',
         author: '',
         author_avatar: '',
@@ -310,7 +288,6 @@ export default {
         detail: '',
         images: [],
         show_image: '',
-        issuer_id: '',
         stock: '',
         three_url: {
           three_type: '',
@@ -327,9 +304,6 @@ export default {
         }
       },
       rules: {
-        is_abc: [
-          { required: true, message: '请选择是否农行专区', trigger: ['blur', 'change'] }
-        ],
         'video_url.filename': [
           { required: true, message: '请上传mp4文件', trigger: ['blur', 'change'] }
         ],
@@ -397,19 +371,7 @@ export default {
       if (data) {
         this.form.id = data.id
         this.getDetails()
-      } else {
-        this.dataIssuersLists()
       }
-    },
-    dataIssuersLists() {
-      dataIssuersList().then((response) => {
-        this.issuersOptions = response.data.map(v => {
-          return {
-            label: v.name,
-            value: v.id
-          }
-        })
-      })
     },
     getDetails() {
       details(this.form.id)
@@ -417,7 +379,7 @@ export default {
           if ([1].includes(response.data.is_three)) {
             this.typeValue = 1
             this.form = response.data
-            this.form.three_url.three_type = response.data.three_url.three_type || 'obj'
+            this.form.three_url.three_type = response.data.three_url.three_type || ''
             const three_mtl = this.form.three_url.three_mtl
             const three_obj = this.form.three_url.three_obj
             const three_gltf = this.form.three_url.three_gltf
@@ -436,6 +398,41 @@ export default {
           }
         })
         .catch(() => {})
+    },
+    handleTypeChange(val) {
+      this.$refs.form.clearValidate(['video_url.filename', 'three_url.three_type', 'three_url.three_obj', 'three_url.three_mtl', 'three_url.three_gltf', 'three_url.three_bin', 'three_url.three_image'])
+      switch (val) {
+        case 0:
+          this.form.is_three = 0
+          this.form.is_video = 0
+          Object.assign(this.form.three_url, this.$options.data().form.three_url)
+          this.form.video_url = {
+            width: 0,
+            height: 0,
+            filename: ''
+          }
+          break
+        case 1:
+          this.form.is_three = 1
+          this.form.is_video = 0
+          this.form.video_url = {
+            width: 0,
+            height: 0,
+            filename: ''
+          }
+          break
+        case 2:
+          this.form.is_three = 0
+          this.form.is_video = 1
+          this.form.video_url = {
+            width: 0,
+            height: 0,
+            filename: ''
+          }
+          this.form.videoList = this.oldVideoList
+          Object.assign(this.form.three_url, this.$options.data().form.three_url)
+          break
+      }
     },
     onFormSubmit() {
       this.$refs['form'].validate(valid => {
@@ -458,7 +455,6 @@ export default {
       })
     },
     hanldaddOrUpdate() {
-      this.form.issuer_id = this.form.issuer_id || 0
       const data = JSON.parse(JSON.stringify(this.form))
       if (data.three_url && data.three_type === 'obj') {
         delete data.three_url.three_gltf
@@ -505,8 +501,18 @@ export default {
       }
     },
     handleRemove(file, fileList) {
-      this.form.three_url[`three_${file.name.split('.')[1]}`] = ''
-      this[`${file.name.split('.')[1]}List`] = []
+      switch (this.typeValue) {
+        case 1:
+          this.form.three_url[`three_${file.name.split('.')[1]}`] = ''
+          this[`${file.name.split('.')[1]}List`] = []
+          break
+        case 2:
+          this.form.video_url = {
+            width: 0,
+            height: 0,
+            filename: ''
+          }
+      }
     },
     closeViewer() {
       this.imageViewer = false
@@ -563,45 +569,17 @@ export default {
       cb(true)
     },
     handleError() {
-      this[`${this.currentName.replace('three_url.three_', '')}List`] = []
+      switch (this.typeValue) {
+        case 1:
+          this[`${this.currentName.replace('three_url.three_', '')}List`] = []
+          break
+        case 2:
+          this.videoList = []
+          break
+      }
     },
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 1 个文件，请删除后在上传`)
-    },
-    handleTypeChange(val) {
-      this.$refs.form.clearValidate(['video_url.filename', 'three_url.three_type', 'three_url.three_obj', 'three_url.three_mtl', 'three_url.three_gltf', 'three_url.three_bin', 'three_url.three_image'])
-      switch (val) {
-        case 0:
-          this.form.is_three = 0
-          this.form.is_video = 0
-          Object.assign(this.form.three_url, this.$options.data().form.three_url)
-          this.form.video_url = {
-            width: 0,
-            height: 0,
-            filename: ''
-          }
-          break
-        case 1:
-          this.form.is_three = 1
-          this.form.is_video = 0
-          this.form.video_url = {
-            width: 0,
-            height: 0,
-            filename: ''
-          }
-          break
-        case 2:
-          this.form.is_three = 0
-          this.form.is_video = 1
-          this.form.video_url = {
-            width: 0,
-            height: 0,
-            filename: ''
-          }
-          this.form.videoList = this.oldVideoList
-          Object.assign(this.form.three_url, this.$options.data().form.three_url)
-          break
-      }
     },
     beforeAvatarUploadVideo(file, cb, refName) {
       const type = ['video/mp4']

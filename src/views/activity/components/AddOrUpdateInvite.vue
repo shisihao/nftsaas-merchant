@@ -18,7 +18,7 @@
             <img v-if="form.image" :src="domin + form.image" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon" />
           </custom-upload>
-          <div class="notice">注意：建议藏品图片尺寸 750*750px</div>
+          <div class="notice">注意：建议藏品图片尺寸 750*1000px</div>
         </el-form-item>
         <el-form-item label="活动标题" prop="title">
           <el-input v-model="form.title" placeholder="请输入活动标题" />
@@ -59,7 +59,7 @@
               <el-card v-for="(item,index) in form.reward" :key="index" shadow="never" class="box-card">
                 <div slot="header" class="clearfix">
                   <el-tag type="warning">{{ index }}</el-tag>
-                  <el-button v-if="disabledBtn&&Object.keys(form.reward).length>1" style="float: right; padding: 3px 0" type="text" @click="deleteCard(index)">
+                  <el-button v-if="Object.keys(form.reward).length>1" style="float: right; padding: 3px 0" type="text" @click="deleteCard(index)">
                     <i class="el-icon-delete" />
                   </el-button>
                 </div>
@@ -69,7 +69,7 @@
                   :prop="`reward.${index}.type`"
                   :rules="{ required: true, message: '不能为空', trigger: ['blur', 'change'] }"
                 >
-                  <el-select v-model="item.type" :disabled="form.id>0&&oldReward[index].stock>0" placeholder="请选择奖品类型" @change="typeChange(item,index)">
+                  <el-select v-model="item.type" placeholder="请选择奖品类型" @change="typeChange(item,index)">
                     <el-option
                       v-for="typeItem in typeOptions"
                       :key="typeItem.value"
@@ -85,7 +85,7 @@
                   :prop="`reward.${index}.target_id`"
                   :rules="{ required: true, message: '不能为空', trigger: ['blur', 'change'] }"
                 >
-                  <el-select v-model="item.target_id" :disabled="form.id>0&&oldReward[index].stock>0" filterable clearable popper-class="popover-box" style="width:100%;" @change="goodsOrboxChange(item,index)">
+                  <el-select v-model="item.target_id" filterable clearable popper-class="popover-box" style="width:100%;" @change="goodsOrboxChange(item,index)">
                     <el-option
                       v-for="(goodsItem, index2) in goodsOptions"
                       :key="index2"
@@ -112,7 +112,7 @@
                   :prop="`reward.${index}.target_id`"
                   :rules="{ required: true, message: '不能为空', trigger: ['blur', 'change'] }"
                 >
-                  <el-select v-model="item.target_id" :disabled="form.id>0&&oldReward[index].stock>0" filterable clearable popper-class="popover-box" style="width:300px;" @change="goodsOrboxChange(item,index)">
+                  <el-select v-model="item.target_id" filterable clearable popper-class="popover-box" style="width:300px;" @change="goodsOrboxChange(item,index)">
                     <el-option
                       v-for="(boxItem, index3) in boxOptions"
                       :key="index3"
@@ -138,27 +138,27 @@
                   :prop="`reward.${index}.num`"
                   :rules="{ required: true, message: '不能为空', trigger: ['blur', 'change'] }"
                 >
-                  <el-input-number v-model="item.num" :min="1" :disabled="form.id>0&&oldReward[index].stock>0" style="width:180px" :precision="0" controls-position="right" @change="numChange(item,index)" />
+                  <el-input-number v-model="item.num" :min="1" style="width:180px" :precision="0" controls-position="right" />
                 </el-form-item>
-                <el-form-item
+                <!-- <el-form-item
                   label="库存数量"
                   :prop="`reward.${index}.stock`"
                   :rules="{ required: true,message: '不能为空', trigger: ['blur', 'change'] }"
                 >
                   <el-input-number v-model="item.stock" :disabled="form.id>0&&oldReward[index].stock>0" style="width:180px" controls-position="right" :min="0" :precision="0" @change="stockChange(item,index)" />
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item
                   class="reward-row"
                   label="邀请人数"
                   :prop="`reward.${index}.count`"
                   :rules="{ required: true, message: '不能为空', trigger: ['blur', 'change'] }"
                 >
-                  <el-input-number v-model="item.count" :disabled="form.id>0&&oldReward[index].stock>0" style="width:180px" :min="0" :precision="0" controls-position="right" />
+                  <el-input-number v-model="item.count" style="width:180px" :min="1" :precision="0" controls-position="right" />
                 </el-form-item>
               </el-card>
             </div>
           </div>
-          <el-button v-if="disabledBtn" icon="el-icon-plus" class="level-btn" @click="addLevel" />
+          <el-button icon="el-icon-plus" class="level-btn" @click="addLevel" />
         </div>
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model="form.sort" :min="0" label="排序" :precision="0" controls-position="right" />
@@ -182,7 +182,7 @@
 import CustomUpload from '@/components/Upload/CustomUpload'
 import EditTinymce from './EditTinymce'
 import { DominKey, getToken } from '@/utils/auth'
-import { addOrUpdateInvite, goodsList, boxList, inviteDetail } from '@/api/activity'
+import { addOrUpdateInvite, boxList, goodsList, inviteDetail } from '@/api/activity'
 export default {
   name: 'AddOrUpdateInvite',
   components: { CustomUpload, EditTinymce },
@@ -206,9 +206,9 @@ export default {
         intro: '',
         reward: {
           level1: {
+            type: 'box',
             num: 0,
-            count: 0,
-            stock: 0
+            count: 1
           }
         },
         extend: { power: 1 },
@@ -224,11 +224,11 @@ export default {
       boxOptions: [],
       typeOptions: [
         { value: 'goods', label: '藏品' },
-        { value: 'box', label: '盲盒' },
-        { label: '藏豆', value: 'integral' },
-        { label: '铸造券', value: 'cast' },
-        { label: '兑换券', value: 'voucher' },
-        { label: '商品劵', value: 'commodity' }
+        { value: 'box', label: '盲盒' }
+        // { label: '藏豆', value: 'integral' },
+        // { label: '铸造券', value: 'cast' },
+        // { label: '兑换券', value: 'voucher' },
+        // { label: '商品劵', value: 'commodity' }
       ],
       pickerOptions: {
         disabledDate(time) {
@@ -274,13 +274,7 @@ export default {
       }
     }
   },
-  computed: {
-    disabledBtn() {
-      return !this.form.id || Object.keys(this.oldReward).some(v => {
-        return this.oldReward[v].stock === 0
-      })
-    }
-  },
+
   methods: {
     init(data) {
       this.visible = true
@@ -292,7 +286,7 @@ export default {
     getInviteDetail(id) {
       inviteDetail(id).then(res => {
         this.form = res.data
-        this.oldReward = JSON.parse(JSON.stringify(res.data.reward))
+        // this.oldReward = JSON.parse(JSON.stringify(res.data.reward))
       })
     },
     getOptionsList() {
@@ -341,18 +335,16 @@ export default {
       const index = Object.keys(this.form.reward).length
       this.$set(this.form.reward, `level${index + 1}`, {
         num: 0,
-        type: '',
+        type: 'box',
         count: 1,
-        stock: 0,
         target_id: ''
       })
-      this.$set(this.oldReward, `level${index + 1}`, {
-        num: 0,
-        type: '',
-        count: 1,
-        stock: 0,
-        target_id: ''
-      })
+      // this.$set(this.oldReward, `level${index + 1}`, {
+      //   num: 0,
+      //   type: 'box',
+      //   count: 1,
+      //   target_id: ''
+      // })
       this.stockFlag[`level${index + 1}`] = false
     },
     goodsOrboxChange(item, index) {
@@ -367,34 +359,34 @@ export default {
       item.num = 1
       item.stock = 0
     },
-    stockChange(item, index) {
-      // 验证库存
-      if (item.type === 'goods' || item.type === 'box') {
-        const id = item.target_id
-        this.validationStockCount(item, index, id, 0)
-      }
-    },
-    numChange(item, index) {
-      // 验证奖励数量
-      if (item.type === 'goods' || item.type === 'box') {
-        const id = item.target_id
-        this.validationStockCount(item, index, id, 1)
-      }
-    },
-    validationStockCount(item, index, id, flag) {
-      this[item.type === 'goods' ? 'goodsOptions' : 'boxOptions'].forEach(v => {
-        if (v.value === id && v.stock / item[flag ? 'num' : 'stock'] < item[flag ? 'stock' : 'num']) {
-          let num = 0
-          num = Math.floor(v.stock / item[flag ? 'stock' : 'num'])
-          this.$message.warning(`${flag ? '奖励' : '库存'}数量不能大于${num}`)
-          this.$nextTick(() => {
-            this.stockFlag[index] = true
-          })
-        } else {
-          this.stockFlag[index] = false
-        }
-      })
-    },
+    // stockChange(item, index) {
+    //   // 验证库存
+    //   if (item.type === 'goods' || item.type === 'box') {
+    //     const id = item.target_id
+    //     this.validationStockCount(item, index, id, 0)
+    //   }
+    // },
+    // numChange(item, index) {
+    //   // 验证奖励数量
+    //   if (item.type === 'goods' || item.type === 'box') {
+    //     const id = item.target_id
+    //     this.validationStockCount(item, index, id, 1)
+    //   }
+    // },
+    // validationStockCount(item, index, id, flag) {
+    //   this[item.type === 'goods' ? 'goodsOptions' : 'boxOptions'].forEach(v => {
+    //     if (v.value === id && v.stock / item[flag ? 'num' : 'stock'] < item[flag ? 'stock' : 'num']) {
+    //       let num = 0
+    //       num = Math.floor(v.stock / item[flag ? 'stock' : 'num'])
+    //       this.$message.warning(`${flag ? '奖励' : '库存'}数量不能大于${num}`)
+    //       this.$nextTick(() => {
+    //         this.stockFlag[index] = true
+    //       })
+    //     } else {
+    //       this.stockFlag[index] = false
+    //     }
+    //   })
+    // },
     deleteCard(index) {
       this.$confirm('此操作将删除该数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -436,7 +428,7 @@ export default {
       cb(true)
     },
     handleAvatarSuccess(response, file) {
-      this.form.image = response
+      this.form.image = response.name
     },
     onTinymce(data) {
       this.editTinymceVisible = true

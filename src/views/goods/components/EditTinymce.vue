@@ -1,8 +1,8 @@
 <template>
-  <el-dialog top="30px" append-to-body :title="form.id ? $t('table.edit') : $t('table.add')" :visible.sync="visible" :close-on-click-modal="false" :close-on-press-escape="false" @closed="onClose()">
-    <el-form ref="form" :model="form" :rules="rules" label-width="160px">
-      <el-form-item label="业务说明" prop="info">
-        <tinymce v-if="visible" v-model="form.info" :classname="info.template_id === 3 ? 'temp3-body' : ''" :height="400" />
+  <el-dialog top="30px" width="1000px" append-to-body :title="form.id ? $t('table.edit') : $t('table.add')" :visible.sync="visible" :close-on-click-modal="false" :close-on-press-escape="false" @closed="onClose()">
+    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form-item label="详情说明" prop="info">
+        <tinymce v-if="visible" v-model="form.info" :height="400" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -46,7 +46,7 @@ export default {
     init(data) {
       this.visible = true
       if (data) {
-        this.form.info = data.business_description
+        this.form.info = data.detail
       }
     },
     onFormSubmit() {
