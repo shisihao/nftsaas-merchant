@@ -67,6 +67,14 @@ export const orderStatusOptions = [
   { label: '异常订单', value: 4, type: 'danger' }
 ]
 
+export const logOrderStatusOptions = [
+  { label: '全部', value: -1 },
+  { label: '待支付', value: 0 },
+  { label: '待审核', value: 1 },
+  { label: '已确认', value: 2 },
+  { label: '已驳回', value: 3 }
+]
+
 export const electricsStatusOptions = [
   { label: '全部', value: '' },
   { label: '待支付', value: 0 },

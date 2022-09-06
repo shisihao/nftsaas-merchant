@@ -105,7 +105,42 @@ export function putIdentification(data) {
 
 // uv列表
 export function uvList(params) {
-  return request.get('/tenant/uv', {
+  return request.get('/tenantInfo/uv', {
     params
+  })
+}
+
+// 服务器续费订单列表
+export function serverOrder(params) {
+  return request.get('/tenantInfo/order', {
+    params
+  })
+}
+
+// 服务器补充费订单列表
+export function supplementOrder(params) {
+  return request.get('/tenantInfo/supplementOrders', {
+    params
+  })
+}
+
+// 服务器补充费订单支付
+export function paySupplementFee(data) {
+  return request.post('/tenantInfo/supplementOrders/pay', {
+    ...data
+  })
+}
+
+// 运维费订单列表
+export function maintainOrder(params) {
+  return request.get('/tenantInfo/maintainOrders', {
+    params
+  })
+}
+
+// 运维费订单支付
+export function payOprateFee(data) {
+  return request.post('/tenantInfo/maintainOrders/pay', {
+    ...data
   })
 }

@@ -161,7 +161,8 @@ export default {
     overflow: hidden;
   }
   .preview-content .preview_image {
-    width: 350px;
+    width: 346px;
+    margin-left: 2px;
     border-radius: 65px;
   }
   .preview_bg {
