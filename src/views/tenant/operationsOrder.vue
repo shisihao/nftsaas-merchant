@@ -47,8 +47,6 @@
       </el-form>
     </div>
 
-    <el-table v-if="list.length === 0 && !loading" />
-
     <div v-loading="loading">
       <el-table v-loading="loading" border :data="list">
         <el-table-column prop="id" label="ID" align="center" />
