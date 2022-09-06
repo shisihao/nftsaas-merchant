@@ -28,7 +28,7 @@ export function setSolve(id) {
 
 // 标签列表
 export function tagList(params) {
-  return request.get('/feedback/tag', {
+  return request.get('/tag', {
     params
   })
 }
@@ -36,7 +36,7 @@ export function tagList(params) {
 // 添加 / 修改 `标签`
 export function addOrUpdateTag({ id, ...data }) {
   let method = 'POST'
-  let url = '/feedback/tag'
+  let url = '/tag'
 
   if (id > 0) {
     method = 'PUT'
@@ -49,5 +49,5 @@ export function addOrUpdateTag({ id, ...data }) {
 
 // 删除  `标签`
 export function deleteDataTag(id) {
-  return request.delete(`/feedback/tag/${id}`)
+  return request.delete(`/tag/${id}`)
 }

@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <div class="app-container">
       <!-- <tips-item /> -->
-      <panel-group :common="data.common" />
+      <panel-group :common="data" @resetData="init()" />
       <history-item :statistics="data" />
       <order-item :statistics="data" />
       <assets-item :asset="data.asset" :statistics="data.statistics" />
@@ -17,7 +17,7 @@ import OrderItem from './components/OrderItem'
 import AssetsItem from './components/AssetsItem'
 // import TipsItem from './components/TipsItem'
 import PanelGroup from './components/PanelGroup'
-import { getHome, putFirst, getHomeOrderCount } from '@/api/common'
+import { getHome, putFirst } from '@/api/common'
 import Driver from 'driver.js' // import driver.js
 import 'driver.js/dist/driver.min.css' // import driver.js css
 import steps from './steps'
@@ -36,15 +36,11 @@ export default {
     return {
       driver: null,
       data: {
-        common: {
-          certification: 0,
-          cnyWithdrawal: 0,
-          electric: 0,
-          feedback: 0,
-          order: 0,
-          transfer: 0,
-          withdrawal: 0,
-          todayAheadReturn: 0
+        uv: {
+          day: 0,
+          month: 0
+        },
+        maintenance_fee: {
         },
         order: {
           total: 0,
@@ -118,19 +114,19 @@ export default {
   methods: {
     init() {
       this.getList()
-      this.getHomeOrder()
+      // this.getHomeOrder()
     },
     getList() {
       getHome()
         .then(response => {
           this.data = response.data
         })
-    },
-    getHomeOrder() {
-      getHomeOrderCount().then(response => {
-
-      })
     }
+    // getHomeOrder() {
+    //   getHomeOrderCount().then(response => {
+
+    //   })
+    // }
   }
 }
 </script>

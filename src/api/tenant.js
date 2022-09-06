@@ -30,21 +30,21 @@ export function postStore(data) {
 
 // 未读消息总数
 export function getMessageCount(params) {
-  return request.get('/tenant/messages-count', {
+  return request.get('/tenantInfo/messages-count', {
     params
   })
 }
 
 // 消息列表
 export function getMessage(params) {
-  return request.get('/tenant/messages', {
+  return request.get('/tenantInfo/messages', {
     params
   })
 }
 
 // 删除消息
 export function delMessage(id) {
-  return request.delete(`/tenant/messages-delete/${id}`)
+  return request.delete(`/tenantInfo/messages-delete/${id}`)
 }
 
 // 操作说明-分类

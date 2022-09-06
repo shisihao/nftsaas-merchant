@@ -1,14 +1,14 @@
 <template>
   <div>
-    <i class="el-icon-info" title="操作说明" @click="click"/>
+    <i class="el-icon-info" title="操作说明" @click="click" />
   </div>
 </template>
 
 <script>
-import screenfull from 'screenfull'
+// import screenfull from 'screenfull'
 
 export default {
-  name: 'operateinfo',
+  name: 'Operateinfo',
   data() {
     return {
     }

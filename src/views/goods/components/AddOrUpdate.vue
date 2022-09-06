@@ -209,6 +209,20 @@
           </div>
         </div>
       </el-form-item>
+      <el-form-item label="发行发头像" prop="issuer_avatar">
+        <div class="filter-list-box">
+          <div v-if="!!form.issuer_avatar" class="upload-images">
+            <el-image :src="form.issuer_avatar && domin + form.issuer_avatar" class="upload-image" fit="cover" @click="onPicturePreview(form.issuer_avatar)" />
+          </div>
+          <div v-else class="err-image">
+            <el-image>
+              <div slot="error" class="image-slot">
+                <i class="el-icon-picture-outline" />
+              </div>
+            </el-image>
+          </div>
+        </div>
+      </el-form-item>
       <el-divider content-position="left">商品价格</el-divider>
       <el-form-item label="人民币价格" prop="cny_price">
         <el-input-number v-model="form.cny_price" :precision="2" :min="0" placeholder="请输入人民币价格" />
@@ -390,6 +404,7 @@ export default {
         total_stock: 0,
         serial: '',
         give_time: '',
+        issuer_avatar: '',
         three_url: {
           three_type: '',
           three_mtl: '',
@@ -449,6 +464,9 @@ export default {
         ],
         author_avatar: [
           { required: true, message: '请选择创作者头像', trigger: ['blur', 'change'] }
+        ],
+        issuer_avatar: [
+          { required: true, message: '请选择发行方头像', trigger: ['blur', 'change'] }
         ],
         issuer: [
           { required: true, message: '请输入发行方', trigger: ['blur', 'change'] }

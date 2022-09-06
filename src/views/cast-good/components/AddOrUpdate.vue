@@ -208,6 +208,20 @@
       <el-form-item v-if="!form.id" label="发行方" prop="issuer">
         <el-input v-model="form.issuer" />
       </el-form-item>
+      <el-form-item label="发行方头像" prop="issuer_avatar">
+        <custom-upload
+          class-name="avatar-uploader"
+          ref-name="issuer_avatar"
+          @handleBeforeUpload="beforeAvatarUpload"
+          @handleSuccess="handleAvatarSuccess"
+        >
+          <img v-if="form.issuer_avatar" :src="domin + form.issuer_avatar" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        </custom-upload>
+        <div class="notice">
+          注意：建议创作者头像尺寸 750*750px
+        </div>
+      </el-form-item>
       <el-form-item label="权益说明" prop="desc">
         <el-input v-model="form.desc" type="textarea" :rows="8" placeholder="权益说明" clearable />
       </el-form-item>
@@ -283,6 +297,7 @@ export default {
         name: '',
         author: '',
         author_avatar: '',
+        issuer_avatar: '',
         issuer: '',
         desc: '',
         detail: '',
@@ -342,6 +357,9 @@ export default {
         ],
         author_avatar: [
           { required: true, message: '请选择创作者头像', trigger: ['blur', 'change'] }
+        ],
+        issuer_avatar: [
+          { required: true, message: '请选择发行方头像', trigger: ['blur', 'change'] }
         ],
         issuer: [
           { required: true, message: '请输入发行方', trigger: ['blur', 'change'] }

@@ -105,9 +105,7 @@ export default {
       if (page === 1) this.pages.current = page
       tagList({ page, ...this.search, limit: this.pages.limit })
         .then(response => {
-          this.list = response.data.map(v => {
-            return Object.assign(v, { loadingDel: false })
-          })
+          this.list = response.data.data
         })
         .catch(() => {
         })
@@ -133,10 +131,10 @@ export default {
     onDelete(row) {
       row.loadingDel = true
       this.$confirm(`确定对[(#${row.id})]进行[删除]操作?`, '删除', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'error'
-        }
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'error'
+      }
       )
         .then(() => {
           deleteDataTag(row.id)
