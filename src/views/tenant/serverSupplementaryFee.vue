@@ -47,8 +47,6 @@
       </el-form>
     </div>
 
-    <el-table v-if="list.length === 0 && !loading" />
-
     <div v-loading="loading">
       <el-table v-loading="loading" border :data="list">
         <el-table-column prop="id" label="ID" align="center" />
@@ -143,7 +141,7 @@
 <script>
 import Pagination from '@/components/Pagination'
 import { getToken, DominKey } from '@/utils/auth'
-import { supplementOrder } from '@/api/tenant'
+import { supplementOrder, supplementFeeExport } from '@/api/tenant'
 import PayFee from './components/PayFee.vue'
 import { pickerOptions, logOrderStatusOptions } from '@/utils/explain'
 export default {
@@ -226,15 +224,15 @@ export default {
     },
     onHandleDownload() {
       this.downloadLoading = true
-      // supplementOrdersExport(this.search)
-      //   .then(response => {
-      //     location.href = location.origin + '/' + response.data.filename
-      //   })
-      //   .catch(() => {
-      //   })
-      //   .finally(() => {
-      //     this.downloadLoading = false
-      //   })
+      supplementFeeExport(this.search)
+        .then(response => {
+          location.href = location.origin + '/' + response.data.filename
+        })
+        .catch(() => {
+        })
+        .finally(() => {
+          this.downloadLoading = false
+        })
     },
     onChangeStatus(value) {
       this.getList(1)

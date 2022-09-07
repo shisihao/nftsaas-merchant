@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { uvList } from '@/api/tenant'
+import { uvList, uvExport } from '@/api/tenant'
 import { getToken, DominKey } from '@/utils/auth'
 import { pickerOptions } from '@/utils/explain'
 import Pagination from '@/components/Pagination'
@@ -109,16 +109,15 @@ export default {
       }
     },
     onHandleDownload() {
-      // todo：暂无接口
-      // this.downloadLoading = true
-      // api.then(response => {
-      //     location.href = location.origin + '/' + response.data.filename
-      //   })
-      //   .catch(() => {
-      //   })
-      //   .finally(() => {
-      //     this.downloadLoading = false
-      //   })
+      this.downloadLoading = true
+      uvExport(this.search).then(response => {
+        location.href = location.origin + '/' + response.data.filename
+      })
+        .catch(() => {
+        })
+        .finally(() => {
+          this.downloadLoading = false
+        })
     }
   }
 }

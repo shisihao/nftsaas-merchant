@@ -110,9 +110,23 @@ export function uvList(params) {
   })
 }
 
+// uv列表导出
+export function uvExport(params) {
+  return request.get('/tenantInfo/uv/export', {
+    params
+  })
+}
+
 // 服务器续费订单列表
 export function serverOrder(params) {
   return request.get('/tenantInfo/order', {
+    params
+  })
+}
+
+// 服务器续费订单列表导出
+export function serverOrderExport(params) {
+  return request.get('/tenantInfo/order/export', {
     params
   })
 }
@@ -131,6 +145,13 @@ export function paySupplementFee(data) {
   })
 }
 
+// 服务器补充费订单列表导出
+export function supplementFeeExport(params) {
+  return request.get('/tenantInfo/supplementOrders/export', {
+    params
+  })
+}
+
 // 运维费订单列表
 export function maintainOrder(params) {
   return request.get('/tenantInfo/maintainOrders', {
@@ -142,5 +163,12 @@ export function maintainOrder(params) {
 export function payOprateFee(data) {
   return request.post('/tenantInfo/maintainOrders/pay', {
     ...data
+  })
+}
+
+// 运维费订单列表导出
+export function maintainExport(params) {
+  return request.get('/tenantInfo/maintainOrders/export', {
+    params
   })
 }

@@ -149,7 +149,7 @@
 <script>
 import Pagination from '@/components/Pagination'
 import { getToken, DominKey } from '@/utils/auth'
-import { serverOrder } from '@/api/tenant'
+import { serverOrder, serverOrderExport } from '@/api/tenant'
 import {
   payOptions,
   pickerOptions,
@@ -235,14 +235,14 @@ export default {
     },
     onHandleDownload() {
       this.downloadLoading = true
-      // exportOrder(this.search)
-      //   .then((response) => {
-      //     location.href = location.origin + "/" + response.data.filename;
-      //   })
-      //   .catch(() => {})
-      //   .finally(() => {
-      //     this.downloadLoading = false;
-      //   });
+      serverOrderExport(this.search)
+        .then((response) => {
+          location.href = location.origin + '/' + response.data.filename
+        })
+        .catch(() => {})
+        .finally(() => {
+          this.downloadLoading = false
+        })
     },
     onChangeStatus(value) {
       this.getList(1)

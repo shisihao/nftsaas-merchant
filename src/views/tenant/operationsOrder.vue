@@ -150,7 +150,7 @@
 <script>
 import Pagination from '@/components/Pagination'
 import { getToken, DominKey } from '@/utils/auth'
-import { maintainOrder } from '@/api/tenant'
+import { maintainOrder, maintainExport } from '@/api/tenant'
 import { pickerOptions, logOrderStatusOptions } from '@/utils/explain'
 import PayFee from './components/PayFee.vue'
 export default {
@@ -234,14 +234,14 @@ export default {
     },
     onHandleDownload() {
       this.downloadLoading = true
-      // maintainExport(this.search)
-      //   .then((response) => {
-      //     location.href = location.origin + "/" + response.data.filename;
-      //   })
-      //   .catch(() => {})
-      //   .finally(() => {
-      //     this.downloadLoading = false;
-      //   });
+      maintainExport(this.search)
+        .then((response) => {
+          location.href = location.origin + '/' + response.data.filename
+        })
+        .catch(() => {})
+        .finally(() => {
+          this.downloadLoading = false
+        })
     },
     onChangeStatus(value) {
       this.getList(1)
