@@ -131,12 +131,14 @@
 import Pagination from '@/components/Pagination'
 import { periodsBackList, exportOrder } from '@/api/fil-level'
 import { pickerOptions } from '@/utils/explain'
+import { DominKey, getToken } from '@/utils/auth'
 
 export default {
   name: 'PeriodsBack',
   components: { Pagination },
   data() {
     return {
+      domin: getToken(DominKey),
       visible: false,
       downloadLoading: false,
       pickerOptions,
@@ -208,7 +210,7 @@ export default {
       this.downloadLoading = true
       exportOrder(this.search)
         .then(response => {
-          location.href = location.origin + '/' + response.data.filename
+          location.href = this.domin + '/' + response.data.filename
         })
         .catch(() => {
         })

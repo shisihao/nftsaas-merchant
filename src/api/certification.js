@@ -12,14 +12,16 @@ export function statusPass(id) {
   return request.put(`/certifications/${id}/pass`)
 }
 
-// 审核驳回
-export function statusReject(id, reason) {
-  return request.put(`/certifications/${id}/reject`, {
-    reason
+// 导出订单
+export function exportOrder(params) {
+  return request.get('/certifications/export', {
+    params
   })
 }
 
-// 解除上限
-export function statusRelease(id) {
-  return request.put(`/certifications/${id}/release`)
+// 解除认证次数限制
+export function relieve(data) {
+  return request.post('/certifications/relieve', {
+    ...data
+  })
 }

@@ -711,16 +711,16 @@ export default {
     },
     handleAvatarSuccess(response, file) {
       if (this.currentName === 'images') {
-        this.form[this.currentName].push(response.name)
+        this.form[this.currentName].push(response)
       } else if (this.currentName.indexOf('three_url') >= 0) {
         if (this.currentName.indexOf('image') >= 0) {
-          this.form.three_url.three_image.push(response.name)
+          this.form.three_url.three_image.push(response)
         } else {
           const a = this.currentName.split('.')
-          this.form[a[0]][a[1]] = response.name
+          this.form[a[0]][a[1]] = response
         }
       } else {
-        this.form[this.currentName] = response.name
+        this.form[this.currentName] = response
       }
     },
     beforeAvatarUpload(file, cb, refName) {

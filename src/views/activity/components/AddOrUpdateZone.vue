@@ -123,7 +123,7 @@ export default {
       cb(true)
     },
     handleAvatarSuccess(response, file) {
-      this.form.image = response.name
+      this.form.image = response
     },
     onClose() {
       this.$reset()

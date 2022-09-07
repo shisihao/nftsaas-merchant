@@ -61,8 +61,7 @@
         width="55"
         align="center"
         :selectable="getSelectEnable"
-      >
-      </el-table-column>
+      />
       <el-table-column
         prop="id"
         label="ID"
@@ -80,18 +79,17 @@
             <div style="display: inline-block;margin-left: 2px">
               <div>
                 #{{ row.user.id }}
-                <el-divider direction="vertical"></el-divider>
+                <el-divider direction="vertical" />
                 {{ row.user.name }}
                 <span v-if="row.user.certification">
-                  <el-divider direction="vertical"></el-divider>
+                  <el-divider direction="vertical" />
                   <el-tag effect="plain">{{ row.user.certification.name }}</el-tag>
                 </span>
               </div>
               <div>
-                {{ row.user.phone || row.user.email}}
+                {{ row.user.phone || row.user.email }}
               </div>
-              <div>
-              </div>
+              <div />
             </div>
           </div>
           <div v-else>
@@ -139,7 +137,7 @@
         label="创建时间"
         width="140"
         align="center"
-        />
+      />
       <el-table-column
         label="操作"
         width="120"
@@ -152,7 +150,7 @@
     </el-table>
     <pagination v-show="pages.total > 0" :total="pages.total" :page.sync="pages.current" :limit.sync="pages.limit" @pagination="getList()" />
 
-      <!-- 弹窗, 多选 -->
+    <!-- 弹窗, 多选 -->
     <settlement
       v-if="settlementVisible"
       ref="settlement"
@@ -170,7 +168,7 @@ import { pickerOptions, currencyReportOptions } from '@/utils/explain'
 import Settlement from './components/Settlement'
 
 export default {
-  name: 'sale',
+  name: 'Sale',
   components: { Pagination, Settlement },
   data() {
     return {
@@ -256,7 +254,7 @@ export default {
       this.selectValue = val
     },
     onSettlement(data) {
-      if(Array.isArray(data)) {
+      if (Array.isArray(data)) {
         if (!this.search.currency || !this.search.type || !this.search.start_time || !this.search.end_time) {
           return this.$message.warning('请先筛选资产类型、奖励类型以及要结算的时间段')
         }
@@ -271,7 +269,7 @@ export default {
       this.downloadLoading = true
       exportOrder(this.search)
         .then(response => {
-          location.href = location.origin + '/' + response.data.filename
+          location.href = this.domin + '/' + response.data.filename
         })
         .catch(() => {
         })

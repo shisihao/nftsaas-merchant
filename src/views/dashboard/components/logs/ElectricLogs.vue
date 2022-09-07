@@ -76,7 +76,7 @@
         width="140"
         align="center"
       />
-      
+
     </el-table>
     <pagination v-show="pages.total > 0" :total="pages.total" :page.sync="pages.current" :limit.sync="pages.limit" @pagination="getList()" />
   </el-dialog>
@@ -85,13 +85,14 @@
 import { getElectricLogs, getElectricExport } from '@/api/common'
 import Pagination from '@/components/Pagination'
 import { pickerOptions, payOptions } from '@/utils/explain'
-
+import { DominKey, getToken } from '@/utils/auth'
 export default {
   components: { Pagination },
   data() {
     return {
       visible: false,
       loading: false,
+      domin: getToken(DominKey),
       downloadLoading: false,
       pickerOptions,
       payOptions,
@@ -146,7 +147,7 @@ export default {
       this.downloadLoading = true
       getElectricExport(this.search)
         .then(response => {
-          location.href = location.origin + '/' + response.data.filename
+          location.href = this.domin + '/' + response.data.filename
         })
         .catch(() => {
         })

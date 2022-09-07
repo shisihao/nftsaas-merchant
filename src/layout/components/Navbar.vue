@@ -17,7 +17,7 @@
             </div>
             <div>
               <el-button type="primary" size="mini" @click="onGoRenew">去续费</el-button>
-              <el-button type="primary" plain size="mini" @click="onGoRenewList">续费记录</el-button>
+              <!-- <el-button type="primary" plain size="mini" @click="onGoRenewList">续费记录</el-button> -->
             </div>
           </div>
         </div>

@@ -6,20 +6,26 @@
           <el-input v-model="search.user_name" placeholder="昵称" clearable @clear="getList(1)" @keyup.enter.native="getList(1)" />
         </el-form-item>
         <el-form-item label="账号">
-          <el-input v-model="search.account" placeholder="手机号/邮箱" clearable @clear="getList(1)" @keyup.enter.native="getList(1)" />
+          <el-input v-model="search.account" placeholder="手机号" clearable @clear="getList(1)" @keyup.enter.native="getList(1)" />
         </el-form-item>
         <el-form-item label="认证姓名">
           <el-input v-model="search.cer_name" placeholder="认证姓名" clearable @clear="getList(1)" @keyup.enter.native="getList(1)" />
         </el-form-item>
-        <el-form-item label="状态" style="margin-left: 10px">
-          <el-radio-group v-model="search.status" size="mini" @change="onChangeStatus">
-            <el-badge v-for="item in statusOptions" :key="item.value" :value="item.value === 0 && wait_count > 0 ? wait_count : ''" class="item">
+        <el-form-item label="身份证">
+          <el-input v-model="search.number" placeholder="身份证" clearable @clear="getList(1)" @keyup.enter.native="getList(1)" />
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-radio-group v-model="search.status" @change="getList(1)">
+            <el-badge v-for="item in statusOptions" :key="item.value" class="badge-item">
               <el-radio-button :label="item.value">{{ item.label }}</el-radio-button>
             </el-badge>
           </el-radio-group>
         </el-form-item>
         <el-button icon="el-icon-search" @click="getList(1)">
           {{ $t('table.search') }}
+        </el-button>
+        <el-button :loading="downloadLoading" type="success" icon="el-icon-document" @click="onHandleDownload">
+          {{ $t('table.export') }} Excel
         </el-button>
       </el-form>
     </div>
@@ -38,7 +44,7 @@
       />
       <el-table-column
         label="用户信息"
-        min-width="180"
+        min-width="200"
         header-align="center"
       >
         <template slot-scope="{ row }">
@@ -60,49 +66,52 @@
       </el-table-column>
       <el-table-column
         label="认证信息"
+        width="200"
         header-align="center"
       >
-        <template slot-scope="{ row: { name, number } }">
+        <template slot-scope="{ row: { name, number, phone } }">
           <div>姓名：{{ name }}</div>
           <div>身份证：{{ number }}</div>
+          <div>手机号：{{ phone }}</div>
         </template>
       </el-table-column>
       <el-table-column
-        label="认证凭证"
-        width="280"
+        label="认证结果"
+        min-width="200"
         header-align="center"
       >
-        <template slot-scope="{ row: { fpic, bpic, hpic } }">
-          <el-image
-            style="width: 80px; height: 80px;display: inline-block;vertical-align: text-top;margin-right: 8px"
-            :src="fpic ? domin + fpic : ''"
-            :preview-src-list="[fpic ? domin + fpic : '']"
-            fit="cover"
-          >
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline" />
+        <template slot-scope="{ row: { result } }">
+          <div v-if="result&&result.data">
+            <div>地域：{{ result.data.province }}</div>
+            <div>城市：{{ result.data.city }} </div>
+            <div>运营商：{{ result.data.operator }} </div>
+          </div>
+          <div v-else-if="result && result.pictureUrl">
+            <el-image
+              class="image-item"
+              fit="cover"
+              :src="result.pictureUrl && domainUrl + result.pictureUrl"
+              :preview-src-list="[domainUrl + result.pictureUrl]"
+            >
+              <div slot="error" class="image-slot">
+                <i class="el-icon-picture-outline" />
+              </div>
+            </el-image>
+          </div>
+          <div v-else style="text-align: center"> - </div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="失败原因"
+        min-width="150"
+        align="center"
+      >
+        <template slot-scope="{ row }">
+          <el-tooltip popper-class="popover-box" effect="dark" :content="row.reason" placement="top">
+            <div class="ellipsis">
+              {{ row.reason || '' }}
             </div>
-          </el-image>
-          <el-image
-            style="width: 80px; height: 80px;display: inline-block;vertical-align: text-top;margin-right: 8px"
-            :src="bpic ? domin + bpic : ''"
-            :preview-src-list="[bpic ? domin + bpic : '']"
-            fit="cover"
-          >
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline" />
-            </div>
-          </el-image>
-          <el-image
-            style="width: 80px; height: 80px;display: inline-block;vertical-align: text-top;"
-            :src="hpic ? domin + hpic : ''"
-            :preview-src-list="[hpic ? domin + hpic : '']"
-            fit="cover"
-          >
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline" />
-            </div>
-          </el-image>
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column
@@ -110,16 +119,9 @@
         width="80"
         align="center"
       >
-        <template slot-scope="{ row: { status, reason, admin } }">
+        <template slot-scope="{ row: { status, admin } }">
           <div v-if="status === 2">
-            <el-popover
-              placement="bottom-start"
-              max-width="300"
-              trigger="hover"
-              :content="reason"
-            >
-              <el-tag slot="reference" :type="status | paraphrase(statusOptions, 'value', 'type')"> {{ status | paraphrase(statusOptions) }} <i class="el-icon-info" /></el-tag>
-            </el-popover>
+            <el-tag slot="reference" :type="status | paraphrase(statusOptions, 'value', 'type')"> {{ status | paraphrase(statusOptions) }} <i class="el-icon-info" /></el-tag>
           </div>
           <div v-else>
             <el-tag :type="status | paraphrase(statusOptions, 'value', 'type')"> {{ status | paraphrase(statusOptions) }} </el-tag>
@@ -146,6 +148,15 @@
         </template>
       </el-table-column>
       <el-table-column
+        label="是否删除"
+        width="80"
+        align="center"
+      >
+        <template slot-scope="{ row }">
+          <span :style="`color: ${ row.is_delete ? '#ff4949' : '' }`">{{ row.is_delete | paraphrase(whetherOptions) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="时间"
         width="170"
         align="center"
@@ -161,8 +172,7 @@
         align="center"
       >
         <template slot-scope="{ row }">
-          <el-button v-if="[0].includes(row.status)" type="success" @click="onPassOrReject(row,1)">通过</el-button>
-          <el-button v-if="[0, 1].includes(row.status)" type="danger" @click="onPassOrReject(row,2)">驳回</el-button>
+          <el-button v-if="![1].includes(row.status)" type="success" @click="onPassOrReject(row,1)">通过</el-button>
           <el-button v-if="![1].includes(row.status)" type="warning" @click="onRelease(row)">解除上限</el-button>
         </template>
       </el-table-column>
@@ -173,9 +183,9 @@
 
 <script>
 import Pagination from '@/components/Pagination'
-import { dataList, statusPass, statusReject, statusRelease } from '@/api/certification'
+import { dataList, statusPass, exportOrder, relieve } from '@/api/certification'
 import { getToken, DominKey } from '@/utils/auth'
-import { examineStatusOptions } from '@/utils/explain'
+import { examineStatusOptions, whetherOptions } from '@/utils/explain'
 
 export default {
   name: 'Certification',
@@ -183,10 +193,13 @@ export default {
   data() {
     return {
       domin: getToken(DominKey),
+      whetherOptions,
       list: [],
       wait_count: 0,
+      domainUrl: 'https://cn-shanghai-aliyun-cloudauth-1582222736062849.oss-cn-shanghai.aliyuncs.com/',
       search: {
         user_name: '',
+        number: '',
         status: '',
         account: '',
         cer_name: ''
@@ -202,7 +215,8 @@ export default {
         'success',
         'danger'
       ],
-      loading: false
+      loading: false,
+      downloadLoading: false
     }
   },
   created() {
@@ -210,7 +224,6 @@ export default {
   },
   methods: {
     init() {
-      this.search.status = this.$route.query.status === undefined ? '' : this.$route.query.status
       this.getList()
     },
     getList(page = this.pages.current, loading = true) {
@@ -220,9 +233,10 @@ export default {
       dataList({ page, ...this.search, limit: this.pages.limit })
         .then(response => {
           if (response.code !== 0) return
-          this.list = response.data.data.data
-          this.pages.total = response.data.data.total
-          this.wait_count = response.data.wait_count
+          this.list = response.data.data.map(v => {
+            return Object.assign(v, { status: v.status === 0 ? 2 : v.status })
+          })
+          this.pages.total = response.data.total
         })
         .catch(() => {
         })
@@ -230,11 +244,11 @@ export default {
           this.loading = false
         })
     },
-    onPassOrReject({ id, user: { name }}, type) {
+    onPassOrReject({ id, name, user }, type) {
       const title = type === 1 ? '通过' : '驳回'
       const confirmType = type === 1 ? this.$confirm : this.$prompt
 
-      confirmType(`用户「${name}」实名认证`, `认证${title}`, {
+      confirmType(`用户昵称「${user?.name}」，用户姓名「${name}」`, `认证${title}`, {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         inputPattern: /\S/,
@@ -244,22 +258,18 @@ export default {
         cancelButtonClass: 'btn-custom-cancel'
       })
         .then(({ value }) => {
-          const api =
-            type === 1
-              ? statusPass(id)
-              : statusReject(id, value)
+          const api = statusPass(id)
           api
             .then(() => {
               this.$message.success(`${type === 1 ? '已通过' : '已驳回'}认证`)
               this.init()
             })
-            .catch(error => {
-              this.$message.error(error.msg)
+            .catch(() => {
             })
         })
         .catch(() => {})
     },
-    onRelease({ id, name, user }) {
+    onRelease({ name, number }) {
       this.$confirm(`确定对用户姓名「${name}」进行[解除上限]操作?`, '解除上限', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -267,23 +277,35 @@ export default {
         cancelButtonClass: 'btn-custom-cancel'
       })
         .then(() => {
-          statusRelease(id)
+          relieve({ number })
             .then(({ msg = '解除成功' }) => {
               this.$message.success(msg)
               this.getList()
             })
             .catch(() => {
+              this.$message.error('解除失败')
             })
         })
         .catch(() => {})
     },
     onChangeStatus(value) {
       this.getList(1)
+    },
+    onHandleDownload() {
+      this.downloadLoading = true
+      exportOrder(this.search)
+        .then(response => {
+          location.href = this.domin + '/' + response.data.filename
+        })
+        .catch(_ => {})
+        .finally(_ => {
+          this.downloadLoading = false
+        })
     }
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 ::v-deep .image-slot {
   font-size: 30px;
   display: flex;
@@ -309,4 +331,62 @@ export default {
 ::v-deep .item:last-child .el-radio-button:first-child .el-radio-button__inner {
   border-radius: 0 4px 4px 0;
 }
+.el-radio-group {
+  ::v-deep .badge-item {
+  .el-badge__content {
+    transform: translateY(-50%) translateX(50%);
+    z-index: 1;
+  }
+  .el-radio-button:first-child .el-radio-button__inner {
+    border-radius: 0;
+    border-left: 0;
+  }
+  &:first-child .el-radio-button:first-child .el-radio-button__inner {
+     border-left: 1px solid #DCDFE6;
+     border-radius: 4px 0 0 4px;
+   }
+  &:last-child .el-radio-button:first-child .el-radio-button__inner {
+     border-radius: 0 4px 4px 0;
+   }
+  }
+}
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.RichContent-collapsedText {
+  position: relative;
+  left: 0;
+  top: 0;
+  padding-right: 60px;
+}
+.RichContent-lookText {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: #409eff;
+  cursor: pointer;
+  user-select: none;
+}
+ .image-item {
+    flex-shrink: 0;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    img {
+      height: auto;
+    }
+    ::v-deep .image-slot {
+      font-size: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      background: #f5f7fa;
+      color: #909399;
+    }
+  }
 </style>

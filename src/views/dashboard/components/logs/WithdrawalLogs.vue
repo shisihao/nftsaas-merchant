@@ -51,15 +51,14 @@
               <div>
                 {{ account_info.name }}
                 <span v-if="account_info.certification">
-                  <el-divider direction="vertical"></el-divider>
+                  <el-divider direction="vertical" />
                   <el-tag effect="plain">{{ account_info.certification.name }}</el-tag>
                 </span>
               </div>
               <div>
                 {{ account_info.number }}
               </div>
-              <div>
-              </div>
+              <div />
             </div>
           </div>
           <div v-else>
@@ -108,11 +107,13 @@ import { getCnyWithdrawalLogs, getCnyWithdrawalExport } from '@/api/common'
 import Pagination from '@/components/Pagination'
 import { pickerOptions } from '@/utils/explain'
 import { BigNumber } from 'bignumber.js'
+import { DominKey, getToken } from '@/utils/auth'
 
 export default {
   components: { Pagination },
   data() {
     return {
+      domin: getToken(DominKey),
       visible: false,
       loading: false,
       downloadLoading: false,
@@ -167,7 +168,7 @@ export default {
       this.downloadLoading = true
       getCnyWithdrawalExport(this.search)
         .then(response => {
-          location.href = location.origin + '/' + response.data.filename
+          location.href = this.domin + '/' + response.data.filename
         })
         .catch(() => {
         })

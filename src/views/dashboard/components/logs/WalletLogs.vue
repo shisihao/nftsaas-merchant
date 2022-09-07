@@ -30,11 +30,11 @@
     </div>
 
     <el-tabs v-model="activeName" @tab-click="onHandleClick">
-      <el-tab-pane label="充值流水" name="recharge"></el-tab-pane>
-      <el-tab-pane label="提现流水" name="withdraw"></el-tab-pane>
-      <el-tab-pane label="互转流水" name="transfer"></el-tab-pane>
+      <el-tab-pane label="充值流水" name="recharge" />
+      <el-tab-pane label="提现流水" name="withdraw" />
+      <el-tab-pane label="互转流水" name="transfer" />
     </el-tabs>
-    
+
     <el-table
       v-if="['recharge', 'withdraw'].includes(activeName)"
       v-loading="loading"
@@ -94,15 +94,14 @@
               <div>
                 {{ user.name }}
                 <span v-if="user.certification">
-                  <el-divider direction="vertical"></el-divider>
+                  <el-divider direction="vertical" />
                   <el-tag effect="plain">{{ user.certification.name }}</el-tag>
                 </span>
               </div>
               <div>
-                {{ user.phone || user.email}}
+                {{ user.phone || user.email }}
               </div>
-              <div>
-              </div>
+              <div />
             </div>
           </div>
           <div v-else>
@@ -117,7 +116,7 @@
         align="center"
       />
     </el-table>
-    
+
     <el-table
       v-else
       v-loading="loading"
@@ -175,15 +174,14 @@
               <div>
                 {{ user.name }}
                 <span v-if="user.certification">
-                  <el-divider direction="vertical"></el-divider>
+                  <el-divider direction="vertical" />
                   <el-tag effect="plain">{{ user.certification.name }}</el-tag>
                 </span>
               </div>
               <div>
-                {{ user.phone || user.email}}
+                {{ user.phone || user.email }}
               </div>
-              <div>
-              </div>
+              <div />
             </div>
           </div>
           <div v-else>
@@ -204,15 +202,14 @@
               <div>
                 {{ target_user.name }}
                 <span v-if="target_user.certification">
-                  <el-divider direction="vertical"></el-divider>
+                  <el-divider direction="vertical" />
                   <el-tag effect="plain">{{ target_user.certification.name }}</el-tag>
                 </span>
               </div>
               <div>
-                {{ target_user.phone || target_user.email}}
+                {{ target_user.phone || target_user.email }}
               </div>
-              <div>
-              </div>
+              <div />
             </div>
           </div>
           <div v-else>
@@ -234,13 +231,15 @@
 <script>
 import { getWalletLogs, getWalletExport, getWithdrawalLogs, getWithdrawalExport, getTransferLogs, getTransferExport } from '@/api/common'
 import Pagination from '@/components/Pagination'
-import { currencyOptions, pickerOptions, streamTypeOptions} from '@/utils/explain'
+import { currencyOptions, pickerOptions, streamTypeOptions } from '@/utils/explain'
 import { BigNumber } from 'bignumber.js'
+import { DominKey, getToken } from '@/utils/auth'
 
 export default {
   components: { Pagination },
   data() {
     return {
+      domin: getToken(DominKey),
       currencyOptions: currencyOptions.slice(1),
       visible: false,
       loading: false,
@@ -275,10 +274,9 @@ export default {
       if (page === 1) this.pages.current = page
       this.list = []
       let api
-      if(this.activeName === 'recharge') {
+      if (this.activeName === 'recharge') {
         api = getWalletLogs({ page, ...this.search, limit: this.pages.limit, type: 'recharge' })
-          
-      } else if(this.activeName === 'withdraw') {
+      } else if (this.activeName === 'withdraw') {
         api = getWithdrawalLogs({ page, ...this.search, limit: this.pages.limit, type: 'withdrawal' })
       } else {
         api = getTransferLogs({ page, ...this.search, limit: this.pages.limit, type: 'transfer' })
@@ -307,17 +305,17 @@ export default {
     onHandleDownload() {
       this.downloadLoading = true
       let api
-      if(this.activeName === 'recharge') {
+      if (this.activeName === 'recharge') {
         api = getWalletExport(this.search)
-      } else if(this.activeName === 'withdraw') {
+      } else if (this.activeName === 'withdraw') {
         api = getWithdrawalExport(this.search)
       } else {
         api = getTransferExport(this.search)
       }
-      
+
       api.then(response => {
-          location.href = location.origin + '/' + response.data.filename
-        })
+        location.href = this.domin + '/' + response.data.filename
+      })
         .catch(() => {
         })
         .finally(() => {

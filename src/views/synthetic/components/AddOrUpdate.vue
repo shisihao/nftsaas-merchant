@@ -481,7 +481,7 @@ export default {
       this.form.intro = value
     },
     handleCoverSuccess(response, file) {
-      this.form[this.currentName].filename = response.name
+      this.form[this.currentName].filename = response
     },
     beforeAvatarUpload(file, cb, refName) {
       const type = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
