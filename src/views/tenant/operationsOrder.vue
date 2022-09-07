@@ -212,7 +212,7 @@ export default {
       maintainOrder({ page, ...this.search, limit: this.pages.limit })
         .then((response) => {
           if (response.code !== 0) return
-          this.list = response.data.list.data.map((v) => {
+          this.list = response.data.data.map((v) => {
             return Object.assign(v, { checked: false })
           })
           this.pages.total = response.data.list.total

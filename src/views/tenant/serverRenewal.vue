@@ -213,8 +213,8 @@ export default {
       serverOrder({ page, ...this.search, limit: this.pages.limit })
         .then((response) => {
           if (response.code !== 0) return
-          this.list = response.data.map((v) => {
-            return Object.assign(v, { checked: false })
+          this.list = response.data.data.map((v) => {
+            return Object.assign(v)
           })
           this.pages.total = response.data.list.total
           this.wait_count = response.data.list.wait_count
