@@ -536,3 +536,15 @@ export function setCert(data) {
     ...data
   })
 }
+
+// 获取短信配置
+export function getSms() {
+  return request.get('/configs/sms')
+}
+// 设置短信配置
+export function setSms(data) {
+  return request.put('/configs/sms', {
+    ...data
+  })
+}
+
