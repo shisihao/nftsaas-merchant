@@ -24,6 +24,7 @@
 
               <app-step
                 ref="appStep"
+                :app-data="appData"
                 @appLogoInfo="getAppLogoInfo"
               />
 
@@ -141,7 +142,7 @@ import AppStep from '@/components/AppStep'
 import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
 import phoneBox from '@/assets/images/step2_phone_bg2.png'
-import { temList, setTem } from '@/api/design'
+import { dataList, temList, setTem } from '@/api/design'
 import { mapGetters } from 'vuex'
 import { putFirst } from '@/api/common'
 
@@ -207,6 +208,7 @@ export default {
         template_id: 0,
         agree: false
       },
+      appData: {},
       rules: {
         app_name: [
           { required: true, trigger: ['blur', 'change'], validator: validateUsername }
@@ -232,9 +234,24 @@ export default {
   created() {
     this.init()
   },
+  beforeRouteEnter(to, from, next) {
+    if (from.path !== '/login') {
+      next(vm => {
+        vm.getTemData()
+      })
+    } else {
+      next()
+    }
+  },
   methods: {
     init() {
       this.getTemList()
+    },
+    getTemData() {
+      dataList().then(response => {
+        this.appData = response.data
+        this.form.app_name = response.data.app_name
+      })
     },
     getTemList() {
       this.templateLoading = true

@@ -6,40 +6,25 @@
     <el-form ref="form" :model="form" :rules="rules" size="medium">
       <div class="logo-box">
         <el-form-item label="启动页logo" prop="start_logo">
-          <custom-upload
-            class-name="avatar-uploader avatar1"
-            ref-name="start_logo"
-            @handleBeforeUpload="beforeAvatarUpload"
-            @handleSuccess="handleAvatarSuccess"
-          >
+          <custom-upload class-name="avatar-uploader avatar1" ref-name="start_logo" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
             <img v-if="form.start_logo" :src="domin + form.start_logo" class="avatar">
             <img v-else src="@/assets/images/step1_add_img.png" class="avatar">
           </custom-upload>
           <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar1', 'start_logo')">上传图片</el-button>
           <div class="describe">
-            <div>
-              1.尺寸为256px * 256px
-            </div>
-            <div>
-              2.支持png格式
-            </div>
-            <div>
-              3.不超过2M
-            </div>
+            <div> 1.尺寸为256px * 256px </div>
+            <div> 2.支持png格式 </div>
+            <div> 3.不超过2M </div>
           </div>
         </el-form-item>
         <div>
-          <div class="logo-title logo-title-cover">
-            示例
-          </div>
+          <div class="logo-title logo-title-cover"> 示例 </div>
           <div>
             <img src="@/assets/images/shuban_icon_logo.png">
           </div>
         </div>
         <div>
-          <div class="logo-title">
-            应用场景
-          </div>
+          <div class="logo-title"> 应用场景 </div>
           <div>
             <img src="@/assets/images/step1_changjing1.png">
           </div>
@@ -48,40 +33,25 @@
       <el-divider />
       <div class="logo-box">
         <el-form-item label="子页面应用logo" prop="invite_logo">
-          <custom-upload
-            class-name="avatar-uploader avatar2"
-            ref-name="invite_logo"
-            @handleBeforeUpload="beforeAvatarUpload"
-            @handleSuccess="handleAvatarSuccess"
-          >
+          <custom-upload class-name="avatar-uploader avatar2" ref-name="invite_logo" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
             <img v-if="form.invite_logo" :src="domin + form.invite_logo" class="avatar">
             <img v-else src="@/assets/images/step1_add_img.png" class="avatar">
           </custom-upload>
           <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar2', 'invite_logo')">上传图片</el-button>
           <div class="describe">
-            <div>
-              1.尺寸为256px * 64px
-            </div>
-            <div>
-              2.支持png格式
-            </div>
-            <div>
-              3.不超过2M
-            </div>
+            <div> 1.尺寸为256px * 64px </div>
+            <div> 2.支持png格式 </div>
+            <div> 3.不超过2M </div>
           </div>
         </el-form-item>
         <div>
-          <div class="logo-title logo-title-cover">
-            示例
-          </div>
+          <div class="logo-title logo-title-cover"> 示例 </div>
           <div>
             <img src="@/assets/images/hengban_icon_logo.png">
           </div>
         </div>
         <div>
-          <div class="logo-title">
-            应用场景
-          </div>
+          <div class="logo-title"> 应用场景 </div>
           <div>
             <img src="@/assets/images/step1_changjing2.png">
           </div>
@@ -91,40 +61,25 @@
 
       <div class="logo-box">
         <el-form-item label="不带产品名图片logo" prop="inside_logo">
-          <custom-upload
-            class-name="avatar-uploader avatar3"
-            ref-name="inside_logo"
-            @handleBeforeUpload="beforeAvatarUpload"
-            @handleSuccess="handleAvatarSuccess"
-          >
+          <custom-upload class-name="avatar-uploader avatar3" ref-name="inside_logo" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
             <img v-if="form.inside_logo" :src="domin + form.inside_logo" class="avatar">
             <img v-else src="@/assets/images/step1_add_img.png" class="avatar">
           </custom-upload>
-          <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar3','inside_logo')">上传图片</el-button>
+          <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar3', 'inside_logo')">上传图片</el-button>
           <div class="describe">
-            <div>
-              1.尺寸为112 * 112px
-            </div>
-            <div>
-              2.支持png格式
-            </div>
-            <div>
-              3.不超过2M
-            </div>
+            <div> 1.尺寸为112 * 112px </div>
+            <div> 2.支持png格式 </div>
+            <div> 3.不超过2M </div>
           </div>
         </el-form-item>
         <div>
-          <div class="logo-title logo-title-cover">
-            示例
-          </div>
+          <div class="logo-title logo-title-cover"> 示例 </div>
           <div>
             <img src="@/assets/images/fangxing_icon_logo.png">
           </div>
         </div>
         <div>
-          <div class="logo-title">
-            应用场景
-          </div>
+          <div class="logo-title"> 应用场景 </div>
           <div>
             <img src="@/assets/images/step1_changjing3.png">
           </div>
@@ -144,6 +99,10 @@ export default {
     title: {
       type: String,
       default: '请上传您的APP的logo'
+    },
+    appData: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -156,20 +115,22 @@ export default {
         inside_logo: ''
       },
       rules: {
-        start_logo: [
-          { required: true, trigger: ['blur', 'change'], message: '请上传启动页logo' }
-        ],
-        invite_logo: [
-          { required: true, trigger: ['blur', 'change'], message: '请上传子页面应用logo' }
-        ],
-        inside_logo: [
-          { required: true, trigger: ['blur', 'change'], message: '不带产品名图片logo' }
-        ]
+        start_logo: [{ required: true, trigger: ['blur', 'change'], message: '请上传启动页logo' }],
+        invite_logo: [{ required: true, trigger: ['blur', 'change'], message: '请上传子页面应用logo' }],
+        inside_logo: [{ required: true, trigger: ['blur', 'change'], message: '不带产品名图片logo' }]
       }
     }
   },
-  created() {
+  watch: {
+    appData(newVal, oldVal) {
+      if (newVal) {
+        this.form.start_logo = newVal.start_logo
+        this.form.invite_logo = newVal.invite_logo
+        this.form.inside_logo = newVal.inside_logo
+      }
+    }
   },
+  created() {},
   methods: {
     onImage(data) {
       this.imageIndex = data
@@ -215,66 +176,66 @@ export default {
 </script>
 <style scoped lang="scss">
 .app-step-logo {
-  width: 1000px;
-  .step-title {
-    padding-top: 21px ;
-    padding-bottom: 25px;
-    font-size: 20px;
-  }
-  .logo-box {
-    display: flex;
-    justify-content: space-between;
+	width: 1000px;
+	.step-title {
+		padding-top: 21px;
+		padding-bottom: 25px;
+		font-size: 20px;
+	}
+	.logo-box {
+		display: flex;
+		justify-content: space-between;
 
-    ::v-deep  .el-form-item__label {
-      margin-bottom: 20px;
-      color: #808080;
-      font-size: 16px;
-      font-weight: normal;
-    }
-    .logo-title {
-      margin-bottom: 20px;
-      color: #808080;
-    }
-    .logo-title-cover {
-      margin-bottom: 50px;
-    }
-    .logo-uploader {
-      width: 200px;
-      margin-top: 20px;
-    }
-    .describe {
-      line-height: 1.3;
-      font-size: 14px;
-      color: #A6A6A6;
-      margin-top: 20px;
-    }
-  }
+		::v-deep .el-form-item__label {
+			margin-bottom: 20px;
+			color: #808080;
+			font-size: 16px;
+			font-weight: normal;
+		}
+		.logo-title {
+			margin-bottom: 20px;
+			color: #808080;
+		}
+		.logo-title-cover {
+			margin-bottom: 50px;
+		}
+		.logo-uploader {
+			width: 200px;
+			margin-top: 20px;
+		}
+		.describe {
+			line-height: 1.3;
+			font-size: 14px;
+			color: #a6a6a6;
+			margin-top: 20px;
+		}
+	}
 
-  ::v-deep .avatar-uploader .el-upload {
-    width: 200px;
-    height: 200px;
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-  }
-  ::v-deep .avatar-uploader .el-upload .avatar{
-    width: 100%;
-    display: block;
-    object-fit: contain;
-  }
-   ::v-deep .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-   ::v-deep .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 100%;
-    height: 100%;
-    line-height: 200px;
-    text-align: center;
-  }
+	::v-deep .avatar-uploader .el-upload {
+		width: 200px;
+		height: 200px;
+		border: 1px dashed #d9d9d9;
+		border-radius: 6px;
+		cursor: pointer;
+		position: relative;
+		overflow: hidden;
+		display: flex;
+	}
+	::v-deep .avatar-uploader .el-upload .avatar {
+		width: 100%;
+		display: block;
+		object-fit: contain;
+	}
+	::v-deep .avatar-uploader .el-upload:hover {
+		border-color: #409eff;
+	}
+	::v-deep .avatar-uploader-icon {
+		font-size: 28px;
+		color: #8c939d;
+		width: 100%;
+		height: 100%;
+		line-height: 200px;
+		text-align: center;
+	}
 }
 </style>

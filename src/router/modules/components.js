@@ -81,5 +81,6 @@ export const localMap = {
   uvStatistics: () => import('@/views/tenant/uvStatistics'), // 日uv统计
   serverRenewal: () => import('@/views/tenant/serverRenewal'), // 服务器续费记录
   serverSupplementaryFee: () => import('@/views/tenant/serverSupplementaryFee'), // 服务器补充费记录
-  operationsOrder: () => import('@/views/tenant/operationsOrder') // 运维费支付记录
+  operationsOrder: () => import('@/views/tenant/operationsOrder'), // 运维费支付记录
+  design: () => import('@/views/step/index') // 设计风格
 }

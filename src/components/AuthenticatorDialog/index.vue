@@ -129,7 +129,8 @@ export default {
             .then(response => {
               this.data.secret = response.data.secret
               QRCode.toDataURL(`otpauth://totp/提资产：${location.origin}?secret=${this.data.secret}`, opts, function(err, url) {
-                if (err) throw _this.data.url = ''
+                if (err) throw new Error(err)
+                _this.data.url = ''
                 _this.data.url = url
               })
               this.secretVisible = true
@@ -141,7 +142,8 @@ export default {
         }
       } else {
         QRCode.toDataURL(`otpauth://totp/登录：${location.origin}?secret=${this.data.secret}`, opts, function(err, url) {
-          if (err) throw _this.data.url = ''
+          if (err) throw new Error(err)
+          _this.data.url = ''
           _this.data.url = url
         })
         this.secretVisible = true
@@ -179,7 +181,9 @@ export default {
                   })
               }
             })
-            .catch(() => {})
+            .catch(() => {
+              this.btnLoading = false
+            })
         }
       })
     }
