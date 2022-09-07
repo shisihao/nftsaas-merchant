@@ -139,7 +139,7 @@
               clearable
             />
           </el-form-item>
-          <el-form-item label="two_public_key：" prop="two_public_key">
+          <el-form-item label="受理侧公钥：" prop="two_public_key">
             <el-input
               v-model="form.two_public_key"
               type="textarea"
