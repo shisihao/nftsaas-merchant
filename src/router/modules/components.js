@@ -66,7 +66,6 @@ export const localMap = {
   dishonest: () => import('@/views/configs/dishonest'), // 失信配置
   destroy: () => import('@/views/configs/destroy'), // 转移配置
   qcgGive: () => import('@/views/configs/qcgGive'), // 奇藏果转赠配置
-  dxConfig: () => import('@/views/configs/dxConfig'), // 顶象开关配置
   gives: () => import('@/views/configs/give'), // 赠送配置
   integral: () => import('@/views/configs/integral'),
   booth: () => import('@/views/configs/booth'), // 展台配置
