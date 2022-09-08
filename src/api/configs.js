@@ -548,3 +548,14 @@ export function setSms(data) {
   })
 }
 
+// 获取滑块验证配置
+export function getSlider() {
+  return request.get('/configs/cvm_config')
+}
+// 设置滑块验证配置
+export function setSlider(data) {
+  return request.put('/configs/cvm_config', {
+    ...data
+  })
+}
+
