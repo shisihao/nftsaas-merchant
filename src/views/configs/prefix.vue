@@ -54,7 +54,7 @@ export default {
       getPrefix({ ...this.form })
         .then((response) => {
           if (response.code !== 0) return
-          this.form = Object.assign({}, response.data.value)
+          this.form.name = response.data.value
         })
         .catch(() => {})
         .finally(() => {
