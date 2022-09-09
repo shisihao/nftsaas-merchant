@@ -45,6 +45,7 @@ import * as echarts from 'echarts'
 import resize from './mixins/resize'
 import { homeSales } from '@/api/common'
 import { pickerOptions } from '@/utils/explain'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'UserChart',
@@ -72,7 +73,7 @@ export default {
       chart: null,
       payTypeOptions: [
         { label: '现金', value: 'cny' },
-        { label: '藏豆', value: 'integral' }
+        { label: this.integral, value: 'integral' }
       ],
       datas: {
         info: []
@@ -86,6 +87,9 @@ export default {
       pickerOptions,
       dateRangeValue: []
     }
+  },
+  computed: {
+    ...mapGetters(['integral'])
   },
   watch: {
     datas: {
@@ -156,7 +160,7 @@ export default {
             trigger: 'axis'
           },
           legend: {
-            data: [_this.search.type === 'cny' ? '现金销售金额' : '藏豆销售数量']
+            data: [_this.search.type === 'cny' ? '现金销售金额' : `${this.integral}销售数量`]
           },
           grid: {
             left: '3%',
@@ -174,7 +178,7 @@ export default {
           },
           series: [
             {
-              name: _this.search.type === 'cny' ? '现金销售金额' : '藏豆销售数量',
+              name: _this.search.type === 'cny' ? '现金销售金额' : `${this.integral}销售数量`,
               type: 'line',
               data: afterRechargeDate,
               smooth: true,

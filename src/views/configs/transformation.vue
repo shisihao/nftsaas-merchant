@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-      <el-tab-pane :label="value.label" :name="value.value" v-for="(value, index) in currencyOptions" :key="index">
+      <el-tab-pane v-for="(value, index) in currencyOptions" :key="index" :label="value.label" :name="value.value">
         <el-form :ref="`${value.value}Form`" :model="form" label-width="200px">
           <el-form-item label="转账开关">
             <el-switch
@@ -109,10 +109,10 @@ export default {
         api = xchTransfer()
       }
       api
-      .then(response => {
-        this.form[this.activeName] = response.data.value
-      })
-      .catch(() => {})
+        .then(response => {
+          this.form[this.activeName] = response.data.value
+        })
+        .catch(() => {})
     },
     onFormSubmit() {
       this.$refs[`${this.activeName}Form`][0].validate(valid => {
@@ -131,13 +131,13 @@ export default {
             api = putXchTransfer(this.form[this.activeName])
           }
           api
-          .then(({ msg }) => {
-            this.$message.success(msg)
-          })
-          .catch(() => {})
-          .finally(() => {
-            this.btnLoading = false
-          })
+            .then(({ msg }) => {
+              this.$message.success(msg)
+            })
+            .catch(() => {})
+            .finally(() => {
+              this.btnLoading = false
+            })
         }
       })
     }

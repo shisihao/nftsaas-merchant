@@ -14,6 +14,7 @@ const getters = {
   permission_routes: state => state.permission.routes,
   errorLogs: state => state.errorLog.logs,
   configInfo: state => state.deploys.configInfo,
-  msgCount: state => state.user.msgCount
+  msgCount: state => state.user.msgCount,
+  integral: state => state.user.integral
 }
 export default getters

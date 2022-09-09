@@ -225,10 +225,6 @@ export default {
       typeOptions: [
         { value: 'goods', label: '藏品' },
         { value: 'box', label: '盲盒' }
-        // { label: '藏豆', value: 'integral' },
-        // { label: '铸造券', value: 'cast' },
-        // { label: '兑换券', value: 'voucher' },
-        // { label: '商品劵', value: 'commodity' }
       ],
       pickerOptions: {
         disabledDate(time) {

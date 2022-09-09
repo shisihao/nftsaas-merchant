@@ -47,7 +47,7 @@
         header-align="center"
       >
         <template slot-scope="{ row, $index }">
-          <div class="RichContent-collapsedText" :class="{ellipsis: row.ellipsis}" >
+          <div class="RichContent-collapsedText" :class="{ellipsis: row.ellipsis}">
             {{ row.content }}
             <div class="RichContent-lookText" @click="onLookAll($index)">
               {{ row.ellipsis ? '查看全部' : '收起内容' }}
@@ -86,7 +86,7 @@
         width="90"
         align="center"
       >
-        <template slot-scope="{ row, $index }">
+        <template slot-scope="{ row }">
           <el-button type="primary" @click="onAddOrUpdate(row)">编辑</el-button>
         </template>
       </el-table-column>
@@ -148,7 +148,7 @@ export default {
         .then(response => {
           if (response.code !== 0) return
           this.list = response.data.data.map(v => {
-            return Object.assign(v,{ellipsis: true})
+            return Object.assign(v, { ellipsis: true })
           })
           this.pages.total = response.data.total
         })
@@ -207,7 +207,6 @@ export default {
       } else {
         this.list[index].ellipsis = true
       }
-
     }
   }
 }

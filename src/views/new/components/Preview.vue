@@ -4,18 +4,15 @@
       {{ form.title }}
     </div>
     <el-divider />
-    <div class="dialog-content" v-html="form.content"></div>
+    <div class="dialog-content" v-html="form.content" />
   </el-dialog>
 </template>
 
 <script>
-import { addOrUpdate } from '@/api/agreement'
-import Tinymce from '@/components/Tinymce'
 import { zoneOptions } from '@/utils/explain'
 
 export default {
   name: 'AddOrUpdate',
-  components: { Tinymce },
   data() {
     return {
       visible: false,

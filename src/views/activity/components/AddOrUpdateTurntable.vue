@@ -152,7 +152,7 @@
         <el-form-item label="抽奖次数" prop="condition.num">
           <el-input-number v-model="form.condition.num" placeholder="请输入" :min="1" controls-position="right" />
         </el-form-item>
-        <el-form-item label="抽奖消耗(藏豆)" prop="condition.integral_num">
+        <el-form-item :label="`抽奖消耗(${integral})`" prop="condition.integral_num">
           <el-input-number v-model="form.condition.integral_num" :min="0" :precision="2" controls-position="right" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="排序" prop="sort">
@@ -178,6 +178,8 @@ import CustomUpload from '@/components/Upload/CustomUpload'
 import EditTinymce from './EditTinymce'
 import { getToken, DominKey } from '@/utils/auth'
 import { goodsList, boxList, castList, addOrUpdateTurntable, turntableDetail } from '@/api/activity'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'AddOrUpdateTurntable',
   components: { CustomUpload, EditTinymce },
@@ -229,13 +231,13 @@ export default {
       payTypeOptions: [
         { label: '藏品', value: 'goods_id' },
         { label: '盲盒', value: 'box_id' },
-        { label: '藏豆', value: 'integral' },
+        { label: this.integral, value: 'integral' },
         { label: '铸造券', value: 'cast' },
         { label: '兑换券', value: 'voucher' },
         { label: '商品券', value: 'commodity' }
       ],
       typeObj: {
-        integral: '藏豆',
+        integral: this.integral,
         cast: '铸造券',
         voucher: '兑换券',
         commodity: '商品券'
@@ -281,6 +283,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['integral']),
     publicVisible() {
       const { reward_num, stock } = this.selectRewardList
       return reward_num >= 1 && stock >= 0 && this.stockStandard

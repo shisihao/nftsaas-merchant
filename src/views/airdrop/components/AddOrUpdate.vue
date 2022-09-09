@@ -197,8 +197,8 @@
       <el-form-item label="人民币价格" prop="cny_price">
         <el-input-number v-model="form.cny_price" :precision="2" :min="0" placeholder="请输入人民币价格" />
       </el-form-item>
-      <el-form-item label="藏豆价格" prop="integral_price">
-        <el-input-number v-model="form.integral_price" :precision="2" :min="0" placeholder="请输入藏豆价格" />
+      <el-form-item :label="`${integral}价格`" prop="integral_price">
+        <el-input-number v-model="form.integral_price" :precision="2" :min="0" placeholder="请输入价格" />
       </el-form-item>
       <el-divider />
       <el-form-item label="限购数量" prop="limit_num">
@@ -294,6 +294,8 @@ import { airdropList, addAirdrop } from '@/api/airdrop'
 import { DominKey, getToken } from '@/utils/auth'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import { castList } from '@/api/cast'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'AddOrUpdate',
   components: { CustomUpload, ElImageViewer },
@@ -429,7 +431,7 @@ export default {
           { required: true, message: '请选择创作者头像', trigger: ['blur', 'change'] }
         ],
         integral_price: [
-          { required: true, message: '请输入藏豆价格', trigger: ['blur', 'change'] }
+          { required: true, message: `请输入${this.integral}价格`, trigger: ['blur', 'change'] }
         ],
         issuer: [
           { required: true, message: '请输入发行方', trigger: ['blur', 'change'] }
@@ -451,6 +453,9 @@ export default {
         ]
       }
     }
+  },
+  computed: {
+    ...mapGetters(['integral'])
   },
   methods: {
     init(data) {

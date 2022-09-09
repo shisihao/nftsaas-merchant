@@ -1,44 +1,10 @@
-export const zoneOptions = [
-  { label: '全部', value: '' },
-  { label: 'FIL', value: 'fil' },
-  { label: 'ETH', value: 'eth' },
-  { label: 'BTC', value: 'btc' },
-  { label: 'XCH', value: 'xch' }
-]
-
-export const zoneSearchOptions = [
-  { label: '全部', value: '' },
-  { label: 'FIL', value: 'fil' },
-  { label: 'ETH', value: 'eth' },
-  { label: 'BTC', value: 'btc' },
-  { label: 'XCH', value: 'xch' },
-  { label: '限时优惠', value: 'discount' }
-]
-
-export const currencyOptions = [
-  { label: '全部', value: '' },
-  { label: 'FIL', value: 'fil' },
-  { label: 'ETH', value: 'eth' },
-  { label: 'BTC', value: 'btc' },
-  { label: 'XCH', value: 'xch' },
-  { label: 'USDT', value: 'usdt' }
-]
-
-export const currencyReportOptions = [
-  { label: '全部', value: '' },
-  { label: 'FIL', value: 'fil' },
-  { label: 'BTC', value: 'btc' },
-  { label: 'ETH', value: 'eth' },
-  { label: 'XCH', value: 'xch' },
-  { label: 'USDT', value: 'usdt' },
-  { label: '电费', value: 'dfb' },
-  { label: '现金', value: 'cny' }
-]
+import store from '@/store'
+const integral = store.getters.integral
 
 export const payOptions = [
 
   { label: '全部', value: '' },
-  { label: '仙豆', value: 'integral' },
+  { label: integral, value: 'integral' },
   { label: '微信', value: 'wxpay' },
   { label: '支付宝', value: 'alipay' },
   // { label: '农行', value: 'abcpay' },
@@ -113,7 +79,7 @@ export const examineStatusOptions = [
 
 export const payTypeOptions = [
   { label: '全部', value: '' },
-  { label: '藏豆', value: 'integral' },
+  { label: integral, value: 'integral' },
   { label: '铸造券', value: 'cast' },
   { label: '兑换券', value: 'voucher' },
   { label: '商品券', value: 'commodity' }
