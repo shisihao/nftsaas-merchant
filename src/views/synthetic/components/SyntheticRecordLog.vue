@@ -8,6 +8,13 @@
       :visible.sync="visible"
       @closed="onClose()"
     >
+      <el-form ref="form" :inline="true" label-width="80px">
+        <el-form-item>
+          <el-button :loading="downloadLoading" type="success" icon="el-icon-document" @click="onHandleDownload">
+            {{ $t('table.export') }} Excel
+          </el-button>
+        </el-form-item>
+      </el-form>
       <el-table v-loading="loading" border :data="list">
         <el-table-column prop="id" label="ID" width="80" align="center" />
         <el-table-column label="用户信息" min-width="200" header-align="center">
@@ -75,7 +82,7 @@
 
 <script>
 import Pagination from '@/components/Pagination'
-import { synthesisLog } from '@/api/synthetic'
+import { synthesisLog, synthesisLogExport } from '@/api/synthetic'
 import { DominKey, getToken } from '@/utils/auth'
 
 export default {
@@ -85,6 +92,7 @@ export default {
     return {
       visible: false,
       loading: false,
+      downloadLoading: false,
       list: [],
       domin: getToken(DominKey),
       pages: {
@@ -113,6 +121,17 @@ export default {
         .catch(() => {})
         .finally(() => {
           this.loading = false
+        })
+    },
+    onHandleDownload() {
+      this.downloadLoading = true
+      synthesisLogExport()
+        .then(response => {
+          location.href = this.domin + '/' + response.data.filename
+        })
+        .catch(_ => {})
+        .finally(_ => {
+          this.downloadLoading = false
         })
     },
     onClose() {

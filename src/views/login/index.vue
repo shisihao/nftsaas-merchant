@@ -170,11 +170,6 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapGetters([
-      'configInfo', 'info'
-    ])
-  },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validEmail(value) && !validPhone(value)) {
@@ -219,6 +214,11 @@ export default {
       googleCodeVisible: false,
       step: 0
     }
+  },
+  computed: {
+    ...mapGetters([
+      'configInfo', 'info'
+    ])
   },
   watch: {
     $route: {

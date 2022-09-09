@@ -44,15 +44,10 @@
       <el-table-column
         prop="content"
         label="系统消息"
-        header-align="center"
+        align="center"
       >
-        <template slot-scope="{ row, $index }">
-          <div class="RichContent-collapsedText" :class="{ellipsis: row.ellipsis}">
-            {{ row.content }}
-            <div class="RichContent-lookText" @click="onLookAll($index)">
-              {{ row.ellipsis ? '查看全部' : '收起内容' }}
-            </div>
-          </div>
+        <template slot-scope="{ row }">
+          <el-link type="primary" :underline="false" @click="onContent(row)">点击查看</el-link>
         </template>
       </el-table-column>
       <el-table-column
@@ -83,11 +78,12 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        width="90"
+        width="160"
         align="center"
       >
         <template slot-scope="{ row }">
           <el-button type="primary" @click="onAddOrUpdate(row)">编辑</el-button>
+          <el-button type="danger" @click="onDelete(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -97,9 +93,19 @@
     <add-or-update
       v-if="addOrUpdateVisible"
       ref="addOrUpdate"
+      :add-or-update-visible.sync="addOrUpdateVisible"
       @refreshList="getList()"
     />
 
+    <!-- 消息内容 -->
+    <el-dialog
+      :title="form.title"
+      width="800px"
+      append-to-body
+      :visible.sync="editTinymceVisible"
+    >
+      <div class="dialog-img" v-html="form.content" />
+    </el-dialog>
   </div>
 </template>
 
@@ -121,6 +127,10 @@ export default {
         start: '',
         end: ''
       },
+      form: {
+        title: '',
+        content: ''
+      },
       pages: {
         total: 0,
         limit: 20,
@@ -129,7 +139,8 @@ export default {
       dateRangeValue: [],
       pickerOptions,
       loading: false,
-      addOrUpdateVisible: false
+      addOrUpdateVisible: false,
+      editTinymceVisible: false
     }
   },
   created() {
@@ -143,18 +154,12 @@ export default {
       if (this.loading) return
       this.loading = loading
       if (page === 1) this.pages.current = page
-      this.list = []
       dataList({ page, ...this.search, limit: this.pages.limit })
         .then(response => {
-          if (response.code !== 0) return
-          this.list = response.data.data.map(v => {
-            return Object.assign(v, { ellipsis: true })
-          })
+          this.list = response.data.data
           this.pages.total = response.data.total
         })
-        .catch(error => {
-          this.$message.error(error.msg)
-        })
+        .catch(() => {})
         .finally(() => {
           this.loading = false
         })
@@ -175,7 +180,7 @@ export default {
         this.getList(1)
       }
     },
-    onDelete({ row, $index }) {
+    onDelete(row) {
       this.$confirm(
         `确定对[(#${row.id})]进行[删除]操作?`,
         '删除',
@@ -190,10 +195,7 @@ export default {
           deleteData(row.id)
             .then(({ msg = '删除成功' }) => {
               this.$message.success(msg)
-              this.list.splice($index, 1)
-              if (this.list.length === 0) {
-                this.init()
-              }
+              this.getList()
             })
             .catch(() => {
               this.$message.error('删除失败')
@@ -201,12 +203,9 @@ export default {
         })
         .catch(() => {})
     },
-    onLookAll(index) {
-      if (this.list[index].ellipsis) {
-        this.list[index].ellipsis = false
-      } else {
-        this.list[index].ellipsis = true
-      }
+    onContent(row) {
+      this.form = { ...row }
+      this.editTinymceVisible = true
     }
   }
 }

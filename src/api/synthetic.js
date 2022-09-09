@@ -56,3 +56,10 @@ export function synthesisLog(id, params) {
 export function recycleStock(id) {
   return request.post(`synthesis/${id}/recycle`)
 }
+
+// 合成记录导出
+export function synthesisLogExport(id, params) {
+  return request.get(`/synthesis/${id}/log/export`, {
+    params
+  })
+}
