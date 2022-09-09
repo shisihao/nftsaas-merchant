@@ -13,13 +13,13 @@
         <div class="app-content">
           <div class="tab-box">
             <el-tabs v-model="activePosName" tab-position="left" @tab-click="onHandlePos">
-              <el-tab-pane :label="value.label" :name="`pos_${value.value}`" :key="index" v-for="(value, index) in adsPosOptions"/>
+              <el-tab-pane v-for="(value, index) in adsPosOptions" :key="index" :label="value.label" :name="`pos_${value.value}`" />
             </el-tabs>
           </div>
           <div class="app-box">
-            <el-empty v-if="list.length === 0" v-loading="loading" description="暂无数据"></el-empty>
+            <el-empty v-if="list.length === 0" v-loading="loading" description="暂无数据" />
             <div v-else class="all-card">
-              <el-card class="box-card" shadow="hover" :key="index" v-for="(value, index) in list">
+              <el-card v-for="(value, index) in list" :key="index" class="box-card" shadow="hover">
                 <div slot="header">
                   <div style="position: relative;">
                     <div>
@@ -47,10 +47,10 @@
 
                 <div class="card-footer">
                   <section @click="onAddOrUpdate(value)">
-                    <i class="el-icon-edit-outline" style="color: #409eff;"/>
+                    <i class="el-icon-edit-outline" style="color: #409eff;" />
                   </section>
                   <section @click="onDelete(value)">
-                    <i class="el-icon-delete" style="color: #f56c6c;"/>
+                    <i class="el-icon-delete" style="color: #f56c6c;" />
                   </section>
                 </div>
               </el-card>
@@ -58,44 +58,10 @@
           </div>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="广告库" name="stock" :disabled="loading">
-        <el-empty v-if="list.length === 0" v-loading="loading" description="暂无数据"></el-empty>
-          <div v-else class="all-card">
-            <el-card class="box-card" shadow="hover" :key="index" v-for="(value, index) in list">
-              <div slot="header">
-                <div style="position: relative;">
-                  <div>
-                    ID：{{ value.id }}
-                  </div>
-                </div>
-              </div>
-
-              <div class="card-content">
-                <el-image
-                  class="image-item"
-                  :src="value.image && domin + value.image"
-                  :preview-src-list="[value.image && domin + value.image]"
-                >
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline" />
-                  </div>
-                </el-image>
-              </div>
-              <div class="card-footer">
-                <section @click="onAddOrUpdate(value)">
-                  <el-link type="primary" :underline="false">基于该广告编辑</el-link>
-                </section>
-                <section @click="onPreview(value)">
-                  <i class="el-icon-view" style="color: #409eff;"/>
-                </section>
-              </div>
-            </el-card>
-          </div>
-      </el-tab-pane>
     </el-tabs>
-    
+
     <pagination v-show="pages.total > 0" :total="pages.total" :page.sync="pages.current" :limit.sync="pages.limit" @pagination="getList()" />
-    
+
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update
       v-if="addOrUpdateVisible"
@@ -108,7 +74,7 @@
       :on-close="closeViewer"
       :url-list="imageViewerList"
     />
-    
+
   </div>
 </template>
 
@@ -121,7 +87,7 @@ import AddOrUpdate from './components/AddOrUpdate'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 
 export default {
-  name: 'ad',
+  name: 'Ad',
   components: { Pagination, AddOrUpdate, ElImageViewer },
   data() {
     return {
@@ -188,7 +154,7 @@ export default {
     getPosList() {
       posList()
         .then(response => {
-          let posOptions = [{ label: '全部', value: '' }]
+          const posOptions = [{ label: '全部', value: '' }]
           this.adsPosOptions = posOptions.concat(response.data.map(v => {
             return {
               label: v.name,
