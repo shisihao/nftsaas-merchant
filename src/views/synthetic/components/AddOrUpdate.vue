@@ -185,9 +185,6 @@
             + 条件
           </el-button>
         </el-form-item>
-        <el-form-item label="商品劵" prop="commodity_price">
-          <el-input-number v-model="form.commodity_price" :precision="0" :min="0" />
-        </el-form-item>
         <el-form-item label="库存" prop="limit_num">
           <el-input-number v-model="form.limit_num" :precision="0" :min="0" />
         </el-form-item>
@@ -279,7 +276,6 @@ export default {
         end_time: '',
         formula: [],
         limit_num: '',
-        commodity_price: 0,
         intro: ''
       },
 
@@ -297,9 +293,6 @@ export default {
           { required: true, message: '不能为空', trigger: ['blur'] }
         ],
         limit_num: [
-          { required: true, message: '不能为空', trigger: ['blur', 'change'] }
-        ],
-        commodity_price: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ],
         user_limit_num: [
