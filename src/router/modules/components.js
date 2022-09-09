@@ -55,7 +55,6 @@ export const localMap = {
   invite: () => import('@/views/configs/invite'),
   register: () => import('@/views/configs/register'),
   partner: () => import('@/views/partner/index'), // 合作商
-  activities: () => import('@/views/draw/index'), // 抽签活动
   airdrop: () => import('@/views/airdrop/index'), // 空投藏品管理
   castGood: () => import('@/views/cast-good/index'), // 铸造藏品管理
   synthetic: () => import('@/views/synthetic/index'), // 合成管理
