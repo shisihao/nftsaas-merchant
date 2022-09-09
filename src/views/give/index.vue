@@ -21,13 +21,6 @@
             @change="onChangeDateRange"
           />
         </el-form-item>
-        <el-form-item label="状态" style="margin-left: 10px">
-          <el-radio-group v-model="search.status" size="mini" @change="getList(1)">
-            <el-badge v-for="item in statusOptions" :key="item.value" :value="item.value === 0 && wait_count > 0 ? wait_count : ''" class="badge-item">
-              <el-radio-button :label="item.value">{{ item.label }}</el-radio-button>
-            </el-badge>
-          </el-radio-group>
-        </el-form-item>
         <el-button icon="el-icon-search" @click="getList(1)">
           {{ $t('table.search') }}
         </el-button>
@@ -46,94 +39,85 @@
         align="center"
       />
       <el-table-column
-        label="藏品信息"
-        min-width="240"
-        header-align="center"
-      >
-        <template slot-scope="{ row }">
-          <div v-if="row.user_goods && row.user_goods.goods" class="info-wrapper">
-            <el-image
-              class="image-item"
-              lazy
-              :src="Array.isArray(row.user_goods.goods.images) && row.user_goods.goods.images[0] && row.platform_info.oss_url + row.user_goods.goods.images[0]"
-              :preview-src-list="[Array.isArray(row.user_goods.goods.images) && row.user_goods.goods.images[0] && row.platform_info.oss_url + row.user_goods.goods.images[0]]"
-            >
-              <div slot="error" class="image-slot">
-                <i class="el-icon-picture-outline" />
-              </div>
-            </el-image>
-            <ul class="data-info">
-              <li>
-                <div>编号：</div>
-                <div>{{ row.user_goods.goods.serial }}</div>
-              </li>
-              <li>
-                <div>名称：</div>
-                <el-tooltip popper-class="popover-box" placement="bottom-start" effect="light">
-                  <div slot="content">{{ row.user_goods.goods.name }}</div>
-                  <div class="more-ellipsis-3">{{ row.user_goods.goods.name }}</div>
-                </el-tooltip>
-              </li>
-            </ul>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="赠送人"
+        label="赠送人信息"
         min-width="200"
         header-align="center"
       >
         <template slot-scope="{ row }">
           <div v-if="row.user">
-            <el-avatar icon="el-icon-user-solid" style="vertical-align: top;" :src="row.user.avatar ? (domin + row.user.avatar) : ''" />
-            <div style="display: inline-block;margin-left: 2px">
+            <el-avatar class="user-avatar" icon="el-icon-user-solid" size="small" :src="row.user && domin + row.user.avatar" />
+            <div style="display: inline-block;margin-left: 10px;vertical-align: middle">
               <div>
-                {{ row.user.name }}
-                <span v-if="row.user.certification">
-                  <el-divider direction="vertical" />
-                  <el-tag effect="plain">{{ row.user.certification.name }}</el-tag>
-                </span>
+                # {{ row.user.id }}
               </div>
               <div>
-                {{ row.user.phone || row.user.email }}
+                {{ row.user.name }}
+              </div>
+              <div>
+                {{ row.user.phone }}
               </div>
             </div>
           </div>
-          <div v-else>
-            用户已删除
-          </div>
+          <div v-else style="text-align: center">-</div>
         </template>
       </el-table-column>
       <el-table-column
-        label="接收人"
+        label="接收人信息"
         min-width="200"
         header-align="center"
       >
         <template slot-scope="{ row }">
           <div v-if="row.target_user">
-            <el-avatar icon="el-icon-user-solid" style="vertical-align: top;" :src="row.target_user.avatar ? (domin + row.target_user.avatar) : ''" />
-            <div style="display: inline-block;margin-left: 2px">
+            <el-avatar class="user-avatar" icon="el-icon-user-solid" size="small" :src="row.target_user && domin + row.target_user.avatar" />
+            <div style="display: inline-block;margin-left: 10px;vertical-align: middle">
               <div>
-                {{ row.target_user.name }}
-                <span v-if="row.target_user.certification">
-                  <el-divider direction="vertical" />
-                  <el-tag effect="plain">{{ row.target_user.certification.name }}</el-tag>
-                </span>
+                # {{ row.target_user.id }}
               </div>
               <div>
-                {{ row.target_user.phone || row.target_user.email }}
+                {{ row.target_user.name }}
+              </div>
+              <div>
+                {{ row.target_user.phone }}
               </div>
             </div>
           </div>
+          <div v-else style="text-align: center">-</div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="商品信息"
+        min-width="200"
+        header-align="center"
+      >
+        <template slot-scope="{ row : { user_goods } }">
+          <div v-if="user_goods && user_goods.goods">
+            <div>
+              商品名称：{{ user_goods.goods.name || '' }}
+            </div>
+            <div>
+              商品编号：{{ user_goods.goods.serial || '' }}#{{ user_goods.num || '' }}/{{ user_goods.goods.stock +user_goods.goods.cast_goods_stock }}
+            </div>
+            <div>
+              创作者：{{ user_goods.goods.author || '' }}
+            </div>
+          </div>
           <div v-else>
-            用户已删除
+            <div>
+              商品名称：-
+            </div>
+            <div>
+              商品编号：-
+            </div>
+            <div>
+              创作者：-
+            </div>
           </div>
         </template>
       </el-table-column>
       <el-table-column
         prop="hash"
         label="交易HASH"
-        width="180"
+        width="160"
         header-align="center"
       >
         <template slot-scope="{ row }">
@@ -156,6 +140,7 @@ import { dataList } from '@/api/give'
 import { pickerOptions } from '@/utils/explain'
 import Pagination from '@/components/Pagination'
 import { DominKey, getToken } from '@/utils/auth'
+
 export default {
   name: 'Give',
   components: {
@@ -167,7 +152,6 @@ export default {
       dateRangeValue: [],
       pickerOptions,
       domin: getToken(DominKey),
-      wait_count: 0,
       search: {
         user_keywords: '',
         target_keywords: '',
@@ -222,55 +206,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-  .info-wrapper {
-    display: flex;
-    .image-item {
-      flex-shrink: 0;
-      width: 100px;
-      height: 100px;
-      display: flex;
-      align-items: center;
-      img {
-        height: auto;
-      }
-      ::v-deep .image-slot {
-        font-size: 30px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        background: #f5f7fa;
-        color: #909399;
-      }
-    }
-  }
-  .data-info {
-    padding: 0;
-    margin-left: 4px;
-    li {
-      display: flex;
-      div:nth-child(1) {
-        flex-shrink: 0;
-      }
-    }
-  }
-  ::v-deep .badge-item {
-    .el-badge__content {
-      transform: translateY(-50%) translateX(50%);
-      z-index: 1;
-    }
-    .el-radio-button:first-child .el-radio-button__inner {
-      border-radius: 0;
-      border-left: 0;
-    }
-    &:first-child .el-radio-button:first-child .el-radio-button__inner {
-      border-left: 1px solid #DCDFE6;
-      border-radius: 4px 0 0 4px;
-    }
-    &:last-child .el-radio-button:first-child .el-radio-button__inner {
-      border-radius: 0 4px 4px 0;
-    }
-  }
-</style>

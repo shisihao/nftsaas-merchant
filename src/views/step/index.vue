@@ -333,7 +333,7 @@ export default {
         .catch(error => {
           if (error.toString().indexOf('设计风格已设置，请前往编辑') >= 0) {
             putFirst()
-            this.$router.replace({ path: '/' })
+            this.$router.replace({ path: '/design' })
           }
         })
         .finally(() => {

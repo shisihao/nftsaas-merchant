@@ -79,10 +79,7 @@ export const examineStatusOptions = [
 
 export const payTypeOptions = [
   { label: '全部', value: '' },
-  { label: integral, value: 'integral' },
-  { label: '铸造券', value: 'cast' },
-  { label: '兑换券', value: 'voucher' },
-  { label: '商品券', value: 'commodity' }
+  { label: integral, value: 'integral' }
 ]
 
 export const typeOptions = [

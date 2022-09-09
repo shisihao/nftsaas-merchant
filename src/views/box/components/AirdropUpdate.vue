@@ -14,17 +14,19 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="上传Excel文件" prop="file_path">
-        <el-upload
-          :action="fileDmoin + 'public/upload'"
+        <custom-upload
+          class-name=""
           :limit="1"
+          :show-file-list="true"
           :file-list="fileList"
-          :before-upload="handleBeforeUpload"
-          :on-exceed="handleExceed"
-          :on-success="handleSuceess"
+          @handleBeforeUpload="handleBeforeUpload"
+          @handleExceed="handleExceed"
+          @handleRemove="handleRemove"
+          @handleSuccess="handleSuceess"
         >
           <el-button type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip  notice">只能上传xlsx文件</div>
-        </el-upload>
+          <div class="el-upload__tip">只能上传xlsx文件</div>
+        </custom-upload>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -89,6 +91,9 @@ export default {
     handleExceed() {
       this.$message.warning(`当前限制选择 1 个文件，请删除后在上传`)
     },
+    handleRemove(file, fileList) {
+      this.form.file_path = ''
+    },
     handleBeforeUpload(file) {
       const a = file.name.split('.')
       const isLt2M = file.size / 1024 / 1024 < 3
@@ -101,8 +106,8 @@ export default {
         return false
       }
     },
-    handleSuceess(file, fileList) {
-      this.form.file_path = file.data.path
+    handleSuceess(response) {
+      this.form.file_path = response
     }
   }
 }

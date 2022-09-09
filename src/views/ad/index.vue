@@ -159,7 +159,7 @@ export default {
               value: v.id,
               size: v.size
             }
-          }))
+          })).slice(0, 2)
         })
     },
     onHandleClick() {

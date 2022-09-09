@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul v-if="index === 1" class="app1">
-      <li v-for="(value, index) in templateList1">
+      <li v-for="(value, index) in templateList1" :key="index">
         <div class="phone-section">
           <el-image class="phone-box" :src="phoneBox" />
           <div class="phone-tabbar">
@@ -52,7 +52,7 @@
       </li>
     </ul>
     <ul v-if="index === 2" class="app2">
-      <li v-for="(value, index) in templateList2">
+      <li v-for="(value, index) in templateList2" :key="index">
         <div class="phone-section">
           <el-image class="phone-box" :src="phoneBox" />
           <div class="phone-tabbar">
@@ -84,7 +84,7 @@
       </li>
     </ul>
     <ul v-if="index === 3" class="app3">
-      <li v-for="(value, index) in templateList3">
+      <li v-for="(value, index) in templateList3" :key="index">
         <div class="phone-section">
           <el-image class="phone-box" :src="phoneBox" />
           <div class="phone-tabbar">

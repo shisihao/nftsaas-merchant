@@ -51,7 +51,6 @@ export default {
     return {
       visible: false,
       btnLoading: false,
-      fileDmoin: process.env.NODE_ENV === 'development' ? process.env.VUE_APP_BASE_API : `${location.origin}/admin/`,
       fileList: [],
       form: {
         is_real: 1,
@@ -114,7 +113,7 @@ export default {
       }
       cb(true)
     },
-    handleRemove(file, fileList) {
+    handleRemove() {
       this.form.file_path = ''
     },
     handleSuceess(response) {
