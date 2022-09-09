@@ -357,7 +357,7 @@ export default {
       cateOptions: [],
       tagsOptions: [],
       castOptions: [],
-      typeOptions: typeOptions.filter(v => !['', 2, 4].includes(v.value)),
+      typeOptions: typeOptions.filter(v => !['', 2, 4, 6].includes(v.value)),
       conditionOptions: [],
       currentName: '',
       percentage: 0,
