@@ -28,13 +28,13 @@
     </div>
 
     <el-tabs v-model="search.type" @tab-click="handleClick">
-      <el-tab-pane label="订单列表" name="order" >
+      <el-tab-pane label="订单列表" name="order">
         <order-list ref="orderList" :search="search" />
       </el-tab-pane>
-      <el-tab-pane label="提资产列表" name="withdrawal" >
+      <el-tab-pane label="提资产列表" name="withdrawal">
         <coin-list ref="coinList" :search="search" />
       </el-tab-pane>
-      <el-tab-pane label="提现列表" name="cny_withdrawal" >
+      <el-tab-pane label="提现列表" name="cny_withdrawal">
         <cny-list ref="cnyList" :search="search" />
       </el-tab-pane>
     </el-tabs>
@@ -45,17 +45,19 @@
 
 <script>
 import Pagination from '@/components/Pagination'
-import { dataList, exportOrder } from '@/api/report'
+import { exportOrder } from '@/api/report'
 import { pickerOptions } from '@/utils/explain'
 import OrderList from './components/OrderList'
 import CoinList from './components/CoinList'
 import CnyList from './components/CnyList'
+import { getToken, DominKey } from '@/utils/auth'
 
 export default {
   name: 'Report',
   components: { Pagination, OrderList, CoinList, CnyList },
   data() {
     return {
+      domin: getToken(DominKey),
       downloadLoading: false,
       list: [],
       dateRangeValue: [],
@@ -110,7 +112,7 @@ export default {
       this.downloadLoading = true
       exportOrder(this.search)
         .then(response => {
-          location.href = '/' + response.data.filename
+          location.href = this.domin + '/' + response.data.filename
         })
         .catch(_ => {})
         .finally(_ => {
