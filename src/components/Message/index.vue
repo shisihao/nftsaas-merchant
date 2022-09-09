@@ -11,14 +11,14 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'Whispers',
+  data() {
+    return {
+    }
+  },
   computed: {
     ...mapGetters([
       'msgCount'
     ])
-  },
-  data() {
-    return {
-    }
   },
   created() {
     this.init()

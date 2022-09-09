@@ -63,7 +63,7 @@
         width="150"
         align="center"
       >
-        <template slot-scope="{ row, $index }">
+        <template slot-scope="{ row }">
           <el-button type="primary" @click="onAddOrUpdate(row)">编辑</el-button>
           <el-button type="danger" @click="onDelete(row)">删除</el-button>
         </template>
@@ -121,7 +121,7 @@ export default {
           this.list = response.data.data
           this.pages.total = response.data.total
         })
-        .catch(error => {
+        .catch(() => {
         })
         .finally(() => {
           this.loading = false

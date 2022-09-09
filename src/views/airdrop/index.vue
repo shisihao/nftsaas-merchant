@@ -95,7 +95,7 @@
             价格：¥{{ row.cny_price || 0.00 }}
           </div>
           <div>
-            藏豆：{{ row.integral_price || 0.00 }}
+            {{ integral }}：{{ row.integral_price || 0.00 }}
           </div>
         </template>
       </el-table-column>
@@ -226,6 +226,7 @@ import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
 import AirdropUpdate from './components/AirdropUpdate'
 import AirdropLog from './components/AirdropLog'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Airdrop',
@@ -274,6 +275,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['integral']),
     swiper() {
       return function(v = 0) {
         return this.$refs[`mySwiper${v}`].$swiper

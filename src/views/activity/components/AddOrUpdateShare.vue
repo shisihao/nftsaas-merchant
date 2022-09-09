@@ -64,11 +64,11 @@
               :disabled="oldfrom.id>0&&oldfrom.reward.stock>0"
             />
           </el-form-item>
-          <el-form-item label="藏豆" prop="reward.wallet.integral">
+          <el-form-item :label="integral" prop="reward.wallet.integral">
             <el-input-number
               v-model="form.reward.wallet.integral"
               :min="0"
-              placeholder="藏豆"
+              :placeholder="integral"
               :disabled="oldfrom.id>0&&oldfrom.reward.stock>0"
             />
           </el-form-item>
@@ -80,7 +80,7 @@
               :disabled="oldfrom.id>0&&oldfrom.reward.stock>0"
             />
           </el-form-item>
-          <div class="notice notice-warning">注意：铸造券、兑换券、藏豆、商品券填0代表不添加该奖励</div>
+          <div class="notice notice-warning">注意：铸造券、兑换券、{{ integral }}、商品券填0代表不添加该奖励</div>
           <el-form-item label="藏品/盲盒" prop="reward">
             <div v-for="(item, index) in form.reward.goods" :key="item.goods_id" class="box-wrapper">
               <span>
@@ -270,6 +270,7 @@ import CustomUpload from '@/components/Upload/CustomUpload'
 import EditTinymce from './EditTinymce'
 import { DominKey, getToken } from '@/utils/auth'
 import { goodsList, boxList, addOrUpdateShare, shareDetail } from '@/api/activity'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'AddOrUpdateWelfare',
@@ -378,6 +379,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['integral']),
     surplusStock() {
       const boxStock = this.boxOptions.find(v => v.value === this.good.box_id)?.stock
       const goodStock = this.goodsOptions.find(v => v.value === this.good.goods_id)?.stock

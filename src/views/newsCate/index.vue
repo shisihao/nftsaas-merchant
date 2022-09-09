@@ -46,7 +46,7 @@
         width="150"
         align="center"
       >
-        <template slot-scope="{ row, $index }">
+        <template slot-scope="{ row }">
           <el-button type="primary" @click="onAddOrUpdate(row)">编辑</el-button>
           <el-button type="danger" @click="onDelete(row)">删除</el-button>
         </template>
@@ -106,7 +106,7 @@ export default {
           if (response.code !== 0) return
           this.list = response.data
         })
-        .catch(error => {
+        .catch(() => {
         })
         .finally(() => {
           this.loading = false
@@ -121,11 +121,11 @@ export default {
     onDelete(row) {
       this.$confirm(`确定对[(#${row.id})]进行[删除]操作?
         ${row.news_count ? '<div style="color: #f56c6c;">注：删除分栏，该分栏下的资讯也会删除，确认删除？</div>' : ''}`, '删除', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          dangerouslyUseHTMLString: true,
-          type: 'error',
-        }
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        dangerouslyUseHTMLString: true,
+        type: 'error'
+      }
       )
         .then(() => {
           deleteData(row.id)

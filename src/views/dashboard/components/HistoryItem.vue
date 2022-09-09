@@ -38,13 +38,13 @@
             </div>
             <el-divider />
             <div class="user-title">
-              昨日销售藏豆（个）
+              昨日销售{{ integral }}（个）
             </div>
             <div class="user-num">
               <span>{{ statistics.sale.integral.yesterday }}</span>
             </div>
             <div class="user-text">
-              累计销售藏豆 <span> {{ statistics.sale.integral.total }}</span>
+              累计销售{{ integral }} <span> {{ statistics.sale.integral.total }}</span>
             </div>
           </el-card>
         </el-col>
@@ -55,7 +55,7 @@
         <el-col :xs="24" :span="12">
           <el-card shadow="never" class="card-boder">
             <div class="user-title">
-              用户剩余藏豆数量（个）
+              用户剩余{{ integral }}数量（个）
             </div>
             <div class="user-num">
               <b>{{ statistics.integral.balance }}</b>
@@ -69,7 +69,7 @@
               <b>{{ statistics.integral.expend | cutZero }}</b>
             </div>
             <div class="user-text">
-              用户藏豆数量累计(个) <b>{{ statistics.integral.income }}</b>
+              用户{{ integral }}数量累计(个) <b>{{ statistics.integral.income }}</b>
             </div>
           </el-card>
         </el-col>
@@ -127,6 +127,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   props: {
     statistics: {
@@ -171,6 +173,9 @@ export default {
   data() {
     return {
     }
+  },
+  computed: {
+    ...mapGetters(['integral'])
   },
   created() {
   },
@@ -219,6 +224,4 @@ export default {
   }
 }
 
-@media (min-width: 768px) {
-}
 </style>

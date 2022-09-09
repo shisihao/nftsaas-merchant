@@ -30,7 +30,7 @@
                   </el-popover>
                 </div>
                 <count-to :start-val="0" :end-val="+common.uv.month" :duration="2000" class="card-panel-num" />
-                <div class="card-panel-desc">当前峰值UV {{ common.uv.day||0 }}</div>
+                <div class="card-panel-desc">当前峰值UV {{ common.uv.day || 0 }}</div>
               </div>
             </div>
           </el-col>
@@ -59,12 +59,12 @@
                   上月运维费用（元）
                   <span class="payment" @click="$router.push('/operationsOrder')">缴费记录</span>
                 </div>
-                <count-to :start-val="0" :end-val="common.maintenance_fee.last_month?common.maintenance_fee.last_month.pay_price:0" :duration="2000" class="card-panel-num" />
+                <count-to :start-val="0" :end-val="common.maintenance_fee.last_month ? common.maintenance_fee.last_month.pay_price : 0" :duration="2000" class="card-panel-num" />
                 <div v-if="common.maintenance_fee.last_month">
-                  <el-button v-if="common.maintenance_fee.last_month.status===0" plain type="info" @click="handleOprate">立即缴纳</el-button>
-                  <el-button v-if="common.maintenance_fee.last_month.status===1" plain type="info">已缴纳</el-button>
-                  <el-button v-if="common.maintenance_fee.last_month.status===2" plain type="info">审核中</el-button>
-                  <el-button v-if="common.maintenance_fee.last_month.status===3" plain type="info">被驳回</el-button>
+                  <el-button v-if="common.maintenance_fee.last_month.status === 0" plain type="info" @click="handleOprate">立即缴纳</el-button>
+                  <el-button v-if="common.maintenance_fee.last_month.status === 1" plain type="info">已缴纳</el-button>
+                  <el-button v-if="common.maintenance_fee.last_month.status === 2" plain type="info">审核中</el-button>
+                  <el-button v-if="common.maintenance_fee.last_month.status === 3" plain type="info">被驳回</el-button>
                 </div>
               </div>
             </div>
@@ -74,7 +74,6 @@
     </el-row>
     <PayFee v-if="payVisible" ref="payFee" @refreshList="resetData" />
   </div>
-
 </template>
 
 <script>
@@ -88,9 +87,7 @@ export default {
   props: {
     common: {
       type: Object,
-      default: () => ({
-
-      })
+      default: () => ({})
     }
   },
   data() {
@@ -191,21 +188,26 @@ export default {
 	margin-left: 5px;
 	cursor: pointer;
 }
-.last-card-panel{
-  .card-panel-text{
-    display: flex;
-    justify-content: space-between;
-    .payment{
-      font-weight: normal;
-      font-size: 12px;
-      color:#333;
-      text-decoration: underline;
-      cursor: pointer;
-      &:hover{
-        color: #1f9fff;
-      }
-    }
-
+.last-card-panel {
+	.card-panel-text {
+		display: flex;
+		justify-content: space-between;
+		.payment {
+			font-weight: normal;
+			font-size: 12px;
+			color: #333;
+			text-decoration: underline;
+			cursor: pointer;
+			&:hover {
+				color: #1f9fff;
+			}
+		}
+	}
+}
+@media(min-width: 992px) and (max-width: 1200px) {
+  .payment{
+    display:none;
   }
 }
+
 </style>

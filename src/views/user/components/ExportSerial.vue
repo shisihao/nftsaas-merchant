@@ -72,11 +72,13 @@
 </template>
 <script>
 import { exportSerialExcel } from '@/api/user'
+import { getToken, DominKey } from '@/utils/auth'
 
 export default {
   name: 'ExportSerial',
   data() {
     return {
+      domin: getToken(DominKey),
       visible: false,
       btnLoading: false,
       inputVisible: false,
@@ -165,7 +167,7 @@ export default {
               exportSerialExcel(this.form)
                 .then((response) => {
                   this.visible = false
-                  location.href = '/' + response.data.filename
+                  location.href = this.domin + '/' + response.data.filename
                 })
                 .catch(() => {})
                 .finally(() => {

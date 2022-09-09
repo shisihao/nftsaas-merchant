@@ -82,7 +82,6 @@
 import Pagination from '@/components/Pagination'
 import { dataList, deleteData, dataLibraryList, posList } from '@/api/ad'
 import { getToken, DominKey } from '@/utils/auth'
-import { zoneOptions } from '@/utils/explain'
 import AddOrUpdate from './components/AddOrUpdate'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 
@@ -96,7 +95,6 @@ export default {
       addOrUpdateVisible: false,
       previewVisible: false,
       domin: getToken(DominKey),
-      zoneOptions,
       activePosName: 'pos_',
       adsPosOptions: [],
       imageViewerList: [],

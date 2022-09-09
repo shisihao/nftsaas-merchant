@@ -26,7 +26,7 @@ export function getOrdersRefund(id) {
   return request.patch(`/order/${id}/refund`)
 }
 
-// 发起仙豆交易
+// 发起积分交易
 export function getOrdersIntegral(id) {
   return request.patch(`/order/${id}/integral_transfer`)
 }

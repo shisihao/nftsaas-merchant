@@ -3,6 +3,7 @@ import { getInfo } from '@/api/tenant'
 import { getMessageCount } from '@/api/tenant'
 import { getToken, setToken, removeToken, OssKey, DominKey, AppKey } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
+import { getIntegralConfig } from '@/api/configs'
 
 const state = {
   token: getToken(),
@@ -11,7 +12,8 @@ const state = {
   introduction: '',
   info: '',
   msgCount: '',
-  roles: []
+  roles: [],
+  integral: getToken('integral') || '积分'
 }
 
 const mutations = {
@@ -38,15 +40,19 @@ const mutations = {
   },
   SET_MSGCOUNT: (state, data) => {
     state.msgCount = data
+  },
+  SET_INTEGRAL: (state, data) => {
+    state.integral = data
   }
 }
 
 const actions = {
   // user login
-  login({ commit }, userInfo) {
+  login({ dispatch, commit }, userInfo) {
     return new Promise((resolve, reject) => {
       login(userInfo).then(response => {
         const { data } = response
+        dispatch('getIntegral')
         commit('SET_TOKEN', data.admin.admin_token)
         setToken(data.oss.domain, DominKey)
         setToken(data.admin.admin_token)
@@ -111,12 +117,20 @@ const actions = {
         })
     })
   },
+  getIntegral({ commit, state }) {
+    getIntegralConfig().then(res => {
+      res.data.value && commit('SET_INTEGRAL', res.data.value.name)
+      res.data.value && setToken(res.data.value.name, 'integral')
+    }).catch(() => { })
+  },
   // user logout
   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
       commit('SET_CONFIGINFO', '')
+      removeToken('integral')
+      removeToken('is_first')
       removeToken()
       removeToken(OssKey)
       removeToken(DominKey)
@@ -141,6 +155,7 @@ const actions = {
       removeToken(OssKey)
       removeToken(DominKey)
       removeToken(AppKey)
+      removeToken('integral')
       resolve()
     })
   },

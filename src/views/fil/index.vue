@@ -197,12 +197,14 @@ import { dataList, agreeCancel, exportExport } from '@/api/fil'
 import { dataList as filLevel } from '@/api/fil-level'
 import { pickerOptions, catesOptions } from '@/utils/explain'
 import { parseDate } from '@/utils'
+import { getToken, DominKey } from '@/utils/auth'
 
 export default {
   name: 'Fil',
   components: { Pagination },
   data() {
     return {
+      domin: getToken(DominKey),
       downloadLoading: false,
       catesOptions,
       search: {
@@ -295,7 +297,7 @@ export default {
       this.downloadLoading = true
       exportExport(this.search)
         .then(response => {
-          location.href = '/' + response.data.filename
+          location.href = this.domin + '/' + response.data.filename
         })
         .catch(() => {
         })

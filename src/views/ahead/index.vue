@@ -61,10 +61,9 @@
                 </span>
               </div>
               <div>
-                {{ row.order.user.phone || row.order.user.email}}
+                {{ row.order.user.phone || row.order.user.email }}
               </div>
-              <div>
-              </div>
+              <div />
             </div>
           </div>
           <div v-else>
@@ -247,7 +246,7 @@ export default {
       this.downloadLoading = true
       aheadExportOrder(this.search)
         .then(response => {
-          location.href = '/' + response.data.filename
+          location.href = this.domin + '/' + response.data.filename
         })
         .catch(() => {
         })
