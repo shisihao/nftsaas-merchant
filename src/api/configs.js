@@ -559,3 +559,14 @@ export function setSlider(data) {
   })
 }
 
+// 获取藏品编号前缀配置
+export function getPrefix() {
+  return request.get('/configs/serial')
+}
+// 设置藏品编号前缀配置
+export function setPrefix(data) {
+  return request.put('/configs/serial', {
+    ...data
+  })
+}
+

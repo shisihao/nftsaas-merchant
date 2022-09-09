@@ -16,9 +16,9 @@
 
     <el-tabs v-model="activeName" type="card" @tab-click="onHandleClick">
       <el-tab-pane label="我的海报" name="my" :disabled="loading">
-        <el-empty v-if="list.length === 0" v-loading="loading" description="暂无数据"></el-empty>
+        <el-empty v-if="list.length === 0" v-loading="loading" description="暂无数据" />
         <div v-else class="all-card">
-          <el-card class="box-card" shadow="hover" :key="index" v-for="(value, index) in list">
+          <el-card v-for="(value, index) in list" :key="index" class="box-card" shadow="hover">
             <div slot="header">
               <div class="ellipsis"> {{ value.name }} </div>
             </div>
@@ -34,62 +34,30 @@
               </el-image>
             </div>
             <div v-else class="card-content">
-              <el-empty description="请添加内容"></el-empty>
-            </div>  
+              <el-empty description="请添加内容" />
+            </div>
             <div class="card-footer">
               <section @click="onAddOrUpdate(value)">
-                <i class="el-icon-edit-outline" style="color: #409eff;"/>
+                <i class="el-icon-edit-outline" style="color: #409eff;" />
               </section>
               <section @click="onDelete(value)">
-                <i class="el-icon-delete" style="color: #f56c6c;"/>
-              </section>
-            </div>
-          </el-card>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="海报库" name="stock" :disabled="loading">
-        <el-empty v-if="list.length === 0" v-loading="loading" description="暂无数据"></el-empty>
-        <div v-else class="all-card">
-          <el-card class="box-card" shadow="hover" :key="index" v-for="(value, index) in list">
-            <div slot="header">
-              <div class="ellipsis"> {{ value.name }} </div>
-            </div>
-            <div v-if="value.url" class="card-content">
-              <el-image
-                class="image-item"
-                :src="value.url && domin + value.url"
-                :preview-src-list="[value.url && domin + value.url]"
-              >
-                <div slot="error" class="image-slot">
-                  <i class="el-icon-picture-outline" />
-                </div>
-              </el-image>
-            </div>
-            <div v-else class="card-content">
-              <el-empty description="请添加内容"></el-empty>
-            </div>  
-            <div class="card-footer">
-              <section @click="onAddOrUpdate(value)">
-                <el-link type="primary" :underline="false">基于该海报编辑</el-link>
-              </section>
-              <section @click="onPreview(value)">
-                <i class="el-icon-view" style="color: #409eff;"/>
+                <i class="el-icon-delete" style="color: #f56c6c;" />
               </section>
             </div>
           </el-card>
         </div>
       </el-tab-pane>
     </el-tabs>
-    
+
     <pagination v-show="pages.total > 0" :total="pages.total" :page.sync="pages.current" :limit.sync="pages.limit" @pagination="getList()" />
-    
+
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update
       v-if="addOrUpdateVisible"
       ref="addOrUpdate"
       @refreshList="getList()"
     />
-    
+
     <el-image-viewer
       v-if="imageViewer"
       :on-close="closeViewer"

@@ -71,6 +71,7 @@ export const localMap = {
   booth: () => import('@/views/configs/booth'), // 展台配置
   shortMessage: () => import('@/views/configs/shortMessage'), // 短信配置
   sliderConfig: () => import('@/views/configs/sliderConfig'), // 滑块配置
+  prefix: () => import('@/views/configs/prefix'), // 藏品编号前缀配置
   interest: () => import('@/views/interest/index'), // 藏品权益
   interestManagement: () => import('@/views/interestManagement/index'), // 权益管理列表
   task: () => import('@/views/task/index'), // 藏豆任务管理
