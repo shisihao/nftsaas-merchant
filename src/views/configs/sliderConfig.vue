@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="form">
-      <el-form-item label="赠送开关">
+      <el-form-item label="滑块验证开关">
         <el-switch
           v-model="form.open"
           active-value="on"
