@@ -127,7 +127,7 @@ export default {
         { label: '修改登录密码', value: 'update-login-pass' },
         { label: '设置/修改支付密码', value: 'set-pay-pass' },
         { label: '账号换绑', value: 'change-account' },
-        { label: '提现审核', value: 'withdrawal' },
+        // { label: '提现审核', value: 'withdrawal' },
         { label: '认证审核', value: 'identification' }
       ],
       typeOptions: [
