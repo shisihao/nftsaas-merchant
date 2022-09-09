@@ -102,7 +102,7 @@
             价格：¥{{ row.cny_price || 0.00 }}
           </div>
           <div>
-            幻晶：{{ row.integral_price || 0.00 }}
+            {{ integral }}：{{ row.integral_price || 0.00 }}
           </div>
         </template>
       </el-table-column>
@@ -268,6 +268,7 @@ import { tagList } from '@/api/common'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Collection',
@@ -314,6 +315,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['integral']),
     swiper() {
       return function(v = 0) {
         return this.$refs[`mySwiper${v}`].$swiper

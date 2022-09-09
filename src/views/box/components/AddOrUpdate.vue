@@ -78,7 +78,7 @@
               <el-tag type="primary">藏品</el-tag> <el-tag v-if="item.goodType" :type="item.goodType | paraphrase(typeOptions, 'value', 'type')">{{ item.goodType | paraphrase(typeOptions) }}</el-tag> <span class="box-name ellipsis">名称：{{ item.name }}</span> <span class="box-stock">库存：{{ item.stock }}</span><span class="box-stock">剩余：{{ item.stock - (item.sales_num || 0) }}</span>
             </span>
             <span v-show="item.goods_id === 0">
-              <el-tag type="warning">仙豆</el-tag> <span class="box-name ellipsis">数量：{{ item.integral_num }}</span><span class="box-stock">库存：{{ item.stock }}</span>
+              <el-tag type="warning">{{ integral }}</el-tag> <span class="box-name ellipsis">数量：{{ item.integral_num }}</span><span class="box-stock">库存：{{ item.stock }}</span>
             </span>
             <i v-show="!form.id" class="el-icon-delete del-good" @click="onDelGood(index)" />
           </div>
@@ -94,8 +94,8 @@
               </el-select>
             </div>
             <div v-if="good.type === 1" class="add-box">
-              仙豆：
-              <el-input-number v-model="good.integral_num" :min="0" :precision="2" placeholder="仙豆" />
+              {{ integral }}：
+              <el-input-number v-model="good.integral_num" :min="0" :precision="2" :placeholder="`${integral}`" />
             </div>
             <div class="add-box">
               库存：
@@ -108,7 +108,7 @@
           </div>
           <div v-else>
             <el-button v-show="!form.id" type="primary" plain @click="onAddBoxType(0)">+ 藏品</el-button>
-            <el-button v-show="!form.id" type="warning" plain @click="onAddBoxType(1)">+ 仙豆</el-button>
+            <el-button v-show="!form.id" type="warning" plain @click="onAddBoxType(1)">+{{ integral }}</el-button>
           </div>
         </el-form-item>
         <el-form-item label="库存" prop="stock">
@@ -138,8 +138,8 @@
         <el-form-item label="人民币价格" prop="cny_price">
           <el-input-number v-model="form.cny_price" :min="0" :precision="2" placeholder="人民币价格" />
         </el-form-item>
-        <el-form-item label="仙豆价格" prop="integral_price">
-          <el-input-number v-model="form.integral_price" :min="0" :precision="2" placeholder="仙豆价格" />
+        <el-form-item :label="`${integral}价格`" prop="integral_price">
+          <el-input-number v-model="form.integral_price" :min="0" :precision="2" :placeholder="`${integral}价格`" />
         </el-form-item>
         <el-form-item label="限购数量" prop="limit_num">
           <el-input-number v-model="form.limit_num" :min="1" :precision="0" placeholder="限购数量" />
@@ -206,6 +206,8 @@ import EditTinymce from './EditTinymce'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import { typeOptions } from '@/utils/explain'
 import { conditionList } from '@/api/collection'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'AddOrUpdate',
   components: { CustomUpload, EditTinymce, draggable, ElImageViewer },
@@ -325,6 +327,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['integral']),
     dragOptions() {
       return {
         animation: 200,
@@ -486,7 +489,7 @@ export default {
           return false
         }
         if (this.good.integral_num <= 0) {
-          this.$message.warning('仙豆数量必须大于 0')
+          this.$message.warning(`${this.integral}数量必须大于 0`)
           return false
         }
       }

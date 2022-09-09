@@ -211,7 +211,7 @@
                     名称：{{ row.goods.name || '' }}
                   </div>
                   <div>价格：¥ {{ row.cny_price || 0.0 }}</div>
-                  <div>仙豆：{{ row.integral_price || 0.0 }}</div>
+                  <div>{{ integral }}：{{ row.integral_price || 0.0 }}</div>
                   <div>数量：x{{ row.num }}</div>
                 </div>
               </div>
@@ -242,14 +242,14 @@
           <el-table-column width="180" header-align="center">
             <template slot-scope="{ row }">
               <div>支付价格：¥ {{ row.cny_price || 0.0 }}</div>
-              <div>支付仙豆：{{ row.integral_price || 0.0 }}</div>
+              <div>支付{{ integral }}：{{ row.integral_price || 0.0 }}</div>
               <div>
                 支付方式：
                 <span v-if="row.cny_price > 0">
                   <svg-icon :icon-class="row.pay_type | paraphrase(payOptions, 'value', 'value')" /> {{ row.pay_type | paraphrase(payOptions) }}
                 </span>
                 <span v-if="row.integral_price > 0">
-                  <svg-icon icon-class="hd" /> 仙豆
+                  <svg-icon icon-class="hd" /> {{ integral }}
                 </span>
               </div>
             </template>
@@ -338,10 +338,10 @@
                   <div>
                     {{
                       [1].includes(row.trade_status)
-                        ? ' 仙豆链上交易失败'
+                        ? `${integral}链上交易失败`
                         : [2].includes(row.trade_status)
-                          ? ' 藏品链上交易失败'
-                          : ' 仙豆、藏品链上交易失败'
+                          ? '藏品链上交易失败'
+                          : `${integral}、藏品链上交易失败`
                     }}
                   </div>
                   <div slot="reference">
@@ -477,7 +477,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['info'])
+    ...mapGetters(['info', 'integral'])
   },
   created() {
     this.init()

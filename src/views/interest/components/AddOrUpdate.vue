@@ -2,6 +2,7 @@
   <div>
     <el-dialog
       width="800px"
+      top="30px"
       :title="form.id ? $t('table.edit') : $t('table.add')"
       :visible.sync="visible"
       :close-on-click-modal="false"
@@ -12,21 +13,13 @@
         ref="form"
         :model="form"
         :rules="rules"
-        label-width="130px"
+        label-width="180px"
         label-position="left"
       >
         <el-form-item label="藏品" prop="goods_id">
-          <el-select
-            v-model="form.goods_id"
-            class="select-input"
-            filterable
-            clearable
-            placeholder="请输入关键字搜索"
-            :disabled="!!form.id"
-            :filter-method="filterMethodSelect"
-          >
+          <el-select v-model="form.goods_id" filterable clearable :disabled="!!form.id">
             <el-option
-              v-for="(item, index) in interestGoodMetaOptions"
+              v-for="(item, index) in interestGoodOptions"
               :key="index"
               :label="item.label"
               :value="item.value"
@@ -60,9 +53,7 @@
               v-for="(item, index) in priorOptions"
               :key="index"
               :label="item.value"
-              :disabled="
-                !!form.id && !!oldCheckLists.find((v) => v === item.value)
-              "
+              :disabled="!!form.id && !!oldCheckLists.find((v) => v === item.value)"
               @change="onChangeCheckItem(item)"
             >
               {{ item.label }}
@@ -77,59 +68,221 @@
           <el-tab-pane
             v-for="item in checkLists"
             :key="item"
-            :label="priorOptions.find((v) => v.value === item) && priorOptions.find((v) => v.value === item).label"
+            :label="
+              priorOptions.find((v) => v.value === item) &&
+                priorOptions.find((v) => v.value === item).label
+            "
             :closable="!oldCheckLists.find((v) => v === item)"
             :name="item"
           >
-            <!-- 优先购 -->
-            <prior
-              v-if="tabIndex === 'prior'"
-              :form.sync="form"
-              :old-check-lists="oldCheckLists"
-              :prior-item-options="JSON.stringify(priorItemOptions)"
-              :goods-options="goodsOptions"
-              :goods-prior-meta-options="goodsPriorMetaOptions"
-              :box-options="boxOptions"
-              :issuer-options="issuerOptions"
-              :box-prior-meta-options="boxPriorMetaOptions"
-            />
-            <!-- 上链话题 -->
-            <topic
-              v-if="tabIndex === 'topic'"
-              :form.sync="form"
-              :old-check-lists="oldCheckLists"
-              :prior-item-options="JSON.stringify(priorItemOptions)"
-            />
-            <!-- 转赠 -->
-            <give
-              v-if="tabIndex === 'give'"
-              :form.sync="form"
-              :old-check-lists="oldCheckLists"
-              :prior-item-options="JSON.stringify(priorItemOptions)"
-            />
-            <!-- 折扣购 -->
-            <rebate
-              v-if="tabIndex === 'rebate'"
-              :form.sync="form"
-              :old-check-lists="oldCheckLists"
-              :prior-item-options="JSON.stringify(priorItemOptions)"
-              :goods-options="goodsOptions"
-              :goods-rebate-meta-options="goodsRebateMetaOptions"
-              :box-options="boxOptions"
-              :issuer-options="issuerOptions"
-              :box-rebate-meta-options="boxRebateMetaOptions"
-            />
-            <!-- 实体商品折扣购 -->
-            <entity
-              v-if="tabIndex === 'entity'"
-              :form.sync="form"
-              :old-check-lists="oldCheckLists"
-              :prior-item-options="JSON.stringify(priorItemOptions)"
-              :grade-type.sync="gradeType"
-              :entity-goods-options="entityGoodsOptions"
-              :entity-meta-goods-options="entityMetaGoodsOptions"
-              :level-options="levelOptions"
-            />
+            <el-form-item
+              label="权益类型"
+              :prop="'interests.' + item + '.type'"
+              :rules="{
+                required: true,
+                message: '请选择权益类型',
+                trigger: 'blur'
+              }"
+            >
+              <el-select
+                v-model="form.interests[item].type"
+                clearable
+                :disabled="!!form.id && !!oldCheckLists.find((v) => v === item)"
+                @change="onChangeType(item)"
+              >
+                <el-option
+                  v-for="(item1, index1) in priorItemOptions[item]"
+                  :key="index1"
+                  :label="item1.value | paraphrase(interestsOptions)"
+                  :value="item1.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              v-if=" (!['rebate','give'].includes(item) &&
+                form.interests[item].type !== 'appoint' )||
+                (item !== 'prior' && form.interests[item].type === 'once' ) "
+              label="权益次数"
+              :prop="'interests.' + item + '.num'"
+              :rules="{
+                required: true,
+                message: '请输入权益次数',
+                trigger: 'blur'
+              }"
+            >
+              <el-input-number
+                v-model="form.interests[item].num"
+                :min="1"
+                :precision="0"
+                label="权益次数"
+              />
+            </el-form-item>
+            <el-form-item
+              v-if="item=== 'prior'"
+              label="优先购提前时间(分)"
+              :prop="'interests.' + item + '.prior_time'"
+              :rules="{
+                required: true,
+                message: '请输入优先购时间',
+                trigger: 'blur'
+              }"
+            >
+              <el-input-number
+                v-model="form.interests[item].prior_time"
+                :min="1"
+                :precision="0"
+                label="提前时间(分)"
+              />
+            </el-form-item>
+            <el-form-item
+              v-if="item=== 'give'"
+              label="藏品转赠解锁时间(天)"
+              :prop="'interests.' + item + '.give_days'"
+              :rules="{
+                required: true,
+                message: '请输入转赠时间',
+                trigger: 'blur'
+              }"
+            >
+              <el-input-number
+                v-model="form.interests[item].give_days"
+                :min="1"
+                :precision="0"
+                label="藏品转赠解锁时间(天)"
+              />
+            </el-form-item>
+            <el-form-item
+              v-if="
+                ['rebate', 'give'].includes(item) &&
+                  form.interests[item].type === 'long'
+              "
+              label="是否开启"
+            >
+              <el-switch
+                v-model="form.interests[item].num"
+                :active-value="1"
+                :inactive-value="0"
+              />
+            </el-form-item>
+            <div v-if="['rebate', 'entity'].includes(item)">
+              <el-form-item
+                label="折扣"
+                :prop="'interests.' + item + '.discount'"
+                :rules="{
+                  required: true,
+                  message: '请输入折扣',
+                  trigger: ['blur', 'change']
+                }"
+              >
+                <el-input-number
+                  v-model="form.interests[item].discount"
+                  :precision="0"
+                  :min="1"
+                  :max="100"
+                  placeholder="请输入折扣"
+                />
+              </el-form-item>
+              <div class="notice">注意：折扣范围 1-100 ，输入88代表8.8折</div>
+            </div>
+            <div v-if="form.interests[item].type === 'once'">
+              <el-form-item
+                label="有效时间"
+                :prop="'interests.' + item + '.expire_time'"
+                :rules="{
+                  required: true,
+                  message: '请选择有效时间',
+                  trigger: 'blur'
+                }"
+              >
+                <el-date-picker
+                  v-model="form.interests[item].expire_time"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  placeholder="选择日期时间"
+                  :picker-options="pickerOptions0"
+                  align="right"
+                />
+              </el-form-item>
+            </div>
+
+            <div v-if="form.interests[item].type === 'once'">
+              <el-form-item
+                label="是否销毁"
+                :prop="'interests.' + item + '.is_destroy'"
+                :rules="{
+                  required: true,
+                  message: '请选择是否销毁',
+                  trigger: 'blur'
+                }"
+              >
+                <el-radio-group v-model="form.interests[item].is_destroy">
+                  <el-radio :label="0">否</el-radio>
+                  <el-radio :label="1">是</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </div>
+            <div v-if="form.interests[item].type === 'appoint'">
+              <el-form-item
+                label="指定藏品"
+                :prop="'interests.' + item + '.buy.goods'"
+                :rules="{ validator: validateGoodAndBox, trigger: ['blur', 'change'] }"
+              >
+                <el-select
+                  v-model="form.interests[item].buy.goods"
+                  class="select-input"
+                  filterable
+                  multiple
+                  clearable
+                >
+                  <el-option
+                    v-for="(goodsItem, index) in goodsOptions"
+                    :key="index"
+                    :label="goodsItem.label"
+                    :value="goodsItem.value"
+                  >
+                    <span>#{{ goodsItem.value }}</span>
+                    <el-image
+                      class="good-img"
+                      fit="cover"
+                      :src="goodsItem.image && domin + goodsItem.image"
+                    />
+                    <span>
+                      {{ goodsItem.label }}
+                    </span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item
+                label="指定盲盒"
+                :prop="'interests.' + item + '.buy.box'"
+                :rules="{ validator: validateGoodAndBox, trigger: ['blur', 'change'] }"
+              >
+                <el-select
+                  v-model="form.interests[item].buy.box"
+                  class="select-input"
+                  filterable
+                  multiple
+                  clearable
+                >
+                  <el-option
+                    v-for="(boxItem, index) in boxOptions"
+                    :key="index"
+                    :label="boxItem.label"
+                    :value="boxItem.value"
+                  >
+                    <span>#{{ boxItem.value }}</span>
+                    <el-image
+                      class="good-img"
+                      fit="cover"
+                      :src="boxItem.image && domin + boxItem.image"
+                    />
+                    <span>
+                      {{ boxItem.label }}
+                    </span>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </el-form>
@@ -147,24 +300,11 @@
 
 <script>
 import { DominKey, getToken } from '@/utils/auth'
-import {
-  addOrUpdate,
-  interestList,
-  goodsList,
-  entityGoodsList,
-  gradeList,
-  issuerList
-} from '@/api/interest'
+import { addOrUpdate, interestList, goodsList } from '@/api/interest'
 import { interestsOptions } from '@/utils/explain'
-import prior from './interest/prior'
-import topic from './interest/topic'
-import give from './interest/give'
-import rebate from './interest/rebate'
-import entity from './interest/entity'
 
 export default {
   name: 'AddOrUpdate',
-  components: { prior, topic, give, rebate, entity },
   data() {
     return {
       pickerOptions0: {
@@ -177,46 +317,33 @@ export default {
       visible: false,
       btnLoading: false,
       interestGoodOptions: [],
-      interestGoodMetaOptions: [],
-
       goodsOptions: [],
-      goodsPriorMetaOptions: [],
-      goodsRebateMetaOptions: [],
-
       boxOptions: [],
-      boxPriorMetaOptions: [],
-      boxRebateMetaOptions: [],
-
-      entityGoodsOptions: [],
-      entityMetaGoodsOptions: [],
-
       priorOptions: [],
-      issuerOptions: [], // 指定发行方列表
-      priorItemOptions: {}, // 权益类型
-      levelOptions: [], // 实体商品折扣购
+      priorItemOptions: {},
       checkLists: [], // 权益
       oldCheckLists: [], // 编辑初始的权益
       tabIndex: '', // 当前选择的tab
-      gradeType: 0, // 默认为折扣
       defaultItem: {
         // 默认子项
         type: '',
-        num: 0,
+        num: 1,
         expire_time: '',
+        prior_time: 1,
+        give_days: 1,
         is_destroy: 0,
-        grade_id: '', // 权益等级
-        discount: 1,
+        discount: 0,
         buy: {
           goods: [],
-          box: [],
-          entity_goods: []
+          box: []
         }
       },
+      box: 0,
+      goods: 0,
       form: {
         id: 0,
         goods_id: '',
         intro: '',
-        goodsFrequency: {}, // 商品折扣时的备用值
         interests: {
           /* prior: {
             type: '',
@@ -247,53 +374,14 @@ export default {
     init(data) {
       this.visible = true
       this.interestLists()
-      this.getEntityGoodsList(data)
       this.goodsLists(data)
-      this.getGradeList()
-      this.getIssuerList()
       if (data) {
-        this.form = JSON.parse(
-          JSON.stringify(Object.assign(data, { goodsFrequency: {}}))
-        )
-        this.oldCheckLists = this.checkLists = Object.keys(
-          this.form.interests
-        ).map((v) => {
+        this.form = JSON.parse(JSON.stringify(data))
+        this.oldCheckLists = this.checkLists = Object.keys(this.form.interests).map((v) => {
           return v
         })
         this.tabIndex = this.checkLists[this.checkLists.length - 1] ?? ''
-
-        // 实体商品折扣购
-        if (this.oldCheckLists.includes('entity')) {
-          const countArrs = []
-          const entityGoods = this.form.interests.entity.buy.entity_goods
-          const numArr = entityGoods.reduce(function(prev, next) {
-            prev[next.toString()] = prev[next.toString()] + 1 || 1
-            countArrs.push({ prev })
-            return prev
-          }, {})
-          for (const [key, value] of Object.entries(numArr)) {
-            this.$set(this.form.goodsFrequency, key, value)
-          }
-          this.form.interests.entity.buy.entity_goods = [
-            ...new Set(entityGoods)
-          ]
-
-          if (this.form.interests.entity?.grade_id) {
-            // 返回对应类型选择
-            this.gradeType = 1
-          }
-        }
       }
-    },
-    getIssuerList() {
-      issuerList().then((response) => {
-        this.issuerOptions = response.data.map((v, index) => {
-          return {
-            label: index,
-            value: v
-          }
-        })
-      })
     },
     goodsLists(data) {
       goodsList()
@@ -304,9 +392,7 @@ export default {
               value: v.id,
               image: v.images && v.images[0]
             }
-          }
-          )
-
+          })
           this.goodsOptions = response.data.goods.map((v) => {
             return {
               label: v.name,
@@ -323,45 +409,8 @@ export default {
             }
           })
 
-          if (data) {
-            // 优先购回显
-            if ('prior' in data.interests && data.interests.prior.type === 'appoint') {
-              const goodsPrior = data.interests.prior.buy.goods.map(v => {
-                return this.goodsOptions.find(x => x.value === v)
-              })
-              goodsPrior.forEach((v, i) => {
-                this.$set(this.goodsPriorMetaOptions, i, v)
-              })
-              const boxPrior = data.interests.prior.buy.box.map(v => {
-                return this.boxOptions.find(x => x.value === v)
-              })
-              boxPrior.forEach((v, i) => {
-                this.$set(this.boxPriorMetaOptions, i, v)
-              })
-            }
-            // 折扣购回显
-            if ('rebate' in data.interests && data.interests.rebate.type === 'appoint') {
-              const goodsRebate = data.interests.rebate.buy.goods.map(v => {
-                return this.goodsOptions.find(x => x.value === v)
-              })
-              goodsRebate.forEach((v, i) => {
-                this.$set(this.goodsRebateMetaOptions, i, v)
-              })
-
-              const boxRebate = data.interests.rebate.buy.box.map(v => {
-                return this.boxOptions.find(x => x.value === v)
-              })
-              boxRebate.forEach((v, i) => {
-                this.$set(this.boxRebateMetaOptions, i, v)
-              })
-            }
-          }
-
-          if (data.goods_id) { // 藏品回显
-            this.interestGoodMetaOptions.push({
-              label: data.goods.name,
-              value: data.goods.id
-            })
+          if (data.goods_id) {
+            this.interestGoodOptions.push({ label: data.goods.name, value: data.goods.id })
           }
         })
         .catch(() => {})
@@ -369,76 +418,33 @@ export default {
     interestLists() {
       interestList()
         .then((response) => {
-          this.priorOptions = [] // 所有权益类型
           Object.keys(response.data).forEach((v) => {
-            this.priorOptions.push({
-              label: response.data[v][0].name,
-              value: v
-            })
+            this.priorOptions.push({ label: response.data[v][0].name, value: v })
+          })
 
+          Object.keys(response.data).forEach((v) => {
             this.priorItemOptions[v] = response.data[v].map((x) => {
-              let label = this.interestsOptions.find(
-                (y) => y.value === x.type
-              )?.label
-              if (x.label === 'entity' && x.type === 'appoint') {
-                label = '指定商品'
-              }
-              return { label: label, value: x.type }
+              return { value: x.type }
             })
           })
         })
         .catch(() => {})
     },
-    getEntityGoodsList(data) {
-      entityGoodsList()
-        .then((response) => {
-          this.entityGoodsOptions = response.data.map((v) => {
-            return {
-              label: v.name,
-              value: v.id,
-              image: v.images && v.images[0]
-            }
-          })
-          // 实体商品折扣购回显
-          if ('entity' in data.interests && data.interests.entity.type === 'appoint') {
-            const entityList = [...new Set(data.interests.entity.buy.entity_goods)]
-            const shopEntity = []
-            entityList.forEach(v => {
-              const obj = this.entityGoodsOptions.find(x => x.value === v)
-              if (obj) {
-                shopEntity.push(obj)
-              }
-            })
-            shopEntity.forEach((v, i) => {
-              this.$set(this.entityMetaGoodsOptions, i, v)
-            })
-          }
-        })
-        .catch(() => {})
-    },
-    getGradeList() {
-      gradeList()
-        .then((response) => {
-          this.levelOptions = response.data
-        })
-    },
-    filterMethodSelect(val) {
-      if (val) {
-        this.interestGoodMetaOptions = this.interestGoodOptions.filter(
-          (v) => v.label.indexOf(val) !== -1
-        )
+    validateGoodAndBox(rule, value, callback) {
+      if (this.form.interests[rule.field.split('.')[1]].buy.goods.length === 0 && this.form.interests[rule.field.split('.')[1]].buy.box.length === 0) {
+        callback(new Error('指定藏品和指定盲盒必选一个'))
       } else {
-        this.interestGoodMetaOptions = []
+        callback()
       }
     },
     onChangeCheckItem(val) {
       if (this.checkLists.includes(val.value)) {
         // 为true时 添加数据
-        const item = JSON.parse(JSON.stringify(this.defaultItem))
-        if (['rebate', 'entity'].includes(val.value)) {
-          item.discount = 1
-        }
-        this.$set(this.form.interests, val.value, item)
+        this.$set(
+          this.form.interests,
+          val.value,
+          JSON.parse(JSON.stringify(this.defaultItem))
+        )
         this.tabIndex = val.value
       } else {
         // 为false时 删除数据
@@ -455,32 +461,22 @@ export default {
       delete this.form.interests[val]
       this.tabIndex = this.checkLists[this.checkLists.length - 1] ?? ''
     },
+    onChangeType(val) {
+      this.form.interests[val].buy.goods = []
+      this.form.interests[val].buy.box = []
+      if (this.form.interests[val].type === 'appoint') {
+        this.form.interests[val].num = 1
+      }
+
+      if (this.form.interests[val].type !== 'long') {
+        this.form.interests[val].expire_time = ''
+      }
+    },
     onFormSubmit() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.btnLoading = true
-          const data = JSON.parse(JSON.stringify(this.form))
-          // 当有 实体商品折扣购 && 指定藏品 时
-          if (data.interests?.entity?.type === 'appoint') {
-            const entityGoodsArr = []
-            for (const [key, value] of Object.entries(this.form.goodsFrequency)) {
-              for (let i = 0; i < value; i++) {
-                entityGoodsArr.push(parseInt(key))
-              }
-            }
-            data.interests.entity.buy.entity_goods = entityGoodsArr
-          }
-
-          if (data.interests?.entity) {
-            // 勾选实体商品折扣时 根据选择删除无效字段
-            if (this.gradeType === 0) {
-              delete data.interests.entity?.grade_id
-            } else if (this.gradeType === 1) {
-              delete data.interests.entity?.discount
-            }
-          }
-
-          addOrUpdate(data)
+          addOrUpdate(this.form)
             .then(({ msg }) => {
               this.$message.success(msg)
               this.visible = false
@@ -519,12 +515,5 @@ export default {
   line-height: 1.5;
   margin-top: 10px;
   margin-left: 130px;
-}
-.goods-frequency {
-  ::v-deep .el-form-item__label {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
 }
 </style>

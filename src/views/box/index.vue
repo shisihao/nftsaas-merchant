@@ -90,7 +90,7 @@
             价格：¥ {{ row.cny_price }}
           </div>
           <div>
-            仙豆：{{ row.integral_price }}
+            {{ integral }}：{{ row.integral_price }}
           </div>
           <div>
             库存：{{ row.stock }}
@@ -198,6 +198,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { dataList, deleteData, setStatus, addOrUpdate } from '@/api/box'
 import { tagList } from '@/api/common'
 import { getToken, DominKey } from '@/utils/auth'
@@ -248,6 +249,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['integral']),
     swiper() {
       return function(v = 0) {
         return this.$refs[`mySwiper${v}`].$swiper
