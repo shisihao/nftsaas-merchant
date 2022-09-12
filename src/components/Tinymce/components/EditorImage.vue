@@ -59,7 +59,7 @@
 <script>
 import { getToken, OssKey, setToken } from '@/utils/auth'
 import { getQiniuToken } from '@/api/qiniu'
-import OSS from 'ali-oss'
+import COS from 'cos-js-sdk-v5'
 
 export default {
   name: 'EditorSlideUpload',
@@ -75,11 +75,10 @@ export default {
       listObj: {},
       fileList: [],
       oss: {
-        AccessKeyId: '',
-        AccessKeySecret: '',
-        BucketName: '',
-        Expiration: '',
-        SecurityToken: ''
+        SecretId: '',
+        SecretKey: '',
+        Bucket: '',
+        Region: ''
       }
     }
   },
@@ -108,7 +107,7 @@ export default {
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
-          this.listObj[objKeyArr[i]].url = response.url
+          this.listObj[objKeyArr[i]].url = response
           this.listObj[objKeyArr[i]].hasSuccess = true
           return
         }
@@ -157,33 +156,39 @@ export default {
         if (getToken(OssKey)) {
           this.oss = JSON.parse(getToken(OssKey))
         }
-        const client = new OSS({
-          region: 'oss-cn-hangzhou',
-          accessKeyId: this.oss.AccessKeyId,
-          accessKeySecret: this.oss.AccessKeySecret,
-          stsToken: this.oss.SecurityToken,
-          bucket: this.oss.BucketName,
-          refreshSTSToken: async() => {
-          }
+        const cos = new COS({
+          SecretId: this.oss.credentials.tmpSecretId,
+          SecretKey: this.oss.credentials.tmpSecretKey,
+          SecurityToken: this.oss.credentials.sessionToken
         })
 
-        const filename = `${String(+new Date()) + Math.random().toString(36).substr(2)}.${options.file.name.split('.').pop()}`
+        const filename = `${String(+new Date()) + Math.random().toString(36).substring(2)}.${options.file.name.split('.').pop()}`
 
-        client.put(filename, options.file).then(res => {
-          if (res.res.statusCode === 200) {
-            options.onSuccess(res)
-          } else {
-            options.onError('上传失败')
+        cos.putObject(
+          {
+            Bucket: this.oss.bucket,
+            Region: this.oss.region,
+            Key: filename,
+            Body: options.file
+          },
+          (err, data) => {
+            if (err) {
+              console.log(err)
+              this.$message.error('上传失败，请重新上传')
+              getQiniuToken()
+                .then((data) => {
+                  setToken(data.data, OssKey)
+                })
+              return
+            }
+            if (data.statusCode === 200) {
+              const newData = data.Location.split('/')
+              options.onSuccess(newData[1])
+            } else {
+              options.onError('上传失败')
+            }
           }
-        })
-          .catch(() => {
-            this.handleRemove1(options.file)
-            this.$message.error('上传失败，请重新上传')
-            getQiniuToken()
-              .then((data) => {
-                setToken(data.data, OssKey)
-              })
-          })
+        )
       } catch (e) {
         options.onError('上传失败')
       }

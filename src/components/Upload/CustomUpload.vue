@@ -29,7 +29,6 @@
 <script>
 import { getToken, OssKey, setToken } from '@/utils/auth'
 import { getQiniuToken } from '@/api/qiniu'
-// import OSS from 'ali-oss'
 import COS from 'cos-js-sdk-v5'
 
 export default {
@@ -139,7 +138,7 @@ export default {
           SecurityToken: this.oss.credentials.sessionToken
         })
 
-        const filename = `${String(+new Date()) + Math.random().toString(36).substr(2)}.${options.file.name.split('.').pop()}`
+        const filename = `${String(+new Date()) + Math.random().toString(36).substring(2)}.${options.file.name.split('.').pop()}`
 
         cos.putObject(
           {

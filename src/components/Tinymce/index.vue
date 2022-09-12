@@ -11,6 +11,7 @@
 import editorImage from './components/EditorImage'
 import plugins from './plugins'
 import toolbar from './toolbar'
+import { getToken, DominKey } from '@/utils/auth'
 
 export default {
   name: 'Tinymce',
@@ -50,6 +51,7 @@ export default {
   },
   data() {
     return {
+      domin: getToken(DominKey),
       hasChange: false,
       hasInit: false,
       tinymceId: this.id,
@@ -166,7 +168,7 @@ export default {
       window.tinymce.get(this.tinymceId).getContent()
     },
     imageSuccessCBK(arr) {
-      arr.forEach(v => window.tinymce.get(this.tinymceId).insertContent(v.type === 'image' ? `<img class="wscnph" src="${v.url}"  alt="">` : `<video controls="controls" class="wscnph" src="${v.url}" />`))
+      arr.forEach(v => window.tinymce.get(this.tinymceId).insertContent(v.type === 'image' ? `<img class="wscnph" src="${this.domin + v.url}"  alt="">` : `<video controls="controls" class="wscnph" src="${this.domin + v.url}" />`))
     }
   }
 }
