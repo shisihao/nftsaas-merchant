@@ -78,10 +78,7 @@
             用户合成限量：{{ row.user_limit_num || 0 }}
           </div>
           <div>
-            剩余：{{ row.stock || 0 }}
-          </div>
-          <div>
-            商品券：{{ row.commodity_price || 0 }}
+            剩余：{{ row.limit_num - row.synthesis_num }}
           </div>
         </template>
       </el-table-column>
@@ -118,14 +115,12 @@
       />
       <el-table-column
         label="操作"
-        width="350"
+        width="220"
         align="center"
-        fixed="right"
       >
         <template slot-scope="{ row }">
           <el-button-group>
             <el-button type="primary" @click="onAddOrUpdate(row)">编辑</el-button>
-            <el-button v-if="new Date(row.end_time).getTime()<+new Date()&&row.stock>0" type="warning" @click="onRecycleStock(row)">回收库存</el-button>
             <el-button type="primary" plain @click="onRecordLog(row)">合成记录</el-button>
             <el-button type="danger" @click="onDelete(row)">删除</el-button>
           </el-button-group>
@@ -151,7 +146,7 @@
 </template>
 
 <script>
-import { dataList, deleteData, recycleStock } from '@/api/synthetic'
+import { dataList, deleteData } from '@/api/synthetic'
 import { getToken, DominKey } from '@/utils/auth'
 import { pickerOptions, statusOptions } from '@/utils/explain'
 import AddOrUpdate from './components/AddOrUpdate'
@@ -183,7 +178,6 @@ export default {
       recordVisible: false
     }
   },
-
   created() {
     this.init()
   },
@@ -243,18 +237,6 @@ export default {
       this.recordVisible = true
       this.$nextTick(() => {
         this.$refs.recordLog && this.$refs.recordLog.init(data)
-      })
-    },
-    onRecycleStock(row) {
-      this.$confirm(`确定对ID[(#${row.id})]进行[库存回收]操作?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        recycleStock(row.id).then(({ msg }) => {
-          this.$message.success(msg)
-          this.getList()
-        })
       })
     }
   }

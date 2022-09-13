@@ -110,6 +110,7 @@ import { pickerOptions, interestsOptions } from '@/utils/explain'
 import AddOrUpdate from './components/AddOrUpdate'
 import Pagination from '@/components/Pagination'
 import { mapGetters } from 'vuex'
+import { interestOptions } from '@/utils/explain'
 
 export default {
   name: 'Interest',
@@ -120,13 +121,7 @@ export default {
       loading: false,
       pickerOptions,
       interestsOptions,
-      keyOptions: [
-        { label: '优先购', value: 'prior' },
-        { label: '转赠', value: 'give' },
-        { label: `免${this.integral}`, value: 'free_integral' },
-        { label: '零元购', value: 'free_cny' },
-        { label: '折扣购', value: 'rebate' }
-      ],
+      keyOptions: interestOptions,
       list: [],
       pages: {
         total: 0,

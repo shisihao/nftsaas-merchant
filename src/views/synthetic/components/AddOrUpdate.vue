@@ -17,15 +17,8 @@
             @handleBeforeUpload="beforeAvatarUpload"
             @handleSuccess="handleCoverSuccess"
           >
-            <img
-              v-show="form.cover.filename"
-              :src="form.cover.filename && domin + form.cover.filename"
-              class="avatar"
-            >
-            <i
-              v-show="!form.cover.filename"
-              class="el-icon-plus avatar-uploader-icon"
-            />
+            <img v-show="form.cover.filename" :src="form.cover.filename && domin + form.cover.filename" class="avatar">
+            <i v-show="!form.cover.filename" class="el-icon-plus avatar-uploader-icon" />
           </custom-upload>
           <div class="notice">注意：建议藏品图片尺寸 750*750px</div>
         </el-form-item>
@@ -40,18 +33,9 @@
             :disabled="form.formula.length > 0"
             @change="onChangeGood"
           >
-            <el-option
-              v-for="item in synthesisOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
+            <el-option v-for="item in synthesisOptions" :key="item.value" :label="item.label" :value="item.value">
               <span>#{{ item.value }}</span>
-              <el-image
-                class="good-img"
-                fit="cover"
-                :src="item.image && domin + item.image"
-              />
+              <el-image class="good-img" fit="cover" :src="item.image && domin + item.image" />
               <span>
                 {{ item.label }}
               </span>
@@ -81,11 +65,7 @@
                 placement="top"
               >
                 <div style="margin-bottom: 5px">
-                  <el-form
-                    :inline="true"
-                    label-width="70px"
-                    label-position="left"
-                  >
+                  <el-form :inline="true" label-width="70px" label-position="left">
                     <el-form-item :label="`条件${index + 1}`" />
                     <el-form-item label="是否销毁">
                       <el-radio-group v-model="form.formula[index].is_destroy">
@@ -105,20 +85,9 @@
                   </el-form>
                 </div>
                 <el-card shadow="hover">
-                  <i
-                    class="el-icon-close close"
-                    @click="onDelCard(index, item)"
-                  />
-                  <div
-                    v-for="(v, i) in item.goods_id"
-                    :key="i"
-                    class="good-item"
-                  >
-                    <el-image
-                      :src="v | filterFormula(formulaAllOptions, 'image')"
-                      class="good-img"
-                      fit="cover"
-                    />
+                  <i class="el-icon-close close" @click="onDelCard(index, item)" />
+                  <div v-for="(v, i) in item.goods_id" :key="i" class="good-item">
+                    <el-image :src="v | filterFormula(formulaAllOptions, 'image')" class="good-img" fit="cover" />
                     <span>
                       <el-tag
                         :type="
@@ -135,10 +104,7 @@
                       </el-tag>
                       {{ v | filterFormula(formulaAllOptions, 'label') }}
                     </span>
-                    <i
-                      class="el-icon-delete del-good"
-                      @click="onDelGood(index, i, v)"
-                    />
+                    <i class="el-icon-delete del-good" @click="onDelGood(index, i, v)" />
                   </div>
                 </el-card>
               </el-timeline-item>
@@ -152,24 +118,13 @@
               multiple
               filterable
               clearable
-              placeholder="请输入关键字搜索"
-              :filter-method="filterMethodSelect"
-              no-data-text="请输入关键字搜索"
             >
-              <el-option
-                v-for="item in newFormulaOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
+              <el-option v-for="item in formulaOptions" :key="item.value" :label="item.label" :value="item.value">
                 <el-image class="good-img" fit="cover" :src="item.image" />
                 <span style="margin-left: 10px">
-                  <el-tag
-                    :type="item.type | paraphrase(typeOptions, 'value', 'type')"
-                  >
+                  <el-tag :type="item.type | paraphrase(typeOptions, 'value', 'type')">
                     {{ item.type | paraphrase(typeOptions) }}
                   </el-tag>
-                  <el-tag style="margin-left:10px">{{ item.serial }}</el-tag>
                   {{ item.label }}
                 </span>
               </el-option>
@@ -198,11 +153,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="用户合成限量" prop="user_limit_num">
-          <el-input-number
-            v-model="form.user_limit_num"
-            :precision="0"
-            :min="0"
-          />
+          <el-input-number v-model="form.user_limit_num" :precision="0" :min="0" />
         </el-form-item>
         <el-form-item label="合成规则说明" prop="intro">
           <el-link type="primary" :underline="false" @click="onTinymce(form)">
@@ -256,7 +207,6 @@ export default {
       synthesisOptions: [],
       formulaOptions: [],
       formulaAllOptions: [],
-      newFormulaOptions: [],
       formulaSelect: [],
       form: {
         id: 0,
@@ -342,14 +292,7 @@ export default {
             }
           })
         })
-        .catch(() => {})
-    },
-    filterMethodSelect(val) {
-      if (val) {
-        this.newFormulaOptions = this.formulaOptions.filter(v => v.label.indexOf(val) !== -1)
-      } else {
-        this.newFormulaOptions = []
-      }
+        .catch(() => { })
     },
     async getFormulaList() {
       await formulaList()
@@ -359,13 +302,12 @@ export default {
               label: v.name,
               value: v.id,
               type: v.type,
-              serial: v.serial,
               image: v.images && this.domin + v.images[0]
             }
           })
           this.formulaAllOptions = this.formulaOptions
         })
-        .catch(() => {})
+        .catch(() => { })
     },
     onFormula() {
       if (this.formulaSelect.length > 0) {
@@ -474,7 +416,7 @@ export default {
       this.form.intro = value
     },
     handleCoverSuccess(response, file) {
-      this.form[this.currentName].filename = response
+      this.form[this.currentName].filename = response.name
     },
     beforeAvatarUpload(file, cb, refName) {
       const type = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
@@ -490,6 +432,7 @@ export default {
         cb(false)
         return
       }
+
       new Promise(function(resolve, reject) {
         const _URL = window.URL || window.webkitURL
         const image = new Image()
@@ -508,7 +451,7 @@ export default {
           this.form.cover.width = response.width
           this.form.cover.height = response.height
         })
-        .catch(() => {})
+        .catch(() => { })
 
       this.form.cover.mime = file.type
       this.currentName = refName
@@ -521,6 +464,7 @@ export default {
 <style lang="scss" scoped>
 .avatar-uploader {
   display: inline-block;
+
   ::v-deep .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
@@ -528,9 +472,11 @@ export default {
     position: relative;
     overflow: hidden;
   }
+
   .el-upload:hover {
     border-color: #409eff;
   }
+
   .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
@@ -539,6 +485,7 @@ export default {
     line-height: 100px;
     text-align: center;
   }
+
   .avatar {
     width: 100px;
     height: 100px;
@@ -546,6 +493,7 @@ export default {
     object-fit: contain;
   }
 }
+
 .good-img {
   width: 30px;
   margin-left: 5px;
@@ -553,24 +501,31 @@ export default {
   vertical-align: middle;
   flex-shrink: 0;
 }
+
 .select-input {
   margin-right: 10px;
   width: 490px;
 }
+
 .add-box {
   display: inline-block;
   margin-left: 10px;
+
   &:first-child {
     margin-left: 0;
   }
 }
+
 .timeline-box {
   line-height: 1.5;
+
   .el-timeline {
     padding-left: 0px;
+
     ::v-deep .el-card__body {
       padding: 10px;
       position: relative;
+
       .close {
         position: absolute;
         right: 5px;
@@ -578,18 +533,22 @@ export default {
         font-size: 16px;
         cursor: pointer;
       }
+
       .good-item {
         display: flex;
         align-items: center;
         margin-bottom: 4px;
+
         &:last-child {
           margin-bottom: 0;
         }
+
         span {
           padding: 0 10px;
           text-overflow: ellipsis;
           white-space: nowrap;
           overflow: hidden;
+
           span {
             vertical-align: middle;
           }
@@ -598,17 +557,20 @@ export default {
     }
   }
 }
+
 .notice {
   color: #909399;
   font-size: 12px;
   line-height: 1.5;
   margin-top: 10px;
 }
+
 .del-good {
   margin-left: 10px;
   color: #f56c6c;
   cursor: pointer;
 }
+
 .el-input-number {
   width: 200px;
 }

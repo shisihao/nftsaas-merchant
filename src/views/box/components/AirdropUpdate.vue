@@ -42,14 +42,15 @@
 
 <script>
 import { addAirdrops } from '@/api/box'
+import CustomUpload from '@/components/Upload/CustomUpload'
 
 export default {
   name: 'AirdropUpdate',
+  components: { CustomUpload },
   data() {
     return {
       visible: false,
       btnLoading: false,
-      fileDmoin: process.env.NODE_ENV === 'development' ? process.env.VUE_APP_BASE_API : `${location.origin}/admin/`,
       fileList: [],
       form: {
         is_real: 1,
@@ -94,17 +95,20 @@ export default {
     handleRemove(file, fileList) {
       this.form.file_path = ''
     },
-    handleBeforeUpload(file) {
+    handleBeforeUpload(file, cb, refName) {
       const a = file.name.split('.')
       const isLt2M = file.size / 1024 / 1024 < 3
       if (a[a.length - 1] !== 'xlsx') {
         this.$message.error('上传文件只能是 xlsx 格式!')
-        return false
+        cb(false)
+        return
       }
       if (!isLt2M) {
         this.$message.error('上传文件大小不能超过 3M')
-        return false
+        cb(false)
+        return
       }
+      cb(true)
     },
     handleSuceess(response) {
       this.form.file_path = response

@@ -120,6 +120,15 @@ export const goodShowTypeOptions = [
   { label: '3D', value: 1, type: 'primary' },
   { label: '视频', value: 2, type: 'warning' }
 ]
+
+export const interestOptions = [
+  { label: '优先购', value: 'prior' },
+  { label: '转赠', value: 'give' },
+  { label: `免${integral}`, value: 'free_integral' },
+  { label: '零元购', value: 'free_cny' },
+  { label: '折扣购', value: 'rebate' }
+]
+
 export const streamTypeOptions = [
   { label: '全部', value: '' },
   { label: '充值', value: 'recharge' },

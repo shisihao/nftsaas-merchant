@@ -20,7 +20,6 @@
         <el-table-column label="用户信息" min-width="200" header-align="center">
           <template slot-scope="{ row }">
             <el-avatar
-              :key="row.id"
               icon="el-icon-user-solid"
               style="vertical-align: top"
               :src="row.user.avatar ? domin + row.user.avatar : ''"
@@ -41,7 +40,7 @@
             <div class="info-wrapper">
               <el-image
                 class="image-item"
-                :src="domin + row.goods.images[0]"
+                :src="row.goods.images[0] && domin + row.goods.images[0]"
                 :preview-src-list="[domin + row.goods.images[0]]"
               >
                 <div slot="error" class="image-slot">
@@ -125,7 +124,7 @@ export default {
     },
     onHandleDownload() {
       this.downloadLoading = true
-      synthesisLogExport()
+      synthesisLogExport(this.id)
         .then(response => {
           location.href = this.domin + '/' + response.data.filename
         })

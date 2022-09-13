@@ -61,7 +61,7 @@
 
       <div class="logo-box">
         <el-form-item label="不带产品名图片logo" prop="inside_logo">
-          <custom-upload class-name="avatar-uploader avatar3" ref-name="inside_logo" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
+          <custom-upload class-name="avatar-uploader avatar4" ref-name="inside_logo" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
             <img v-if="form.inside_logo" :src="domin + form.inside_logo" class="avatar">
             <img v-else src="@/assets/images/step1_add_img.png" class="avatar">
           </custom-upload>
@@ -82,6 +82,34 @@
           <div class="logo-title"> 应用场景 </div>
           <div>
             <img src="@/assets/images/step1_changjing3.png">
+          </div>
+        </div>
+      </div>
+      <el-divider />
+
+      <div class="logo-box">
+        <el-form-item label="产品专区banner" prop="goods_banner">
+          <custom-upload class-name="avatar-uploader avatar3" ref-name="goods_banner" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
+            <img v-if="form.goods_banner" :src="domin + form.goods_banner" class="avatar">
+            <img v-else src="@/assets/images/step1_add_img.png" class="avatar">
+          </custom-upload>
+          <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar4', 'goods_banner')">上传图片</el-button>
+          <div class="describe">
+            <div> 1.尺寸为112 * 112px </div>
+            <div> 2.支持png格式 </div>
+            <div> 3.不超过2M </div>
+          </div>
+        </el-form-item>
+        <div>
+          <div class="logo-title logo-title-cover"> 示例 </div>
+          <div>
+            <img src="@/assets/images/hengban_icon_logo.png">
+          </div>
+        </div>
+        <div>
+          <div class="logo-title"> 应用场景 </div>
+          <div>
+            <img src="@/assets/images/step1_changjing2.png">
           </div>
         </div>
       </div>
@@ -112,7 +140,8 @@ export default {
       form: {
         start_logo: '',
         invite_logo: '',
-        inside_logo: ''
+        inside_logo: '',
+        goods_banner: ''
       },
       rules: {
         start_logo: [{ required: true, trigger: ['blur', 'change'], message: '请上传启动页logo' }],
