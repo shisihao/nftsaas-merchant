@@ -571,3 +571,15 @@ export function setPrefix(data) {
     ...data
   })
 }
+
+// 视频藏品配置
+export function videoSeconds() {
+  return request.get('/configs/video_seconds')
+}
+
+// 视频藏品配置
+export function putVideoSeconds(data) {
+  return request.put('/configs/video_seconds', {
+    ...data
+  })
+}

@@ -131,6 +131,20 @@
           <el-form-item label="发行方" prop="issuer">
             <el-input v-model="form.issuer" placeholder="发行方" clearable />
           </el-form-item>
+          <el-form-item label="发行发头像" prop="issuer_avatar">
+            <div class="filter-list-box">
+              <div v-if="!!form.issuer_avatar" class="upload-images">
+                <el-image :src="form.issuer_avatar && domin + form.issuer_avatar" class="upload-image" fit="cover" @click="onPicturePreview(form.issuer_avatar)" />
+              </div>
+              <div v-else class="err-image">
+                <el-image>
+                  <div slot="error" class="image-slot">
+                    <i class="el-icon-picture-outline" />
+                  </div>
+                </el-image>
+              </div>
+            </div>
+          </el-form-item>
         </div>
         <el-form-item label="权益说明" prop="desc">
           <el-input v-model="form.desc" clearable type="textarea" placeholder="权益说明" :rows="3" />
@@ -248,6 +262,7 @@ export default {
         name: '',
         author: '',
         author_avatar: '',
+        issuer_avatar: '',
         type: '',
         issuer: '',
         desc: '',
@@ -322,6 +337,9 @@ export default {
         ],
         type: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
+        ],
+        issuer_avatar: [
+          { required: true, message: '请选择发行方头像', trigger: ['blur', 'change'] }
         ]
       }
     }
