@@ -30,6 +30,11 @@
             <video v-if="file.response ? file.response.mime.indexOf('video/') >= 0 : ''" class="el-upload-list__item-thumbnail" :src="file.url" />
             <img v-else-if="file.response ? file.response.mime.indexOf('image/') >= 0 : ''" class="el-upload-list__item-thumbnail" :src="file.url" alt="">
           </div>
+          <span class="upload-status progress" :class="file.status">
+            <i v-if="file.status === 'success'" class="el-icon-check" />
+            <i v-else-if="file.status === 'fail'" class="el-icon-close" />
+            <i v-else class="el-icon-loading" />
+          </span>
           <span class="el-upload-list__item-actions">
             <!--            <span class="el-upload-list__item-preview">
               <i class="el-icon-zoom-in" />
@@ -60,6 +65,7 @@
 import { getToken, OssKey, setToken } from '@/utils/auth'
 import { getQiniuToken } from '@/api/qiniu'
 import COS from 'cos-js-sdk-v5'
+import CalcVideo from '@/utils/calcVideo'
 
 export default {
   name: 'EditorSlideUpload',
@@ -135,20 +141,55 @@ export default {
     },
     beforeUpload(file) {
       const _self = this
-      const _URL = window.URL || window.webkitURL
       const fileName = file.uid
-      this.listObj[fileName] = {}
-      return new Promise((resolve) => {
-        if (file.type.indexOf('image/') >= 0) {
-          const img = new Image()
-          img.src = _URL.createObjectURL(file)
-          img.onload = function() {
-            _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height, type: 'image' }
+
+      let verifySize
+      if (file.type.indexOf('image') >= 0) {
+        verifySize = new Promise(function(resolve, reject) {
+          const _URL = window.URL || window.webkitURL
+          const image = new Image()
+          image.src = _URL.createObjectURL(file)
+          image.onload = function() {
+            resolve({
+              width: image.width,
+              height: image.height
+            })
           }
+          image.onerror = function() {
+            reject()
+          }
+        })
+      }
+
+      let videoSize
+      if (file.type.indexOf('video') >= 0) {
+        videoSize = new CalcVideo(file, 1)
+      }
+      return new Promise((resolve, reject) => {
+        if (file.type.indexOf('image/') >= 0) {
+          verifySize.then(res => {
+            if (res.width > 1920) {
+              _self.$message.error('上传图片过大，宽度不超过`1920像素`')
+              reject(false)
+            } else {
+              _self.listObj[fileName] = {}
+              _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height, type: 'image' }
+              resolve(true)
+            }
+          })
         } else if (file.type.indexOf('video/') >= 0) {
-          _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: 0, height: 0, type: 'video' }
+          videoSize.then(response => {
+            const { width } = response
+            if (width > 750) {
+              _self.$message.error('上传图片过大，宽度不超过`750像素`')
+              reject(false)
+            } else {
+              _self.listObj[fileName] = {}
+              _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: 0, height: 0, type: 'video' }
+              resolve(true)
+            }
+          })
         }
-        resolve(true)
       })
     },
     uploadRequest(options) {

@@ -30,12 +30,13 @@
 import { getToken, OssKey, setToken } from '@/utils/auth'
 import { getQiniuToken } from '@/api/qiniu'
 import COS from 'cos-js-sdk-v5'
+import CalcVideo from '@/utils/calcVideo'
 
 export default {
   props: {
     refName: {
       type: String,
-      default: `elUpload${String(+new Date()) + Math.random().toString(36).substr(2)}`
+      default: `elUpload${String(+new Date()) + Math.random().toString(36).substring(2)}`
     },
     refresh: {
       type: Boolean,
@@ -94,11 +95,63 @@ export default {
   },
   methods: {
     handleBeforeUpload(file) {
-      this.loading = true
+      if (!this.showFileList) {
+        this.loading = true
+      }
+
+      let verifySize
+      if (file.type.indexOf('image') >= 0) {
+        verifySize = new Promise(function(resolve, reject) {
+          const _URL = window.URL || window.webkitURL
+          const image = new Image()
+          image.src = _URL.createObjectURL(file)
+          image.onload = function() {
+            resolve({
+              width: image.width,
+              height: image.height
+            })
+          }
+          image.onerror = function() {
+            reject()
+          }
+        })
+      }
+
+      let videoSize
+      if (file.type.indexOf('video') >= 0) {
+        videoSize = new CalcVideo(file, 1)
+      }
+
       return new Promise((resolve, reject) => {
         this.$emit('handleBeforeUpload', file, res => {
           if (res) {
-            resolve(file)
+            if (file.type.indexOf('image') >= 0) {
+              verifySize
+                .then(response => {
+                  if (response.width > 2048) {
+                    this.$message.error('上传图片过大，宽度不超过`2048像素`')
+                    this.loading = false
+                    reject(false)
+                  } else {
+                    resolve(file)
+                  }
+                })
+                .catch(() => {})
+            } else if (file.type.indexOf('video') >= 0) {
+              videoSize
+                .then(response => {
+                  const { width } = response
+                  if (width > 750) {
+                    this.$message.error('上传图片过大，宽度不超过`750像素`')
+                    this.loading = false
+                    reject(false)
+                  } else {
+                    resolve(file)
+                  }
+                })
+            } else {
+              resolve(file)
+            }
           } else {
             this.loading = false
             reject(false)
@@ -138,7 +191,12 @@ export default {
           SecurityToken: this.oss.credentials.sessionToken
         })
 
-        const filename = `${String(+new Date()) + Math.random().toString(36).substring(2)}.${options.file.name.split('.').pop()}`
+        let filename = ''
+        if (['three_url.three_image', 'three_url.three_bin'].includes(this.refName)) {
+          filename = options.file.name
+        } else {
+          filename = `${String(+new Date()) + Math.random().toString(36).substring(2)}.${options.file.name.split('.').pop()}`
+        }
 
         cos.putObject(
           {
