@@ -152,7 +152,6 @@ import GoogleCode from './components/GoogleCode'
 import { mapGetters } from 'vuex'
 import Cookies from 'js-cookie'
 import { checkBind, getCode } from '@/api/common'
-import '@/utils/gt'
 
 export default {
   name: 'Login',
@@ -240,8 +239,6 @@ export default {
       this.codeText = `${this.curCount}s 后重发`
       this.interValObj = setInterval(this.setRemainTime, 1000)
     }
-
-    this.initGT()
   },
   mounted() {
   },
@@ -249,34 +246,6 @@ export default {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
-    initGT() {
-      // const handler = function(captcha_obj, vm) {
-      //   captcha_obj.onReady(function() {
-      //     // 把这个obj放入了vue实例里管理
-      //     vm.captcha_obj = captcha_obj
-      //   }).onSuccess(function() {
-      //     var result = captcha_obj.getValidate()
-      //     if (!result) {
-      //       return alert('请完成验证')
-      //     }
-      //     vm.getSms(result.geetest_challenge, result.geetest_validate, result.geetest_seccode)
-      //   }).onError(function() {
-      //     captcha_obj.reset()
-      //   })
-      // }
-      // getGt()
-      //   .then(({ data }) => {
-      //     initGeetest({
-      //       // 以下配置参数来自服务端 SDK
-      //       gt: data.gt,
-      //       challenge: data.challenge,
-      //       offline: !data.success,
-      //       new_captcha: true,
-      //       product: 'bind'
-      //     }, handler, this)
-      //   })
-      //   .catch(() => {})
-    },
     checkCapslock(e) {
       const { key } = e
       this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
@@ -350,18 +319,31 @@ export default {
       }
     },
     onSendCode() {
+      const _this = this
       this.$refs.form.validateField('account', errMsg => {
         if (errMsg) {
           // console.log('账号校验未通过')
         } else {
-          this.captcha_obj && this.captcha_obj.verify()
+          const options = {
+            'needFeedBack': false
+          }
+          const appid = '193152420'
+          const captcha = new window.TencentCaptcha(appid, function(res) {
+            if (res.ret === 0) {
+              _this.getSms(res.ticket, res.randstr)
+            } else if (res.errorMessage) {
+              console.log(res.errorMessage)
+            }
+          }, options)
+          captcha.show()
         }
       })
     },
-    getSms(geetest_challenge, geetest_seccode, geetest_validate) {
+    getSms(randstr, ticket) {
+      console.log(1111111)
       this.codeStatus = true
       this.codeStatusLoading = true
-      getCode({ geetest_challenge, geetest_seccode, geetest_validate, scene: 'login', account: this.form.account })
+      getCode({ randstr, ticket, scene: 'login', account: this.form.account })
         .then((data) => {
           this.curCount = this.count
           this.codeText = `${this.curCount}s 后重发`

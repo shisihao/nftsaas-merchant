@@ -87,9 +87,9 @@ export const typeOptions = [
   { label: '常规藏品', value: 0, type: 'primary' },
   { label: '盲盒藏品', value: 1, type: 'warning' },
   { label: '合成藏品', value: 3, type: 'success' },
-  { label: '专属藏品', value: 4, type: 'info' },
+  // { label: '专属藏品', value: 4, type: 'info' },
   { label: '资格券', value: 5, type: 'danger' },
-  { label: '兑换藏品', value: 6, type: 'danger' },
+  // { label: '兑换藏品', value: 6, type: 'danger' },
   { label: '活动藏品', value: 7, type: 'danger' }
 ]
 
