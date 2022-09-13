@@ -1,8 +1,6 @@
 <template>
   <div class="upload-container">
-    <el-button :style="{background:color,borderColor:color}" icon="el-icon-upload" size="mini" type="primary" @click=" dialogVisible=true">
-      上传图片/视频
-    </el-button>
+    <el-button :style="{ background: color, borderColor: color }" icon="el-icon-upload" size="mini" type="primary" @click="dialogVisible = true"> 上传图片/视频 </el-button>
     <el-dialog append-to-body :visible.sync="dialogVisible">
       <el-upload
         ref="pictureUpload"
@@ -47,16 +45,10 @@
             </span>
           </span>
         </div>
-        <el-button size="small" type="primary">
-          点击上传
-        </el-button>
+        <el-button size="small" type="primary"> 点击上传 </el-button>
       </el-upload>
-      <el-button @click="dialogVisible = false">
-        取消
-      </el-button>
-      <el-button type="primary" @click="handleSubmit">
-        确认
-      </el-button>
+      <el-button @click="dialogVisible = false"> 取消 </el-button>
+      <el-button type="primary" @click="handleSubmit"> 确认 </el-button>
     </el-dialog>
   </div>
 </template>
@@ -216,10 +208,9 @@ export default {
             if (err) {
               console.log(err)
               this.$message.error('上传失败，请重新上传')
-              getQiniuToken()
-                .then((data) => {
-                  setToken(data.data, OssKey)
-                })
+              getQiniuToken().then(data => {
+                setToken(data.data, OssKey)
+              })
               return
             }
             if (data.statusCode === 200) {
@@ -242,21 +233,45 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .editor-slide-upload {
-    margin-bottom: 20px;
-    ::v-deep .el-upload--picture-card {
-      width: 100%;
-    }
-  }
-  .upload-box {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    .upload-item {
-      line-height: 1;
-      img {
-        object-fit: contain;
-      }
-    }
-  }
+.editor-slide-upload {
+	margin-bottom: 20px;
+	::v-deep .el-upload--picture-card {
+		width: 100%;
+	}
+}
+.upload-status {
+	position: absolute;
+	right: -15px;
+	top: -6px;
+	width: 40px;
+	height: 24px;
+	text-align: center;
+	transform: rotate(45deg);
+	box-shadow: 0 0 1pc 1px rgb(0 0 0 / 20%);
+	&.progress {
+		background: #e6a23c;
+	}
+	&.success {
+		background: #13ce66;
+	}
+	&.fail {
+		background: #f56c6c;
+	}
+	i {
+		transform: rotate(-45deg);
+		margin-top: 10px;
+		color: #fff;
+	}
+}
+.upload-box {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	.upload-item {
+		line-height: 1;
+		img {
+			object-fit: contain;
+		}
+	}
+}
 </style>
