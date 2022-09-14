@@ -49,12 +49,12 @@ export default {
       },
       typeOptions: [
         {
-          label: "替换",
-          value: "replace"
+          label: '替换',
+          value: 'replace'
         },
         {
-          label: "提示",
-          value: "warning"
+          label: '提示',
+          value: 'warning'
         }
       ],
       rules: {
@@ -63,7 +63,7 @@ export default {
         ],
         word: [
           { required: true, message: '请输入替换内容', trigger: ['blur', 'change'] }
-        ],
+        ]
       }
     }
   },

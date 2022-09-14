@@ -58,3 +58,24 @@ export function addAirdrops(data) {
     ...data
   })
 }
+
+// 盲盒空投记录
+export function airdropLogs(params) {
+  return request.get('/box/airdrop/log', {
+    params
+  })
+}
+
+// 盲盒空投失败记录
+export function failedLogs(params) {
+  return request.get('/box/failed/log', {
+    params
+  })
+}
+
+// 盲盒导出失败空投记录
+export function exportOrder(params) {
+  return request.get('/box/export/log', {
+    params
+  })
+}

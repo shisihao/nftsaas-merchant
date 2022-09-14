@@ -162,14 +162,19 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        width="260"
+        width="160"
         align="center"
         fixed="right"
       >
         <template slot-scope="{ row }">
-          <el-button type="primary" @click="onAddOrUpdate(row)">编辑</el-button>
-          <el-button v-show="row.reserve_surplus_stock" type="primary" plain @click="onAirUpdate(row)">空投</el-button>
-          <el-button type="danger" @click="onDelete(row)">删除</el-button>
+          <el-button-group>
+            <el-button type="primary" @click="onAddOrUpdate(row)">编辑</el-button>
+            <el-button type="danger" @click="onDelete(row)">删除</el-button>
+          </el-button-group>
+          <el-button-group style="margin-top:10px">
+            <el-button v-if="row.reserve_surplus_stock" plain type="primary" @click="onAirUpdate(row)">空投</el-button>
+            <el-button v-if="row.reserve_stock > 0" plain type="primary" @click="onBoxLogs(row)">空投记录</el-button>
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
@@ -194,6 +199,12 @@
       v-if="airUpdateVisible"
       ref="airUpdate"
     />
+
+    <!-- 弹窗, 预览图片 -->
+    <box-airdrop-logs
+      v-if="boxLogsVisible"
+      ref="boxLogs"
+    />
   </div>
 </template>
 
@@ -209,10 +220,11 @@ import { pickerOptions, whetherOptions } from '@/utils/explain'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
+import boxAirdropLogs from './components/boxAirdropLogs'
 
 export default {
   name: 'Task',
-  components: { AddOrUpdate, Pagination, Swiper, SwiperSlide, ElImageViewer, AirdropUpdate },
+  components: { AddOrUpdate, Pagination, Swiper, SwiperSlide, ElImageViewer, AirdropUpdate, boxAirdropLogs },
   data() {
     return {
       domin: getToken(DominKey),
@@ -245,7 +257,8 @@ export default {
       dateRangeValue: [],
       list: [],
       addOrUpdateVisible: false,
-      airUpdateVisible: false
+      airUpdateVisible: false,
+      boxLogsVisible: false
     }
   },
   computed: {
@@ -367,6 +380,12 @@ export default {
       this.airUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.airUpdate && this.$refs.airUpdate.init(data)
+      })
+    },
+    onBoxLogs(data) {
+      this.boxLogsVisible = true
+      this.$nextTick(() => {
+        this.$refs.boxLogs && this.$refs.boxLogs.init(data)
       })
     }
   }
