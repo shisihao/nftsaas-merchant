@@ -70,7 +70,10 @@ export default {
       visible: false,
       btnLoading: false,
       goodsLoading: false,
-      form: { credential: '' },
+      form: {
+        id: 0,
+        credential: ''
+      },
       rules: {
         credential: [
           { required: true, message: '凭证不能为空', trigger: ['blur', 'change'] }
@@ -82,18 +85,29 @@ export default {
   methods: {
     init(data, payType) {
       this.info = data
+      this.form.id = data.id
       this.payType = payType
       this.visible = true
     },
     onFormSubmit() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          this.btnLoading = true
-          if (this.payType === 'oprate') {
-            this.onPayOprateFee()
-          } else {
-            this.onPaySupplementFee()
-          }
+          this.$confirm(`确定处理吗？`, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            dangerouslyUseHTMLString: true,
+            cancelButtonClass: 'btn-custom-cancel',
+            type: 'warning'
+          })
+            .then(() => {
+              this.btnLoading = true
+              if (this.payType === 'oprate') {
+                this.onPayOprateFee()
+              } else {
+                this.onPaySupplementFee()
+              }
+            })
+            .catch(() => {})
         }
       })
     },
@@ -102,9 +116,7 @@ export default {
         .then(({ msg }) => {
           this.$message.success(msg)
           this.visible = false
-          setTimeout(() => {
-            this.$emit('refreshList')
-          }, 1000)
+          this.$emit('refreshList')
         })
         .catch(() => {
           this.btnLoading = false
@@ -115,9 +127,7 @@ export default {
         .then(({ msg }) => {
           this.$message.success(msg)
           this.visible = false
-          setTimeout(() => {
-            this.$emit('refreshList')
-          }, 1000)
+          this.$emit('refreshList')
         })
         .catch(() => {
           this.btnLoading = false

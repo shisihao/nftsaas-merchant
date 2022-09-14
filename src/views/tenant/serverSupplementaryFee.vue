@@ -114,14 +114,13 @@
         </el-table-column>
         <el-table-column label="操作" width="160" align="center">
           <template slot-scope="{ row }">
-            <el-button-group>
-              <el-button
-                v-if="row.status !== 1"
-                plain
-                type="primary"
-                @click="handleOprate(row)"
-              >立即处理</el-button>
-            </el-button-group>
+            <el-button
+              v-if="row.status !== 1"
+              type="primary"
+              @click="handleOprate(row)"
+            >
+              立即处理
+            </el-button>
           </template>
         </el-table-column>
       </el-table>

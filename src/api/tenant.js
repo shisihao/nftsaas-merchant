@@ -139,8 +139,8 @@ export function supplementOrder(params) {
 }
 
 // 服务器补充费订单支付
-export function paySupplementFee(data) {
-  return request.post('/tenantInfo/supplementOrders/pay', {
+export function paySupplementFee({id, ...data}) {
+  return request.post(`/tenantInfo/supplementOrders/pay/${id}`, {
     ...data
   })
 }
@@ -160,8 +160,8 @@ export function maintainOrder(params) {
 }
 
 // 运维费订单支付
-export function payOprateFee(data) {
-  return request.post('/tenantInfo/maintainOrders/pay', {
+export function payOprateFee({id, ...data}) {
+  return request.post(`/tenantInfo/maintainOrders/pay/${id}`, {
     ...data
   })
 }
