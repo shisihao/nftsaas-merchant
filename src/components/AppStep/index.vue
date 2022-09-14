@@ -102,14 +102,14 @@
         </el-form-item>
         <div>
           <div class="logo-title logo-title-cover"> 示例 </div>
-          <div>
-            <img src="@/assets/images/hengban_icon_logo.png">
+          <div class="logo3">
+            <img src="@/assets/images/design/changjing4_shili.png">
           </div>
         </div>
         <div>
           <div class="logo-title"> 应用场景 </div>
-          <div>
-            <img src="@/assets/images/step1_changjing2.png">
+          <div class="logo2">
+            <img src="@/assets/images/design/step1_changjing4.png">
           </div>
         </div>
       </div>
