@@ -131,19 +131,16 @@
           <el-form-item label="发行方" prop="issuer">
             <el-input v-model="form.issuer" placeholder="发行方" clearable />
           </el-form-item>
-          <el-form-item label="发行发头像" prop="issuer_avatar">
-            <div class="filter-list-box">
-              <div v-if="!!form.issuer_avatar" class="upload-images">
-                <el-image :src="form.issuer_avatar && domin + form.issuer_avatar" class="upload-image" fit="cover" @click="onPicturePreview(form.issuer_avatar)" />
-              </div>
-              <div v-else class="err-image">
-                <el-image>
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline" />
-                  </div>
-                </el-image>
-              </div>
-            </div>
+          <el-form-item label="发行方头像" prop="issuer_avatar">
+            <custom-upload
+              ref-name="issuer_avatar"
+              class-name="avatar-uploader"
+              @handleBeforeUpload="beforeAvatarUpload"
+              @handleSuccess="handleAvatarSuccess"
+            >
+              <img v-if="form.issuer_avatar" :src="form.issuer_avatar && domin + form.issuer_avatar" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon" />
+            </custom-upload>
           </el-form-item>
         </div>
         <el-form-item label="权益说明" prop="desc">
@@ -681,6 +678,30 @@ export default {
       color: #fff;
       font-size: 18px;
       cursor: pointer;
+    }
+    .err-image {
+      width: 100px;
+      height: 100px;
+      border: 1px solid #c0ccda;
+      background: #f5f7fa;
+      border-radius: 6px;
+      .el-image{
+        margin-left: 35px;
+        margin-top: 35px;
+      }
+      img {
+        height: auto;
+      }
+      ::v-deep .image-slot {
+        font-size: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background: #f5f7fa;
+        color: #909399;
+      }
     }
   }
 }

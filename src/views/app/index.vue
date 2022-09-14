@@ -24,7 +24,7 @@
                 <div class="clolor-select" :style="`background-color: ${form.default_color};`" />
                 <p>推荐颜色</p>
                 <ul class="color-list">
-                  <li v-for="(value, index) in colorList" :key="index" :style="`background-color: ${value};`" @click="onSelectColor(value)" />
+                  <li v-for="(value, index1) in colorList" :key="index1" :style="`background-color: ${value};`" @click="onSelectColor(value)" />
                 </ul>
               </div>
             </div>

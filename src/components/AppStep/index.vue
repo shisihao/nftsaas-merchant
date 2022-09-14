@@ -8,7 +8,7 @@
         <el-form-item label="启动页logo" prop="start_logo">
           <custom-upload class-name="avatar-uploader avatar1" ref-name="start_logo" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
             <img v-if="form.start_logo" :src="domin + form.start_logo" class="avatar">
-            <img v-else src="@/assets/images/step1_add_img.png" class="avatar">
+            <img v-else src="@/assets/images/design/step1_add_img.png" class="avatar">
           </custom-upload>
           <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar1', 'start_logo')">上传图片</el-button>
           <div class="describe">
@@ -19,14 +19,14 @@
         </el-form-item>
         <div>
           <div class="logo-title logo-title-cover"> 示例 </div>
-          <div>
-            <img src="@/assets/images/shuban_icon_logo.png">
+          <div class="logo1">
+            <img src="@/assets/images/design/shuban_icon_logo.png">
           </div>
         </div>
         <div>
           <div class="logo-title"> 应用场景 </div>
-          <div>
-            <img src="@/assets/images/step1_changjing1.png">
+          <div class="logo2">
+            <img src="@/assets/images/design/step1_changjing1.png">
           </div>
         </div>
       </div>
@@ -35,7 +35,7 @@
         <el-form-item label="子页面应用logo" prop="invite_logo">
           <custom-upload class-name="avatar-uploader avatar2" ref-name="invite_logo" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
             <img v-if="form.invite_logo" :src="domin + form.invite_logo" class="avatar">
-            <img v-else src="@/assets/images/step1_add_img.png" class="avatar">
+            <img v-else src="@/assets/images/design/step1_add_img.png" class="avatar">
           </custom-upload>
           <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar2', 'invite_logo')">上传图片</el-button>
           <div class="describe">
@@ -46,14 +46,14 @@
         </el-form-item>
         <div>
           <div class="logo-title logo-title-cover"> 示例 </div>
-          <div>
-            <img src="@/assets/images/hengban_icon_logo.png">
+          <div class="logo3">
+            <img src="@/assets/images/design/hengban_icon_logo.png">
           </div>
         </div>
         <div>
           <div class="logo-title"> 应用场景 </div>
-          <div>
-            <img src="@/assets/images/step1_changjing2.png">
+          <div class="logo2">
+            <img src="@/assets/images/design/step1_changjing2.png">
           </div>
         </div>
       </div>
@@ -63,7 +63,7 @@
         <el-form-item label="不带产品名图片logo" prop="inside_logo">
           <custom-upload class-name="avatar-uploader avatar4" ref-name="inside_logo" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
             <img v-if="form.inside_logo" :src="domin + form.inside_logo" class="avatar">
-            <img v-else src="@/assets/images/step1_add_img.png" class="avatar">
+            <img v-else src="@/assets/images/design/step1_add_img.png" class="avatar">
           </custom-upload>
           <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar3', 'inside_logo')">上传图片</el-button>
           <div class="describe">
@@ -74,28 +74,28 @@
         </el-form-item>
         <div>
           <div class="logo-title logo-title-cover"> 示例 </div>
-          <div>
-            <img src="@/assets/images/fangxing_icon_logo.png">
+          <div class="logo1">
+            <img src="@/assets/images/design/appicon1024x1024.png">
           </div>
         </div>
         <div>
           <div class="logo-title"> 应用场景 </div>
-          <div>
-            <img src="@/assets/images/step1_changjing3.png">
+          <div class="logo2">
+            <img src="@/assets/images/design/step1_changjing3.png">
           </div>
         </div>
       </div>
       <el-divider />
 
       <div class="logo-box">
-        <el-form-item label="产品专区banner" prop="goods_banner">
+        <el-form-item label="藏品专区banner" prop="goods_banner">
           <custom-upload class-name="avatar-uploader avatar3" ref-name="goods_banner" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
             <img v-if="form.goods_banner" :src="domin + form.goods_banner" class="avatar">
             <img v-else src="@/assets/images/step1_add_img.png" class="avatar">
           </custom-upload>
           <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar4', 'goods_banner')">上传图片</el-button>
           <div class="describe">
-            <div> 1.尺寸为112 * 112px </div>
+            <div> 1.尺寸为750px * 540px </div>
             <div> 2.支持png格式 </div>
             <div> 3.不超过2M </div>
           </div>
@@ -222,6 +222,7 @@ export default {
 			font-weight: normal;
 		}
 		.logo-title {
+      margin-top: 10px;
 			margin-bottom: 20px;
 			color: #808080;
 		}
@@ -266,5 +267,25 @@ export default {
 		line-height: 200px;
 		text-align: center;
 	}
+}
+.logo1{
+  width: 109px;
+  height:100px;
+  img{
+    width: 100%;
+  }
+}
+.logo2{
+  width: 170px;
+  height: 332px;
+  img{
+    width: 100%;
+  }
+}
+.logo3{
+  width: 186px;
+  img{
+    width: 100%;
+  }
 }
 </style>

@@ -1,11 +1,8 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-      <el-form-item label="微信" prop="wechat">
-        <el-input v-model="form.wechat" placeholder="微信" show-word-limit maxlength="20" clearable />
-      </el-form-item>
-      <el-form-item label="QQ" prop="qq">
-        <el-input v-model.number="form.qq" oninput="value=value.replace(/[^\d]/g,'')" show-word-limit maxlength="12" placeholder="QQ" />
+      <el-form-item label="email" prop="email">
+        <el-input v-model.trim="form.email" show-word-limit maxlength="20" placeholder="email" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" :loading="btnLoading" @click="onFormSubmit()">
@@ -18,20 +15,13 @@
 
 <script>
 import { contact, putContact } from '@/api/configs'
-import { validWehcat, validQQ } from '@/utils/validate'
+import { validEmail } from '@/utils/validate'
 export default {
   name: 'Contact',
   data() {
-    const validateWehcat = (rule, value, callback) => {
-      if (!validWehcat(value)) {
-        callback(new Error('请输入正确的微信号码'))
-      } else {
-        callback()
-      }
-    }
-    const validateQQ = (rule, value, callback) => {
-      if (!validQQ(value)) {
-        callback(new Error('请输入正确的QQ'))
+    const validateEmail = (rule, value, callback) => {
+      if (!validEmail(value)) {
+        callback(new Error('请输入正确的Email'))
       } else {
         callback()
       }
@@ -39,17 +29,12 @@ export default {
     return {
       btnLoading: false,
       form: {
-        wechat: '',
-        qq: ''
+        email: ''
       },
       rules: {
-        wechat: [
-          { required: true, message: '微信不能为空', trigger: 'blur' },
-          { validator: validateWehcat, trigger: ['blur', 'change'] }
-        ],
-        qq: [
+        email: [
           { required: true, message: 'qq不能为空', trigger: 'blur' },
-          { validator: validateQQ, trigger: ['blur', 'change'] }
+          { validator: validateEmail, trigger: ['blur', 'change'] }
         ]
       }
     }

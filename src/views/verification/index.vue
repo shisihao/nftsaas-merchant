@@ -17,85 +17,37 @@
       </el-form>
     </div>
 
-    <el-table
-      v-loading="loading"
-      border
-      highlight-current-row
-      :data="list"
-    >
-      <el-table-column
-        prop="id"
-        label="ID"
-        width="80"
-        align="center"
-      />
-      <el-table-column
-        prop="code"
-        label="验证码"
-        align="center"
-      />
-      <el-table-column
-        prop="number"
-        label="发送手机号"
-        align="center"
-      />
-      <el-table-column
-        prop="scene"
-        label="使用类型"
-        align="center"
-      >
+    <el-table v-loading="loading" border highlight-current-row :data="list">
+      <el-table-column prop="id" label="ID" width="80" align="center" />
+      <el-table-column prop="code" label="验证码" align="center" />
+      <el-table-column prop="number" label="发送手机号" align="center" />
+      <el-table-column prop="scene" label="使用类型" align="center">
         <template slot-scope="{ row }">
           {{ row.scene | paraphrase(sceneOptions) }}
         </template>
       </el-table-column>
-      <el-table-column
-        prop="type"
-        label="验证类型"
-        align="center"
-      >
+      <el-table-column prop="type" label="验证类型" align="center">
         <template slot-scope="{ row }">
           {{ row.type | paraphrase(typeOptions) }}
         </template>
       </el-table-column>
-      <el-table-column
-        prop="state"
-        label="发送状态"
-        align="center"
-      >
+      <el-table-column prop="state" label="发送状态" align="center">
         <template slot-scope="{ row }">
           {{ row.state | paraphrase(stateOptions) }}
         </template>
       </el-table-column>
-      <el-table-column
-        prop="used"
-        label="使用状态"
-        align="center"
-      >
+      <el-table-column prop="used" label="使用状态" align="center">
         <template slot-scope="{ row }">
           {{ row.used | paraphrase(usedOptions) }}
         </template>
       </el-table-column>
-      <el-table-column
-        prop="used_at"
-        label="使用时间"
-        width="160"
-        align="center"
-      >
+      <el-table-column prop="used_at" label="使用时间" width="160" align="center">
         <template slot-scope="{ row }">
           {{ row.used_at || '-' }}
         </template>
       </el-table-column>
-      <el-table-column
-        prop="message"
-        label="信息"
-        header-align="center"
-      />
-      <el-table-column
-        prop="created_at"
-        label="创建时间"
-        width="140"
-        align="center"
-      />
+      <el-table-column prop="message" label="信息" header-align="center" />
+      <el-table-column prop="created_at" label="创建时间" width="140" align="center" />
     </el-table>
     <pagination v-show="pages.total > 0" :total="pages.total" :page.sync="pages.current" :limit.sync="pages.limit" @pagination="getList()" />
   </div>
@@ -127,8 +79,8 @@ export default {
         { label: '修改登录密码', value: 'update-login-pass' },
         { label: '设置/修改支付密码', value: 'set-pay-pass' },
         { label: '账号换绑', value: 'change-account' },
-        // { label: '提现审核', value: 'withdrawal' },
-        { label: '认证审核', value: 'identification' }
+        { label: '认证审核', value: 'identification' },
+        { label: '注销', value: 'close_account' }
       ],
       typeOptions: [
         { label: '手机短信', value: 'sms' },
