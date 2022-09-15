@@ -19,6 +19,7 @@
           <img v-if="form.image" :src="domin + form.image" class="image">
           <i v-else class="el-icon-plus image-uploader-icon" />
         </custom-upload>
+        <div class="notice">建议尺寸750px * 750px</div>
       </el-form-item>
       <el-button type="primary" :loading="btnLoading" @click="onFormSubmit()">
         {{ $t("table.confirm") }}

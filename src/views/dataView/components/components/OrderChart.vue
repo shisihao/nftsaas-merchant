@@ -4,7 +4,15 @@
       <div slot="header" class="clearfix">
         <div class="filter-container">
           <el-form :inline="true" :model="search">
-            <el-form-item label="用户报表" />
+            <el-form-item label="订单报表" />
+            <el-form-item label="昨日新增订单">
+              <count-to :start-val="0" :end-val="order.yesterday" :duration="2000" class="card-panel-num" />
+            </el-form-item>
+            <el-form-item label="订单状态">
+              <el-select v-model="search.status" clearable @change="getList()">
+                <el-option v-for="item in orderStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
             <el-form-item label="时间">
               <el-date-picker
                 v-model="dateRangeValue"
@@ -25,19 +33,23 @@
         </div>
       </div>
       <div v-loading="loading">
-        <div id="usersChart" style="width: 100%; height: 360px" />
+        <div id="orderChart" style="width: 100%; height: 360px" />
       </div>
     </el-card>
   </div>
 </template>
 <script>
 import * as echarts from 'echarts'
-import resize from './mixins/resize'
-import { usersSales } from '@/api/common'
-import { pickerOptions } from '@/utils/explain'
+import resize from '../../../dashboard/admin/components/mixins/resize'
+import { homeOrder } from '@/api/common'
+import { pickerOptions, orderStatusOptions } from '@/utils/explain'
+import CountTo from 'vue-count-to'
 
 export default {
   name: 'UserChart',
+  components: {
+    CountTo
+  },
   mixins: [resize],
   props: {
     className: {
@@ -55,6 +67,13 @@ export default {
     autoResize: {
       type: Boolean,
       default: true
+    },
+    order: {
+      type: Object,
+      default: () => ({
+        yesterday: 0,
+        total: 0
+      })
     }
   },
   data() {
@@ -65,11 +84,14 @@ export default {
       },
       loading: false,
       search: {
+        status: '',
         end_time: '',
         start_time: ''
       },
       pickerOptions,
-      dateRangeValue: []
+      orderStatusOptions,
+      dateRangeValue: [],
+      orderTotal: 0
     }
   },
   watch: {
@@ -101,7 +123,7 @@ export default {
     },
     getList() {
       this.loading = true
-      usersSales(this.search)
+      homeOrder(this.search)
         .then((response) => {
           this.loading = false
           this.datas = response.data
@@ -118,7 +140,7 @@ export default {
       }
     },
     initChart() {
-      this.chart = echarts.init(document.getElementById('usersChart', 'dark'))
+      this.chart = echarts.init(document.getElementById('orderChart'))
       this.setOptions(this.datas)
     },
     setOptions(beforeDate) {
@@ -135,7 +157,7 @@ export default {
             trigger: 'axis'
           },
           legend: {
-            data: ['用户数量']
+            data: ['订单数量']
           },
           grid: {
             left: '3%',
@@ -153,20 +175,20 @@ export default {
           },
           series: [
             {
-              name: '用户数量',
+              name: '订单数量',
               type: 'line',
               data: afterRechargeDate,
               smooth: true,
               itemStyle: {
                 normal: {
-                  color: '#303133',
+                  color: '#f56c6c',
                   lineStyle: {
-                    color: '#303133'
+                    color: '#f56c6c'
                   }
                 }
               },
               areaStyle: {
-                color: '#e8e8e8'
+                color: '#fdecec'
               }
             }
           ]
@@ -176,5 +198,12 @@ export default {
   }
 }
 </script>
+
 <style lang="scss" scoped>
+
+  .card-panel-num{
+    margin-right: 20px;
+    font-weight: 600;
+    color: #1890ff;
+  }
 </style>

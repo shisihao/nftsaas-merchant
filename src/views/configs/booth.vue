@@ -15,7 +15,7 @@
           >
           <i v-else class="el-icon-plus avatar-uploader-icon" />
         </custom-upload>
-        <!-- <div class="notice">建议尺寸 180px * 44px</div> -->
+        <div class="notice">建议尺寸 750px * 1050px</div>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" :loading="btnLoading" @click="onFormSubmit()">

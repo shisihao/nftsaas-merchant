@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-import SalesChart from '../admin/components/SalesChart'
+import SalesChart from './components/SalesChart'
 export default {
   components: {
     SalesChart

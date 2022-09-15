@@ -17,7 +17,7 @@
       </router-link>
     </scroll-pane>
     <span class="custom-refresh" @click="refreshSelectedTag($route);refreshAnimation()">
-      <i class="el-icon-refresh" :class="{'turn-refresh': isTurnRefresh}"></i>
+      <i class="el-icon-refresh" :class="{'turn-refresh': isTurnRefresh}" />
       {{ $t('tagsView.refresh') }}
     </span>
     <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
@@ -205,7 +205,7 @@ export default {
         this.isTurnRefresh = true
         setTimeout(() => {
           this.isTurnRefresh = false
-        },800)
+        }, 800)
       }
     }
   }

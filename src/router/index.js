@@ -92,6 +92,18 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/dataView',
+    component: Layout,
+    children: [
+      {
+        path: 'view',
+        component: () => import('@/views/dataView/index'),
+        name: 'view',
+        meta: { title: '数据一览', icon: 'dataView', affix: false }
+      }
+    ]
+  },
+  {
     path: '/step',
     component: () => import('@/views/step/index'),
     name: 'step',

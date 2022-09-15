@@ -11,8 +11,8 @@
   </div>
 </template>
 <script>
-import OrderChart from '../admin/components/OrderChart'
-import UsersChart from '../admin/components/UsersChart'
+import OrderChart from './components/OrderChart'
+import UsersChart from './components/UsersChart'
 
 export default {
   name: 'OrderItem',

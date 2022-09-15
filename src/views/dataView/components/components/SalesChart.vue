@@ -4,13 +4,15 @@
       <div slot="header" class="clearfix">
         <div class="filter-container">
           <el-form :inline="true" :model="search">
-            <el-form-item label="订单报表" />
-            <el-form-item label="昨日新增订单">
-              <count-to :start-val="0" :end-val="order.yesterday" :duration="2000" class="card-panel-num" />
-            </el-form-item>
-            <el-form-item label="订单状态">
-              <el-select v-model="search.status" clearable @change="getList()">
-                <el-option v-for="item in orderStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
+            <el-form-item label="销售报表" />
+            <el-form-item label="资产类型">
+              <el-select v-model="search.type" placeholder="请选择" @change="onChangeCurrency">
+                <el-option
+                  v-for="item in payTypeOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
             </el-form-item>
             <el-form-item label="时间">
@@ -33,23 +35,20 @@
         </div>
       </div>
       <div v-loading="loading">
-        <div id="orderChart" style="width: 100%; height: 360px" />
+        <div id="salesChart" style="width: 100%; height: 360px" />
       </div>
     </el-card>
   </div>
 </template>
 <script>
 import * as echarts from 'echarts'
-import resize from './mixins/resize'
-import { homeOrder } from '@/api/common'
-import { pickerOptions, orderStatusOptions } from '@/utils/explain'
-import CountTo from 'vue-count-to'
+import resize from '../../../dashboard/admin/components/mixins/resize'
+import { homeSales } from '@/api/common'
+import { pickerOptions } from '@/utils/explain'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'UserChart',
-  components: {
-    CountTo
-  },
   mixins: [resize],
   props: {
     className: {
@@ -67,32 +66,30 @@ export default {
     autoResize: {
       type: Boolean,
       default: true
-    },
-    order: {
-      type: Object,
-      default: () => ({
-        yesterday: 0,
-        total: 0
-      })
     }
   },
   data() {
     return {
       chart: null,
+      payTypeOptions: [
+        { label: '现金', value: 'cny' },
+        { label: this.integral, value: 'integral' }
+      ],
       datas: {
         info: []
       },
       loading: false,
       search: {
-        status: '',
+        type: 'cny',
         end_time: '',
         start_time: ''
       },
       pickerOptions,
-      orderStatusOptions,
-      dateRangeValue: [],
-      orderTotal: 0
+      dateRangeValue: []
     }
+  },
+  computed: {
+    ...mapGetters(['integral'])
   },
   watch: {
     datas: {
@@ -123,12 +120,17 @@ export default {
     },
     getList() {
       this.loading = true
-      homeOrder(this.search)
+      homeSales(this.search)
         .then((response) => {
-          this.loading = false
           this.datas = response.data
         })
         .catch(() => {})
+        .finally(() => {
+          this.loading = false
+        })
+    },
+    onChangeCurrency() {
+      this.getList()
     },
     onChangeDateRange(value) {
       if (Array.isArray(value)) {
@@ -140,16 +142,17 @@ export default {
       }
     },
     initChart() {
-      this.chart = echarts.init(document.getElementById('orderChart'))
+      this.chart = echarts.init(document.getElementById('salesChart'))
       this.setOptions(this.datas)
     },
     setOptions(beforeDate) {
+      const _this = this
       if (beforeDate.info) {
         const afterRechargeTime = beforeDate.info.map((v) => {
           return v.created_at
         })
         const afterRechargeDate = beforeDate.info.map((v) => {
-          return v.count
+          return v.amount
         })
 
         this.chart.setOption({
@@ -157,7 +160,7 @@ export default {
             trigger: 'axis'
           },
           legend: {
-            data: ['订单数量']
+            data: [_this.search.type === 'cny' ? '现金销售金额' : `${this.integral}销售数量`]
           },
           grid: {
             left: '3%',
@@ -175,20 +178,20 @@ export default {
           },
           series: [
             {
-              name: '订单数量',
+              name: _this.search.type === 'cny' ? '现金销售金额' : `${this.integral}销售数量`,
               type: 'line',
               data: afterRechargeDate,
               smooth: true,
               itemStyle: {
                 normal: {
-                  color: '#f56c6c',
+                  color: '#e6a23c',
                   lineStyle: {
-                    color: '#f56c6c'
+                    color: '#e6a23c'
                   }
                 }
               },
               areaStyle: {
-                color: '#fdecec'
+                color: '#fff7ec'
               }
             }
           ]
@@ -200,10 +203,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-  .card-panel-num{
-    margin-right: 20px;
-    font-weight: 600;
-    color: #1890ff;
-  }
 </style>

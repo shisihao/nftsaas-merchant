@@ -4,17 +4,7 @@
       <div slot="header" class="clearfix">
         <div class="filter-container">
           <el-form :inline="true" :model="search">
-            <el-form-item label="销售报表" />
-            <el-form-item label="资产类型">
-              <el-select v-model="search.type" placeholder="请选择" @change="onChangeCurrency">
-                <el-option
-                  v-for="item in payTypeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
+            <el-form-item label="用户报表" />
             <el-form-item label="时间">
               <el-date-picker
                 v-model="dateRangeValue"
@@ -35,17 +25,16 @@
         </div>
       </div>
       <div v-loading="loading">
-        <div id="salesChart" style="width: 100%; height: 360px" />
+        <div id="usersChart" style="width: 100%; height: 360px" />
       </div>
     </el-card>
   </div>
 </template>
 <script>
 import * as echarts from 'echarts'
-import resize from './mixins/resize'
-import { homeSales } from '@/api/common'
+import resize from '../../../dashboard/admin/components/mixins/resize'
+import { usersSales } from '@/api/common'
 import { pickerOptions } from '@/utils/explain'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'UserChart',
@@ -71,25 +60,17 @@ export default {
   data() {
     return {
       chart: null,
-      payTypeOptions: [
-        { label: '现金', value: 'cny' },
-        { label: this.integral, value: 'integral' }
-      ],
       datas: {
         info: []
       },
       loading: false,
       search: {
-        type: 'cny',
         end_time: '',
         start_time: ''
       },
       pickerOptions,
       dateRangeValue: []
     }
-  },
-  computed: {
-    ...mapGetters(['integral'])
   },
   watch: {
     datas: {
@@ -120,17 +101,12 @@ export default {
     },
     getList() {
       this.loading = true
-      homeSales(this.search)
+      usersSales(this.search)
         .then((response) => {
+          this.loading = false
           this.datas = response.data
         })
         .catch(() => {})
-        .finally(() => {
-          this.loading = false
-        })
-    },
-    onChangeCurrency() {
-      this.getList()
     },
     onChangeDateRange(value) {
       if (Array.isArray(value)) {
@@ -142,17 +118,16 @@ export default {
       }
     },
     initChart() {
-      this.chart = echarts.init(document.getElementById('salesChart'))
+      this.chart = echarts.init(document.getElementById('usersChart', 'dark'))
       this.setOptions(this.datas)
     },
     setOptions(beforeDate) {
-      const _this = this
       if (beforeDate.info) {
         const afterRechargeTime = beforeDate.info.map((v) => {
           return v.created_at
         })
         const afterRechargeDate = beforeDate.info.map((v) => {
-          return v.amount
+          return v.count
         })
 
         this.chart.setOption({
@@ -160,7 +135,7 @@ export default {
             trigger: 'axis'
           },
           legend: {
-            data: [_this.search.type === 'cny' ? '现金销售金额' : `${this.integral}销售数量`]
+            data: ['用户数量']
           },
           grid: {
             left: '3%',
@@ -178,20 +153,20 @@ export default {
           },
           series: [
             {
-              name: _this.search.type === 'cny' ? '现金销售金额' : `${this.integral}销售数量`,
+              name: '用户数量',
               type: 'line',
               data: afterRechargeDate,
               smooth: true,
               itemStyle: {
                 normal: {
-                  color: '#e6a23c',
+                  color: '#303133',
                   lineStyle: {
-                    color: '#e6a23c'
+                    color: '#303133'
                   }
                 }
               },
               areaStyle: {
-                color: '#fff7ec'
+                color: '#e8e8e8'
               }
             }
           ]
@@ -201,6 +176,5 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
 </style>
