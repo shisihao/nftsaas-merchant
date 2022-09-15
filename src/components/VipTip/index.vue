@@ -7,7 +7,7 @@
     width="400px"
   >
     <span>
-      您的会员距离到期还剩 <b style="color: #f56c6c;">{{ info.due_day }}</b> 天
+      您的服务器距离到期还剩 <b style="color: #f56c6c;">{{ info.due_day }}</b> 天
       <p>为了避免过期无法正常使用本产品，请尽快续费</p>
     </span>
     <span slot="footer" class="dialog-footer">

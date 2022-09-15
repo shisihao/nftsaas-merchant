@@ -12,7 +12,7 @@
             <div style="margin-right: 10px;">
               <div style="line-height: 1.3;font-size: 14px;">Hi～，尊敬的品牌商</div>
               <div style="line-height: 1.3;font-size: 14px;">
-                您的会员期限剩余：<b :style="`color: ${info.due_day > info.day ? '#1890ff' : '#ff4949'}`">{{ info.due_day }}天</b>
+                您的服务器期限剩余：<b :style="`color: ${info.due_day > info.day ? '#1890ff' : '#ff4949'}`">{{ info.due_day }}天</b>
               </div>
             </div>
             <div>

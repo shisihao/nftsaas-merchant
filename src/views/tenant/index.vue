@@ -2,13 +2,13 @@
   <div class="app-container">
     <div class="member-box">
       <div v-if="+new Date() < +new Date(info.expire_at)">
-        <el-page-header content="会员续费" @back="goBack" />
+        <el-page-header content="服务器续费" @back="goBack" />
         <el-divider />
       </div>
       <p class="member-time">
         <el-button type="primary" plain @click="onGoto('/login')">返回登录</el-button>
         <el-divider direction="vertical" />
-        您的会员到期时间：<span>{{ info.expire_at }}</span>
+        您的服务器到期时间：<span>{{ info.expire_at }}</span>
       </p>
       <div class="mod-secton">
         <div class="content-section">
@@ -99,7 +99,7 @@
                   </el-form-item>
                   <el-form-item label="续费协议">
                     <el-checkbox v-model="form.agree" label="确认即同意" name="type" />
-                    <el-link type="primary" style="vertical-align: initial;" :underline="false" @click="dialogRenewalVisible = true">《会员服务协议》</el-link>
+                    <el-link type="primary" style="vertical-align: initial;" :underline="false" @click="dialogRenewalVisible = true">《服务器服务协议》</el-link>
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" @click="onStepNext">下一步</el-button>
@@ -173,7 +173,7 @@
       </div>
     </div>
 
-    <el-dialog title="会员服务协议" top="30px" width="80%" :visible.sync="dialogRenewalVisible">
+    <el-dialog title="服务器服务协议" top="30px" width="80%" :visible.sync="dialogRenewalVisible">
       <div v-html="configInfo.renewal_agreement" />
     </el-dialog>
   </div>

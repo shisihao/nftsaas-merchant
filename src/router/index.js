@@ -118,7 +118,7 @@ export const constantRoutes = [
     name: 'tenants',
     hidden: true,
     meta: {
-      title: '会员续费'
+      title: '服务器续费'
     }
   }
 ]
