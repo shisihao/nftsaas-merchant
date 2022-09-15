@@ -1,138 +1,25 @@
 <template>
   <div>
     <ul v-if="index === 1" class="app1">
-      <li v-for="(value, index) in templateList1" :key="index">
+      <li v-for="(value, colorIndex) in templateList1" :key="colorIndex">
         <div class="phone-section">
           <el-image class="phone-box" :src="phoneBox" />
           <div class="phone-tabbar">
-            <section :style="`color: ${index === 0 ? color : defaultColor}`">
+            <section :style="`color: ${colorIndex === 0 ? color : defaultColor}`">
               <div class="iconfont icon-icon_tab_home_pre" />
               首页
             </section>
-            <section :style="`color: ${index === 1 ? color : defaultColor}`">
+            <section :style="`color: ${colorIndex === 1 ? color : defaultColor}`">
               <div class="iconfont icon-tab_icon_kuangchi_pre" />
-              区块
+              藏品
             </section>
-            <section :style="`color: ${index === 2 ? color : defaultColor}`">
+            <section :style="`color: ${colorIndex === 2 ? color : defaultColor}`">
               <div class="iconfont icon-tab_icon_shop_pre" />
-              商城
-            </section>
-            <section :style="`color: ${index === 3 ? color : defaultColor}`">
-              <div class="iconfont icon-icon_tab_zixun_pre" />
-              资讯
-            </section>
-            <section :style="`color: ${index === 4 ? color : defaultColor}`">
-              <div class="iconfont icon-tab_icon_me_pre" />
               我的
             </section>
           </div>
           <div class="phone-content" :style="`background-color: ${color}`">
             <img :src="value" alt="">
-            <div v-if="index === 0" :style="`color: ${color}`">
-              <div class="iconfont icon-home_icon_news1 tem-add icon-message" />
-              <div class="iconfont icon-home_icom_notice1 tem-add icon-notice" />
-              <div class="tem-add tem-app-name">
-                APP名称
-              </div>
-            </div>
-            <div v-if="index === 2">
-              <div class="tem-add tem-item" :style="`background-color: ${color}`">
-                <span>独立满存算力</span>
-              </div>
-            </div>
-            <div v-if="index === 3" :style="`color: ${color}`">
-              <div class="iconfont icon-zixun_icon_more tem-add zixin-item" />
-              <div class="tem-add zixin-after" :style="`background-color: ${color}`" />
-              <div class="iconfont icon-zixun_icon_like tem-add zixin-good">
-                <span>99</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </li>
-    </ul>
-    <ul v-if="index === 2" class="app2">
-      <li v-for="(value, index) in templateList2" :key="index">
-        <div class="phone-section">
-          <el-image class="phone-box" :src="phoneBox" />
-          <div class="phone-tabbar">
-            <section :style="`color: ${index === 0 ? color : defaultColor}`">
-              <div :class="`iconfont ${index === 0 ? 'icon-app2_tab_icon_home2_pre' : 'icon-app2_tab_icon_home2'}`" />
-              首页
-            </section>
-            <section :style="`color: ${index === 1 ? color : defaultColor}`">
-              <div :class="`iconfont ${index === 1 ? 'icon-app2_tab_icon_mall2_pre' : 'icon-app2_tab_icon_mall2'}`" />
-              商城
-            </section>
-            <section :style="`color: ${index === 2 ? color : defaultColor}`">
-              <div :class="`iconfont ${index === 2 ? 'icon-app2_tab_icon_wallet2_pre' : 'icon-app2_tab_icon_wallet2'}`" />
-              钱包
-            </section>
-            <section :style="`color: ${index === 3 ? color : defaultColor}`">
-              <div :class="`iconfont ${index === 3 ? 'icon-app2_tab_icon_nwes2_pre' : 'icon-app2_tab_icon_nwes2'}`" />
-              资讯
-            </section>
-            <section :style="`color: ${index === 4 ? color : defaultColor}`">
-              <div :class="`iconfont ${index === 4 ? 'icon-app2_tab_icon_mine2_pre' : 'icon-app2_tab_icon_mine'}`" />
-              我的
-            </section>
-          </div>
-          <div class="phone-content" :style="`background-color: ${color}`">
-            <img :src="value" alt="">
-          </div>
-        </div>
-      </li>
-    </ul>
-    <ul v-if="index === 3" class="app3">
-      <li v-for="(value, index) in templateList3" :key="index">
-        <div class="phone-section">
-          <el-image class="phone-box" :src="phoneBox" />
-          <div class="phone-tabbar">
-            <section :style="`color: ${index === 0 ? color : defaultColor}`">
-              <div class="iconfont icon-app3_tab_icon_home" />
-              首页
-            </section>
-            <section :style="`color: ${index === 1 ? color : defaultColor}`">
-              <div class="iconfont icon-app3_tab_icon_shop" />
-              商城
-            </section>
-            <section :style="`color: ${index === 2 ? color : defaultColor}`">
-              <div class="iconfont icon-app3_tab_icon_news" />
-              资讯
-            </section>
-            <section :style="`color: ${index === 3 ? color : defaultColor}`">
-              <div class="iconfont icon-app3_tab_icon_mine" />
-              我的
-            </section>
-          </div>
-          <div class="phone-content" :style="`background-color: ${color}`">
-            <img :src="value" alt="">
-            <div v-if="index === 3" class="tem-fun" :style="`color: ${color}`">
-              <div class="iconfont icon-app3_mine_icon_qb tem-add qb-item">
-                <div class="tem-text">我的钱包</div>
-              </div>
-              <div class="iconfont icon-app3_mine_icon_shebei tem-add qb-item">
-                <div class="tem-text">我的设备</div>
-              </div>
-              <div class="iconfont icon-app3_mine_icon_shichang tem-add qb-item">
-                <div class="tem-text">我的市场</div>
-              </div>
-              <div class="iconfont icon-app3_mine_icon_anquan tem-add qb-item">
-                <div class="tem-text">账户安全</div>
-              </div>
-              <div class="iconfont icon-app3_mine_icon_wenti tem-add qb-item">
-                <div class="tem-text">常见问题</div>
-              </div>
-              <div class="iconfont icon-app3_mine_icon_fankui tem-add qb-item">
-                <div class="tem-text">意见反馈</div>
-              </div>
-              <div class="iconfont icon-app3_mine_icon_kefu tem-add qb-item">
-                <div class="tem-text">客服中心</div>
-              </div>
-              <div class="iconfont icon-app3_mine_icon_guanyu tem-add qb-item">
-                <div class="tem-text">关于我们</div>
-              </div>
-            </div>
           </div>
         </div>
       </li>
@@ -142,7 +29,6 @@
 <script>
 import phoneBox from '@/assets/images/step2_phone_bg2.png'
 import '@/assets/images/app1/icon/iconfont.css'
-import '@/assets/images/app2/icon/iconfont.css'
 
 export default {
   name: 'App1',
@@ -160,9 +46,7 @@ export default {
     return {
       defaultColor: '#ccc',
       phoneBox,
-      templateList1: [require('@/assets/images/app1/muban1_diy_home.png'), require('@/assets/images/app1/muban1_diy_pool.png'), require('@/assets/images/app1/muban1_diy_mall.png'), require('@/assets/images/app1/muban1_diy_news.png'), require('@/assets/images/app1/muban1_diy_mine.png')],
-      templateList2: [require('@/assets/images/app2/muban1_diy_home.png'), require('@/assets/images/app2/muban1_diy_mall.png'), require('@/assets/images/app2/muban1_diy_wallte.png'), require('@/assets/images/app2/muban1_diy_zixun.png'), require('@/assets/images/app2/muban1_diy_mine.png')],
-      templateList3: [require('@/assets/images/app3/muban1_diy_home.png'), require('@/assets/images/app3/muban1_diy_mall.png'), require('@/assets/images/app3/muban1_diy_zixun.png'), require('@/assets/images/app3/muban1_diy_mine.png')],
+      templateList1: [require('@/assets/images/app1/01home.png'), require('@/assets/images/app1/02cangpin.png'), require('@/assets/images/app1/03mine.png')],
       activeName: 'first'
     }
   },
@@ -181,6 +65,7 @@ export default {
     margin: 0;
     padding: 0;
     display: flex;
+    justify-content: center;
     li {
       flex-shrink: 0;
       width: 200px;

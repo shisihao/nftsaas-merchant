@@ -61,7 +61,7 @@
 
       <div class="logo-box">
         <el-form-item label="不带产品名图片logo" prop="inside_logo">
-          <custom-upload class-name="avatar-uploader avatar4" ref-name="inside_logo" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
+          <custom-upload class-name="avatar-uploader avatar3" ref-name="inside_logo" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
             <img v-if="form.inside_logo" :src="domin + form.inside_logo" class="avatar">
             <img v-else src="@/assets/images/design/step1_add_img.png" class="avatar">
           </custom-upload>
@@ -89,9 +89,9 @@
 
       <div class="logo-box">
         <el-form-item label="藏品专区banner" prop="goods_banner">
-          <custom-upload class-name="avatar-uploader avatar3" ref-name="goods_banner" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
+          <custom-upload class-name="avatar-uploader avatar4" ref-name="goods_banner" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
             <img v-if="form.goods_banner" :src="domin + form.goods_banner" class="avatar">
-            <img v-else src="@/assets/images/step1_add_img.png" class="avatar">
+            <img v-else src="@/assets/images/design/step1_add_img.png" class="avatar">
           </custom-upload>
           <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar4', 'goods_banner')">上传图片</el-button>
           <div class="describe">
@@ -184,7 +184,6 @@ export default {
     },
     onHandleUpload(className, refName) {
       this.currentName = refName
-      document.querySelector(`.${className} input`).click()
     },
     onsubmit() {
       this.$refs['form'].validate(valid => {
@@ -222,7 +221,7 @@ export default {
 			font-weight: normal;
 		}
 		.logo-title {
-      margin-top: 10px;
+			margin-top: 10px;
 			margin-bottom: 20px;
 			color: #808080;
 		}
@@ -267,25 +266,25 @@ export default {
 		line-height: 200px;
 		text-align: center;
 	}
-}
-.logo1{
-  width: 109px;
-  height:100px;
-  img{
-    width: 100%;
-  }
-}
-.logo2{
-  width: 170px;
-  height: 332px;
-  img{
-    width: 100%;
-  }
-}
-.logo3{
-  width: 186px;
-  img{
-    width: 100%;
-  }
+	.logo1 {
+		width: 109px;
+		height: 100px;
+		img {
+			width: 100%;
+		}
+	}
+	.logo2 {
+		width: 170px;
+		height: 332px;
+		img {
+			width: 100%;
+		}
+	}
+	.logo3 {
+		width: 186px;
+		img {
+			width: 100%;
+		}
+	}
 }
 </style>

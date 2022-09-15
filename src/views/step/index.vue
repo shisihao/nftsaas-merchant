@@ -47,7 +47,7 @@
                     <swiper-slide v-for="(v, i) in item.images" :key="i" class="images-list">
                       <div class="phone-section" @click="onPreview(index)">
                         <el-image class="phone-box" :src="phoneBox" />
-                        <div class="phone-tabbar">
+                        <div v-if="v.bottom" class="phone-tabbar">
                           <img :src="domin + v.bottom" alt="">
                         </div>
                         <div class="phone-content">
@@ -90,7 +90,7 @@
             <swiper-slide v-for="(v, i) in item.images" :key="i" class="images-list">
               <div class="phone-section">
                 <el-image class="phone-box" :src="phoneBox" />
-                <div class="phone-tabbar">
+                <div v-if="v.bottom" class="phone-tabbar">
                   <img :src="domin + v.bottom" alt="">
                 </div>
                 <div class="phone-content">

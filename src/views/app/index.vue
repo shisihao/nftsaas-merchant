@@ -160,7 +160,6 @@ export default {
     margin-bottom: 28px;
   }
   .app-preview {
-    width: 1120px;
     text-align: center;
     margin-top: 20px;
     margin-bottom: 40px;

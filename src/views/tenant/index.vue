@@ -137,7 +137,7 @@
                         @handleSuccess="handleAvatarSuccess"
                       >
                         <img v-if="form.credential" :src="domin + form.credential" class="avatar">
-                        <img v-else src="@/assets/images/step1_add_img.png" class="avatar">
+                        <img v-else src="@/assets/images/design/step1_add_img.png" class="avatar">
                       </custom-upload>
                       <div class="update-btn">
                         <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar1', 'img')">上传图片</el-button>

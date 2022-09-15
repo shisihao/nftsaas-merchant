@@ -69,8 +69,8 @@
                   <div class="transfer-info">
                     <el-form-item label="待付款">
                       <div style="color: #E6A23C;font-size: 24px;">
-                        <span v-if="activeName === 'meal'">{{ this.form.meal_id ? mealsOptions[this.form.index].price : 0 | moneyToFormat }}</span>
-                        <span v-else-if="activeName === 'custom'">{{ timesNumber(configInfo.price_day ? configInfo.price_day.price || 0 : 0, this.form.days) | moneyToFormat }}</span>
+                        <span v-if="activeName === 'meal'">{{ form.meal_id ? mealsOptions[form.index].price : 0 | moneyToFormat }}</span>
+                        <span v-else-if="activeName === 'custom'">{{ timesNumber(configInfo.price_day ? configInfo.price_day.price || 0 : 0, form.days) | moneyToFormat }}</span>
                         元
                       </div>
                     </el-form-item>
@@ -91,7 +91,7 @@
                         @handleSuccess="handleAvatarSuccess"
                       >
                         <img v-if="form.credential" :src="domin + form.credential" class="avatar">
-                        <img v-else src="@/assets/images/step1_add_img.png" class="avatar">
+                        <img v-else src="@/assets/images/design/step1_add_img.png" class="avatar">
                       </custom-upload>
                       <div class="update-btn">
                         <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar1', 'img')">上传图片</el-button>
