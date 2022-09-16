@@ -110,24 +110,52 @@
             />
           </el-form-item>
           <el-form-item label="杉德公钥：" prop="public_key">
-            <el-input
+            <!-- <el-input
               v-model="form.public_key"
               type="textarea"
               :rows="5"
               :precision="0"
               :min="0"
               clearable
-            />
+            /> -->
+            <custom-upload
+              ref-name="public_key"
+              class-name=""
+              :limit="1"
+              :show-file-list="true"
+              :file-list="fileList1"
+              @handleBeforeUpload="handleBeforeUpload1"
+              @handleExceed="handleExceed"
+              @handleRemove="handleRemove"
+              @handleSuccess="handleSuceess"
+            >
+              <el-button type="primary">点击上传</el-button>
+              <div class="el-upload__tip notice">只能上传cer文件</div>
+            </custom-upload>
           </el-form-item>
           <el-form-item label="杉德私钥：" prop="private_key">
-            <el-input
+            <!-- <el-input
               v-model="form.private_key"
               type="textarea"
               :rows="5"
               :precision="0"
               :min="0"
               clearable
-            />
+            /> -->
+            <custom-upload
+              ref-name="private_key"
+              class-name=""
+              :limit="1"
+              :show-file-list="true"
+              :file-list="fileList2"
+              @handleBeforeUpload="handleBeforeUpload2"
+              @handleExceed="handleExceed"
+              @handleRemove="handleRemove"
+              @handleSuccess="handleSuceess"
+            >
+              <el-button type="primary">点击上传</el-button>
+              <div class="el-upload__tip notice">只能上传pfx文件</div>
+            </custom-upload>
           </el-form-item>
           <el-form-item label="MD5K：" prop="md5_key">
             <el-input
@@ -165,14 +193,20 @@
 
 <script>
 import { aliPay, setAliPay, wxPay, setWxPay, sandPay, setSandPay } from '@/api/configs'
+import CustomUpload from '@/components/Upload/CustomUpload'
+
 export default {
   name: 'Pay',
+  components: { CustomUpload },
   data() {
     return {
       visible: false,
       btnLoading: false,
       form: {},
       rules: {},
+      fileList1: [],
+      fileList2: [],
+      currentName: '',
       tableData: [
         {
           method: '支付宝支付',
@@ -257,6 +291,47 @@ export default {
       }).finally(() => {
         this.btnLoading = false
       })
+    },
+    handleBeforeUpload1(file, cb, refName) {
+      const a = file.name.split('.')
+      const isLt2M = file.size / 1024 / 1024 < 3
+      if (a[a.length - 1] !== 'cer') {
+        this.$message.error('上传文件只能是 cer 格式!')
+        cb(false)
+        return
+      }
+      if (!isLt2M) {
+        this.$message.error('上传文件大小不能超过 3M')
+        cb(false)
+        return
+      }
+      this.currentName = refName
+      cb(true)
+    },
+    handleBeforeUpload2(file, cb, refName) {
+      const a = file.name.split('.')
+      const isLt2M = file.size / 1024 / 1024 < 3
+      if (a[a.length - 1] !== 'pfx') {
+        this.$message.error('上传文件只能是 pfx 格式!')
+        cb(false)
+        return
+      }
+      if (!isLt2M) {
+        this.$message.error('上传文件大小不能超过 3M')
+        cb(false)
+        return
+      }
+      this.currentName = refName
+      cb(true)
+    },
+    handleExceed() {
+      this.$message.warning(`当前限制选择 1 个文件，请删除后在上传`)
+    },
+    handleRemove() {
+      this.form[this.currentName] = ''
+    },
+    handleSuceess(response) {
+      this.form[this.currentName] = response
     }
   }
 }
@@ -269,5 +344,11 @@ export default {
 svg.svg-icon {
   width: 24px;
   height: 24px;
+}
+.notice {
+  color: #909399;
+  font-size: 12px;
+  line-height: 1.5;
+  // margin-top: 10px;
 }
 </style>
