@@ -130,8 +130,8 @@
               @handleSuccess="handleSuceess"
             >
               <el-button type="primary">点击上传</el-button>
-              <div class="el-upload__tip notice">只能上传cer文件</div>
             </custom-upload>
+            <div class="el-upload__tip notice">只能上传cer文件</div>
           </el-form-item>
           <el-form-item label="杉德私钥：" prop="private_key">
             <!-- <el-input
@@ -154,8 +154,8 @@
               @handleSuccess="handleSuceess"
             >
               <el-button type="primary">点击上传</el-button>
-              <div class="el-upload__tip notice">只能上传pfx文件</div>
             </custom-upload>
+            <div class="el-upload__tip notice">只能上传pfx文件</div>
           </el-form-item>
           <el-form-item label="MD5K：" prop="md5_key">
             <el-input
