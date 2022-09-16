@@ -79,7 +79,8 @@ export default {
         default_color: '',
         start_logo: '',
         inside_logo: '',
-        invite_logo: ''
+        invite_logo: '',
+        goods_banner: ''
       }
 
     }
@@ -103,9 +104,11 @@ export default {
           this.form.start_logo = response.data.start_logo
           this.form.inside_logo = response.data.inside_logo
           this.form.invite_logo = response.data.invite_logo
+          this.form.goods_banner = response.data.goods_banner
           this.defaultLogo.start_logo = response.data.start_logo
           this.defaultLogo.inside_logo = response.data.inside_logo
           this.defaultLogo.invite_logo = response.data.invite_logo
+          this.defaultLogo.goods_banner = response.data.goods_banner
           this.contentLoading = false
           this.$nextTick(() => {
             this.$refs.appStep && this.$refs.appStep.setForm(this.form)

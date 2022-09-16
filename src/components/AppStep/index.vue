@@ -146,7 +146,8 @@ export default {
       rules: {
         start_logo: [{ required: true, trigger: ['blur', 'change'], message: '请上传启动页logo' }],
         invite_logo: [{ required: true, trigger: ['blur', 'change'], message: '请上传子页面应用logo' }],
-        inside_logo: [{ required: true, trigger: ['blur', 'change'], message: '不带产品名图片logo' }]
+        inside_logo: [{ required: true, trigger: ['blur', 'change'], message: '不带产品名图片logo' }],
+        goods_banner: [{ required: true, trigger: ['blur', 'change'], message: '藏品专区banner图片' }]
       }
     }
   },
@@ -156,6 +157,7 @@ export default {
         this.form.start_logo = newVal.start_logo
         this.form.invite_logo = newVal.invite_logo
         this.form.inside_logo = newVal.inside_logo
+        this.form.goods_banner = newVal.goods_banner
       }
     }
   },
@@ -184,6 +186,7 @@ export default {
     },
     onHandleUpload(className, refName) {
       this.currentName = refName
+      document.querySelector(`.${className} input`).click()
     },
     onsubmit() {
       this.$refs['form'].validate(valid => {
