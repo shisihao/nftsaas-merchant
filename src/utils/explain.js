@@ -8,7 +8,8 @@ export const payOptions = [
   { label: '微信', value: 'wxpay' },
   { label: '支付宝', value: 'alipay' },
   // { label: '农行', value: 'abcpay' },
-  { label: '京东', value: 'jdpay' }
+  // { label: '京东', value: 'jdpay' },
+  { label: '银行卡快捷', value: 'bank' }
 ]
 
 export const whetherOptions = [

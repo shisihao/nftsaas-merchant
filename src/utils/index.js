@@ -1,4 +1,4 @@
-import Layout from '@/layout'
+// import Layout from '@/layout'
 
 /**
  * Created by PanJiaChen on 16/11/18.
@@ -428,10 +428,10 @@ export function listTree(data, id = 'id', pid = 'pid') {
 
 /**
  * 解决safari 时间问题
- * @param {*} input 
- * @returns 
+ * @param {*} input
+ * @returns
  */
 export function parseDate(input) {
-  var parts = input.match(/(\d+)/g);
-  return new Date(parts[0], parts[1]-1, parts[2]);
+  var parts = input.match(/(\d+)/g)
+  return new Date(parts[0], parts[1] - 1, parts[2])
 }

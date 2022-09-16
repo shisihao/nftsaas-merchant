@@ -38,12 +38,12 @@ export function putInvite(data) {
 
 // 支付方式开关配置
 export function pay() {
-  return request.get('/configs/pay/switch')
+  return request.get('/configs/pay_switch')
 }
 
 // 修改支付方式开关配置
 export function putPay(data) {
-  return request.put('/configs/pay/switch', {
+  return request.put('/configs/pay_switch', {
     ...data
   })
 }

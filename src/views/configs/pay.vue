@@ -139,9 +139,9 @@
               clearable
             />
           </el-form-item>
-          <el-form-item label="受理侧公钥：" prop="two_public_key">
+          <el-form-item label="杉德私钥密码：" prop="private_pass">
             <el-input
-              v-model="form.two_public_key"
+              v-model="form.private_pass"
               type="textarea"
               :rows="5"
               :precision="0"
