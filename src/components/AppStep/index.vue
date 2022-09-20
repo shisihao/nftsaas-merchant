@@ -113,6 +113,34 @@
           </div>
         </div>
       </div>
+      <el-divider />
+
+      <div class="logo-box">
+        <el-form-item label="h5下载页" prop="download_image">
+          <custom-upload class-name="avatar-uploader avatar5" ref-name="download_image" @handleBeforeUpload="beforeAvatarUpload" @handleSuccess="handleAvatarSuccess">
+            <img v-if="form.download_image" :src="domin + form.download_image" class="avatar">
+            <img v-else src="@/assets/images/design/step1_add_img.png" class="avatar">
+          </custom-upload>
+          <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar5', 'download_image')">上传图片</el-button>
+          <div class="describe">
+            <div> 1.尺寸为750px * 540px </div>
+            <div> 2.支持png格式 </div>
+            <div> 3.不超过2M </div>
+          </div>
+        </el-form-item>
+        <div>
+          <div class="logo-title logo-title-cover logo5-title"> 示例 </div>
+          <div class="logo3">
+            <img src="@/assets/images/design/changjing5@2x.png">
+          </div>
+        </div>
+        <div>
+          <div class="logo-title"> 应用场景 </div>
+          <div class="logo2">
+            <img src="@/assets/images/design/step1_changjing5@2x.png">
+          </div>
+        </div>
+      </div>
     </el-form>
   </div>
 </template>
@@ -141,13 +169,15 @@ export default {
         start_logo: '',
         invite_logo: '',
         inside_logo: '',
-        goods_banner: ''
+        goods_banner: '',
+        download_image: ''
       },
       rules: {
         start_logo: [{ required: true, trigger: ['blur', 'change'], message: '请上传启动页logo' }],
         invite_logo: [{ required: true, trigger: ['blur', 'change'], message: '请上传子页面应用logo' }],
         inside_logo: [{ required: true, trigger: ['blur', 'change'], message: '不带产品名图片logo' }],
-        goods_banner: [{ required: true, trigger: ['blur', 'change'], message: '藏品专区banner图片' }]
+        goods_banner: [{ required: true, trigger: ['blur', 'change'], message: '藏品专区banner图片' }],
+        download_image: [{ required: true, trigger: ['blur', 'change'], message: '请上传h5下载页图片' }]
       }
     }
   },
@@ -158,6 +188,7 @@ export default {
         this.form.invite_logo = newVal.invite_logo
         this.form.inside_logo = newVal.inside_logo
         this.form.goods_banner = newVal.goods_banner
+        this.form.download_image = newVal.download_image
       }
     }
   },
@@ -231,6 +262,9 @@ export default {
 		.logo-title-cover {
 			margin-bottom: 50px;
 		}
+    .logo5-title{
+      margin-bottom: 30px;
+    }
 		.logo-uploader {
 			width: 200px;
 			margin-top: 20px;
@@ -289,5 +323,6 @@ export default {
 			width: 100%;
 		}
 	}
+
 }
 </style>

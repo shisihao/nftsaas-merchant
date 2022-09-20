@@ -583,3 +583,15 @@ export function putVideoSeconds(data) {
     ...data
   })
 }
+
+// 视频藏品配置
+export function downloadImage() {
+  return request.get('/configs/download_image')
+}
+
+// 视频藏品配置
+export function putDownloadImage(data) {
+  return request.put('/configs/download_image', {
+    ...data
+  })
+}

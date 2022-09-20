@@ -31,6 +31,7 @@ import { getToken, OssKey, setToken } from '@/utils/auth'
 import { getQiniuToken } from '@/api/qiniu'
 import COS from 'cos-js-sdk-v5'
 import CalcVideo from '@/utils/calcVideo'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -87,6 +88,9 @@ export default {
       },
       loading: false
     }
+  },
+  computed: {
+    ...mapGetters(['info'])
   },
   created() {
     if (getToken(OssKey)) {
@@ -197,12 +201,12 @@ export default {
         } else {
           filename = `${String(+new Date()) + Math.random().toString(36).substring(2)}.${options.file.name.split('.').pop()}`
         }
-
+        console.log(filename)
         cos.putObject(
           {
             Bucket: this.oss.bucket,
             Region: this.oss.region,
-            Key: filename,
+            Key: this.info.id + '/' + filename,
             Body: options.file,
             onProgress: function(progressData) {
               options.onProgress(progressData.percent)
@@ -220,8 +224,9 @@ export default {
               return
             }
             if (data.statusCode === 200) {
-              const newData = data.Location.split('/')
-              options.onSuccess(newData[1])
+              console.log(data.Location)
+              const newData = data.Location.split('/').splice(1).join('/')
+              options.onSuccess(newData)
             } else {
               options.onError('上传失败')
             }
