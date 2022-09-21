@@ -75,6 +75,15 @@
           <div>手机号：{{ phone }}</div>
         </template>
       </el-table-column>
+      <el-table-column
+        label="序列号"
+        width="200"
+        header-align="center"
+      >
+        <template slot-scope="{ row: { result } }">
+          <div> {{ result.seqNo }}</div>
+        </template>
+      </el-table-column>
       <!-- <el-table-column
         label="认证结果"
         min-width="200"
