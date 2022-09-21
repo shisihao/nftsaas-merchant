@@ -295,7 +295,7 @@ import UserLikes from '@/views/user/components/UserLikes'
 import CollectionUpdate from '@/views/user/components/CollectionUpdate'
 import follow from '@/views/user/components/follow'
 import fans from '@/views/user/components/fans'
-import AirBalance from '@/views/user/components/AirBalance'
+import AirBalance from '@/views/user/components/airBalance'
 
 export default {
   name: 'User',
