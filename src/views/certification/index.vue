@@ -75,7 +75,7 @@
           <div>手机号：{{ phone }}</div>
         </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         label="认证结果"
         min-width="200"
         header-align="center"
@@ -100,7 +100,7 @@
           </div>
           <div v-else style="text-align: center"> - </div>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         label="失败原因"
         min-width="150"
