@@ -39,10 +39,6 @@
               <div v-if="common.maintenance_fee.curr_month" class="card-panel-description">
                 <div class="card-panel-text">
                   本月运维费用预计
-                  <el-popover placement="bottom" width="100" trigger="hover">
-                    <div>当前比例：{{ common.maintenance_fee.curr_month.maintain_rate }}%</div>
-                    <i slot="reference" class="el-icon-question" />
-                  </el-popover>
                 </div>
                 <count-to :start-val="0" :end-val="+common.maintenance_fee.curr_month.pay_price" :duration="2000" class="card-panel-num" />
               </div>

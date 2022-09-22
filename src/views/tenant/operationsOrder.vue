@@ -55,11 +55,7 @@
         <el-table-column prop="month" label="月份" align="center" />
         <el-table-column width="140" align="center" label="订单信息">
           <template slot-scope="{ row }">
-            <div>销售额：￥{{ row.sell_price }}</div>
-            <div>运维费用比例：{{ row.maintain_rate }}%</div>
-            <div>比例费用： ￥{{ row.maintain_price }}</div>
-            <div>固定费用： ￥{{ row.fixed_price }}</div>
-            <div>总费用： ￥{{ row.pay_price }}</div>
+            <div>运维费用： ￥{{ row.pay_price }}</div>
           </template>
         </el-table-column>
         <el-table-column width="200" align="center" label="账户信息">
@@ -128,8 +124,8 @@
               type="primary"
               @click="handleOprate(row)"
             >
-            立即处理
-          </el-button>
+              立即处理
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
