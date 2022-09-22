@@ -51,7 +51,7 @@
 <script>
 import { getGwjOpen, setGwjOpen } from '@/api/configs'
 export default {
-  name: 'FlashRemittance',
+  name: 'OpenInterface',
   data() {
     return {
       btnLoading: false,
