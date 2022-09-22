@@ -20,6 +20,11 @@
             <el-option v-for="item in whetherOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
+        <el-form-item label="是否同步">
+          <el-select v-model="search.sync_status" clearable @change="getList(1)">
+            <el-option v-for="item in sync_status_options" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="发表时间">
           <el-date-picker
             v-model="dateRangeValue"
@@ -210,6 +215,16 @@
           />
         </template>
       </el-table-column>
+      <el-table-column width="70" label="是否同步" align="center">
+        <template slot-scope="{ row }">
+          <el-switch
+            v-model="row.sync_status"
+            :active-value="0"
+            :inactive-value="1"
+            @change="onChangeSellOut(row, 'sync_status')"
+          />
+        </template>
+      </el-table-column>
       <el-table-column
         label="操作"
         width="220"
@@ -289,6 +304,7 @@ export default {
         keywords: '',
         status: '',
         sellout: '',
+        sync_status: '',
         start_time: '',
         end_time: '',
         tags: []
@@ -311,7 +327,12 @@ export default {
       pickerOptions,
       whetherOptions,
       statusOptions,
-      goodShowTypeOptions
+      goodShowTypeOptions,
+      sync_status_options: [
+        { label: '全部', value: '' },
+        { label: '否', value: 1 },
+        { label: '是', value: 0 }
+      ]
     }
   },
   computed: {
