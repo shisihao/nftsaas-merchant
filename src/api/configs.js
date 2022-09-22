@@ -595,3 +595,15 @@ export function putDownloadImage(data) {
     ...data
   })
 }
+
+// 闪汇配置
+export function getGwjOpen() {
+  return request.get('/configs/gwj_open')
+}
+
+// 闪汇配置
+export function setGwjOpen(data) {
+  return request.put('/configs/gwj_open', {
+    ...data
+  })
+}
