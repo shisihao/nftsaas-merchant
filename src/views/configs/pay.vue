@@ -45,7 +45,7 @@
               clearable
             />
           </el-form-item>
-          <el-form-item label="公钥证书：" prop="public_key_rsa">
+          <el-form-item label="rsa公钥证书：" prop="public_key_rsa">
             <el-input
               v-model="form.public_key_rsa"
               type="textarea"
