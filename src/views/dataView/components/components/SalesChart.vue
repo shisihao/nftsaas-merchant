@@ -73,7 +73,7 @@ export default {
       chart: null,
       payTypeOptions: [
         { label: '现金', value: 'cny' },
-        { label: this.integral, value: 'integral' }
+        { label: this.$store.state.user.integral, value: 'integral' }
       ],
       datas: {
         info: []

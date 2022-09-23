@@ -607,3 +607,16 @@ export function setGwjOpen(data) {
     ...data
   })
 }
+
+// 积分单价配置
+export function integralPrice() {
+  return request.get('/configs/integral_unit_price')
+}
+
+// 积分单价配置
+export function putIntegralPrice(data) {
+  return request.put('/configs/integral_unit_price', {
+    ...data
+  })
+}
+

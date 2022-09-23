@@ -231,13 +231,13 @@ export default {
       payTypeOptions: [
         { label: '藏品', value: 'goods_id' },
         { label: '盲盒', value: 'box_id' },
-        { label: this.integral, value: 'integral' },
+        { label: this.$store.state.user.integral, value: 'integral' },
         { label: '铸造券', value: 'cast' },
         { label: '兑换券', value: 'voucher' },
         { label: '商品券', value: 'commodity' }
       ],
       typeObj: {
-        integral: this.integral,
+        integral: this.$store.state.user.integral,
         cast: '铸造券',
         voucher: '兑换券',
         commodity: '商品券'

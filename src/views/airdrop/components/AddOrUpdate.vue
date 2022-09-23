@@ -438,7 +438,7 @@ export default {
           { required: true, message: '请选择创作者头像', trigger: ['blur', 'change'] }
         ],
         integral_price: [
-          { required: true, message: `请输入${this.integral}价格`, trigger: ['blur', 'change'] }
+          { required: true, message: `价格不能为空`, trigger: ['blur', 'change'] }
         ],
         issuer: [
           { required: true, message: '请输入发行方', trigger: ['blur', 'change'] }
