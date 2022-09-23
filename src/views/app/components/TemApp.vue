@@ -6,20 +6,21 @@
           <el-image class="phone-box" :src="phoneBox" />
           <div class="phone-tabbar">
             <section :style="`color: ${colorIndex === 0 ? color : defaultColor}`">
-              <div class="iconfont icon-icon_tab_home_pre" />
+              <div class="iconfont icon-tab_icon_home" />
               首页
             </section>
             <section :style="`color: ${colorIndex === 1 ? color : defaultColor}`">
-              <div class="iconfont icon-tab_icon_kuangchi_pre" />
+              <div class="iconfont icon-tab_icon_cangpin" />
               藏品
             </section>
             <section :style="`color: ${colorIndex === 2 ? color : defaultColor}`">
-              <div class="iconfont icon-tab_icon_shop_pre" />
+              <div class="iconfont icon-tab_icon_mine" />
               我的
             </section>
           </div>
           <div class="phone-content" :style="`background-color: ${color}`">
             <img :src="value" alt="">
+            <i v-if="colorIndex===0" class="underscore" :style="`color: ${colorIndex === 0 ? color : defaultColor}`" />
           </div>
         </div>
       </li>
@@ -28,7 +29,7 @@
 </template>
 <script>
 import phoneBox from '@/assets/images/step2_phone_bg2.png'
-import '@/assets/images/app1/icon/iconfont.css'
+import '@/assets/images/app1/icon2/iconfont.css'
 
 export default {
   name: 'App1',
@@ -112,6 +113,13 @@ export default {
           border-radius: 17px;
           img {
             width: 100%;
+          }
+          .underscore{
+            position: absolute;
+            font-style: normal;
+            top: 0;
+            width: 10px;
+            height: 2px;
           }
         }
       }

@@ -123,7 +123,7 @@
           </custom-upload>
           <el-button class="logo-uploader" type="success" size="small" plain @click="onHandleUpload('avatar5', 'download_image')">上传图片</el-button>
           <div class="describe">
-            <div> 1.尺寸为750px * 540px </div>
+            <div> 1.尺寸为750px * 1624px </div>
             <div> 2.支持png格式 </div>
             <div> 3.不超过2M </div>
           </div>

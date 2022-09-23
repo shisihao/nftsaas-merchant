@@ -9,7 +9,7 @@ import './styles/element-variables.scss'
 
 import '@/styles/index.scss' // global css
 
-import App from './App' 
+import App from './App'
 import store from './store'
 import router from './router'
 
@@ -35,7 +35,6 @@ import AuthenticatorDialog from '@/components/AuthenticatorDialog'
   const { mockXHR } = require('../mock')
   mockXHR()
 } */
-
 
 import Chat from 'jwchat'
 Vue.use(Chat)

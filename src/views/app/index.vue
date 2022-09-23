@@ -73,14 +73,17 @@ export default {
       defaultLogo: {
         start_logo: '',
         inside_logo: '',
-        invite_logo: ''
+        invite_logo: '',
+        goods_banner: '',
+        download_image: ''
       },
       form: {
         default_color: '',
         start_logo: '',
         inside_logo: '',
         invite_logo: '',
-        goods_banner: ''
+        goods_banner: '',
+        download_image: ''
       }
 
     }
@@ -105,10 +108,12 @@ export default {
           this.form.inside_logo = response.data.inside_logo
           this.form.invite_logo = response.data.invite_logo
           this.form.goods_banner = response.data.goods_banner
+          this.form.download_image = response.data.download_image
           this.defaultLogo.start_logo = response.data.start_logo
           this.defaultLogo.inside_logo = response.data.inside_logo
           this.defaultLogo.invite_logo = response.data.invite_logo
           this.defaultLogo.goods_banner = response.data.goods_banner
+          this.defaultLogo.download_image = response.data.download_image
           this.contentLoading = false
           this.$nextTick(() => {
             this.$refs.appStep && this.$refs.appStep.setForm(this.form)

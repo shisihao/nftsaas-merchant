@@ -16,23 +16,27 @@
       <el-form-item label="更新说明" prop="description">
         <el-input v-model="form.description" type="textarea" placeholder="更新说明" clearable />
       </el-form-item>
-      <el-form-item v-if="form.type === 0" label="上传APK" prop="link">
+      <el-form-item label="上传APP包" prop="link">
         <custom-upload
           class-name=""
           :show-file-list="true"
           :limit="1"
+          :file-list="fileList"
           @handleBeforeUpload="beforeAvatarUpload"
           @handleSuccess="handleAvatarSuccess"
           @handleExceed="handleExceed"
-          @elProgress="elProgress"
+          @handleProgress="elProgress"
         >
           <el-button type="primary">点击上传</el-button>
         </custom-upload>
-        <el-progress v-if="![0, 1].includes(percentage)" :percentage="percentage * 100" />
+        <el-progress v-if="![0, 1].includes(percentage)" style="margin-top:5px" :percentage="percentage * 100" />
       </el-form-item>
-      <el-form-item v-if="form.type === 1" label="链接地址" prop="link">
+      <el-form-item v-if="form.type === 1" label="包名" prop="package_name">
+        <el-input v-model="form.package_name" placeholder="包名" clearable />
+      </el-form-item>
+      <!-- <el-form-item v-if="form.type === 1" label="链接地址" prop="link">
         <el-input v-model="form.link" placeholder="链接地址" clearable />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="是否强制更新" prop="is_forced">
         <el-radio-group v-model="form.is_forced">
           <el-radio :label="0">否</el-radio>
@@ -101,6 +105,9 @@ export default {
         ],
         is_forced: [
           { required: true, message: '请选择是否强制更新', trigger: 'blur' }
+        ],
+        package_name: [
+          { required: true, message: '不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -130,6 +137,7 @@ export default {
     },
     onSelectType(val) {
       this.form.link = ''
+      this.fileList = []
     },
     clearForm() {
       this.form = {
@@ -145,24 +153,28 @@ export default {
       this.btnLoading = false
       this.clearForm()
       this.$refs['form'].resetFields()
+      this.fileList = []
     },
     elProgress(p, cpt, res) {
-      this.percentage = p
+      this.percentage = Number.parseFloat(p)
     },
     handleAvatarSuccess(response, file) {
       this.form.link = response
-    },
-    handleAvatarError(error) {
-      if (JSON.parse(error.message).error.indexOf('token') !== -1) {
-        this.$message.error('上传功能已失效，请重新登录')
-      }
+      this.fileList = [{
+        name: response,
+        url: response
+      }]
     },
     beforeAvatarUpload(file, cb) {
-      if (file.type.indexOf('android') === -1) {
-        this.$message.error('请上传安卓apk文件')
+      if (!this.form.type && file.type.indexOf('android') === -1) {
+        this.$message.error(`请上传安卓apk文件`)
         cb(false)
+      } else if (this.form.type && file.name.indexOf('ipa') === -1) {
+        this.$message.error(`请上传苹果ipa文件`)
+        cb(false)
+      } else {
+        cb(true)
       }
-      cb(true)
     },
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 1 个文件，请删除后在上传`)
@@ -170,3 +182,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+::v-deep .el-upload-list__item {
+  transition: none !important;
+}
+</style>

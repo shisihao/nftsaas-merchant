@@ -201,7 +201,6 @@ export default {
         } else {
           filename = `${String(+new Date()) + Math.random().toString(36).substring(2)}.${options.file.name.split('.').pop()}`
         }
-        console.log(filename)
         cos.putObject(
           {
             Bucket: this.oss.bucket,
@@ -224,7 +223,6 @@ export default {
               return
             }
             if (data.statusCode === 200) {
-              console.log(data.Location)
               const newData = data.Location.split('/').splice(1).join('/')
               options.onSuccess(newData)
             } else {
