@@ -73,7 +73,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="盲盒内容" prop="goods">
-          <div class="box-scroll">
+          <div v-if="form.goods && form.goods.length > 0" class="box-scroll">
             <div v-for="(item, index) in form.goods" :key="index">
               <span v-show="item.goods_id > 0">
                 <el-tag type="primary">藏品</el-tag> <el-tag v-if="item.goodType" :type="item.goodType | paraphrase(typeOptions, 'value', 'type')">{{ item.goodType | paraphrase(typeOptions) }}</el-tag> <span class="box-name ellipsis">名称：{{ item.name }}</span> <span class="box-stock">库存：{{ item.stock }}</span><span class="box-stock">剩余：{{ item.stock - (item.sales_num || 0) }}</span>
@@ -743,5 +743,8 @@ export default {
 .box-scroll {
   max-height: 200px;
   overflow-y: auto;
+  border: 1px solid #DCDFE6;
+  border-radius: 4px;
+  margin-bottom: 10px;
 }
 </style>
