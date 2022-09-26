@@ -73,14 +73,16 @@
           </el-select>
         </el-form-item>
         <el-form-item label="盲盒内容" prop="goods">
-          <div v-for="(item, index) in form.goods" :key="index">
-            <span v-show="item.goods_id > 0">
-              <el-tag type="primary">藏品</el-tag> <el-tag v-if="item.goodType" :type="item.goodType | paraphrase(typeOptions, 'value', 'type')">{{ item.goodType | paraphrase(typeOptions) }}</el-tag> <span class="box-name ellipsis">名称：{{ item.name }}</span> <span class="box-stock">库存：{{ item.stock }}</span><span class="box-stock">剩余：{{ item.stock - (item.sales_num || 0) }}</span>
-            </span>
-            <span v-show="item.goods_id === 0">
-              <el-tag type="warning">{{ integral }}</el-tag> <span class="box-name ellipsis">数量：{{ item.integral_num }}</span><span class="box-stock">库存：{{ item.stock }}</span>
-            </span>
-            <i v-show="!form.id" class="el-icon-delete del-good" @click="onDelGood(index)" />
+          <div class="box-scroll">
+            <div v-for="(item, index) in form.goods" :key="index">
+              <span v-show="item.goods_id > 0">
+                <el-tag type="primary">藏品</el-tag> <el-tag v-if="item.goodType" :type="item.goodType | paraphrase(typeOptions, 'value', 'type')">{{ item.goodType | paraphrase(typeOptions) }}</el-tag> <span class="box-name ellipsis">名称：{{ item.name }}</span> <span class="box-stock">库存：{{ item.stock }}</span><span class="box-stock">剩余：{{ item.stock - (item.sales_num || 0) }}</span>
+              </span>
+              <span v-show="item.goods_id === 0">
+                <el-tag type="warning">{{ integral }}</el-tag> <span class="box-name ellipsis">数量：{{ item.integral_num }}</span><span class="box-stock">库存：{{ item.stock }}</span>
+              </span>
+              <i v-show="!form.id" class="el-icon-delete del-good" @click="onDelGood(index)" />
+            </div>
           </div>
           <div v-if="[0, 1].includes(good.type)">
             <div v-if="good.type === 0" class="add-box">
@@ -737,5 +739,9 @@ export default {
 }
 .el-textarea ::v-deep .el-input__count {
   background-color: transparent;
+}
+.box-scroll {
+  max-height: 200px;
+  overflow-y: auto;
 }
 </style>
