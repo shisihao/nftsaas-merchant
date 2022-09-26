@@ -746,5 +746,6 @@ export default {
   border: 1px solid #DCDFE6;
   border-radius: 4px;
   margin-bottom: 10px;
+  padding: 5px 10px;
 }
 </style>
