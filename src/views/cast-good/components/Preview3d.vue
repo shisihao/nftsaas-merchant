@@ -58,9 +58,9 @@ export default {
           data.three_url.three_type = 'obj'
         }
         if (data.three_url && data.three_url.three_type === 'obj') {
-          this.src = `3d.html?obj=${data.three_url && data.three_url.three_obj}&mtl=${data.three_url && data.three_url.three_mtl}&bg=${this.bg_url}`
+          this.src = this.formatBgSrc(`3d.html?obj=${data.three_url && data.three_url.three_obj}&mtl=${data.three_url && data.three_url.three_mtl}`)
         } else if (data.three_url && data.three_url.three_type === 'gltf') {
-          this.src = `3d_gltf.html?gltf=${data.three_url && data.three_url.three_gltf}&bg=${this.bg_url}`
+          this.src = this.formatBgSrc(`3d_gltf.html?gltf=${data.three_url && data.three_url.three_gltf}`)
         }
       }
 
@@ -80,6 +80,9 @@ export default {
       getBackImage().then(({ data }) => {
         this.bg_url = data.value
       })
+    },
+    formatBgSrc(src) {
+      return this.bg_url ? `${src}&bg=${this.bg_url}` : src
     },
     onClose() {
       this.visible = false
