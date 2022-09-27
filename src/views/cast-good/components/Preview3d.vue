@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { getBackImage } from '@/api/configs'
 import { DominKey, getToken } from '@/utils/auth'
 import QRCode from 'qrcode'
 
@@ -42,8 +43,12 @@ export default {
       visible: false,
       src: '',
       QRUrl: '',
-      data: {}
+      data: {},
+      bg_url: ''
     }
+  },
+  created() {
+    this.getBgImg()
   },
   methods: {
     init(data) {
@@ -53,9 +58,9 @@ export default {
           data.three_url.three_type = 'obj'
         }
         if (data.three_url && data.three_url.three_type === 'obj') {
-          this.src = `3d.html?obj=${data.three_url && data.three_url.three_obj}&mtl=${data.three_url && data.three_url.three_mtl}`
+          this.src = `3d.html?obj=${data.three_url && data.three_url.three_obj}&mtl=${data.three_url && data.three_url.three_mtl}&bg=${this.bg_url}`
         } else if (data.three_url && data.three_url.three_type === 'gltf') {
-          this.src = `3d_gltf.html?gltf=${data.three_url && data.three_url.three_gltf}`
+          this.src = `3d_gltf.html?gltf=${data.three_url && data.three_url.three_gltf}&bg=${this.bg_url}`
         }
       }
 
@@ -69,6 +74,11 @@ export default {
       }, function(err, url) {
         if (err) throw new Error(err)
         _this.QRUrl = url
+      })
+    },
+    getBgImg() {
+      getBackImage().then(({ data }) => {
+        this.bg_url = data.value
       })
     },
     onClose() {
