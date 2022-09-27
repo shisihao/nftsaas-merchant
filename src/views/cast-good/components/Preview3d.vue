@@ -58,10 +58,11 @@ export default {
           data.three_url.three_type = 'obj'
         }
         if (data.three_url && data.three_url.three_type === 'obj') {
-          this.src = this.formatBgSrc(`3d.html?obj=${data.three_url && data.three_url.three_obj}&mtl=${data.three_url && data.three_url.three_mtl}`)
+          this.src = `3d.html?obj=${data.three_url && data.three_url.three_obj}&mtl=${data.three_url && data.three_url.three_mtl}`
         } else if (data.three_url && data.three_url.three_type === 'gltf') {
-          this.src = this.formatBgSrc(`3d_gltf.html?gltf=${data.three_url && data.three_url.three_gltf}`)
+          this.src = `3d_gltf.html?gltf=${data.three_url && data.three_url.three_gltf}`
         }
+        this.src += this.bg_url ? `&bg=${this.bg_url}` : ''
       }
 
       if (data.is_video) {
@@ -78,11 +79,8 @@ export default {
     },
     getBgImg() {
       getBackImage().then(({ data }) => {
-        this.bg_url = data.value
+        this.bg_url = data.value || ''
       })
-    },
-    formatBgSrc(src) {
-      return this.bg_url ? `${src}&bg=${this.bg_url}` : src
     },
     onClose() {
       this.visible = false
