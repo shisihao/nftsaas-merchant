@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="form.id ? $t('table.edit') : $t('table.add') " :visible.sync="visible" @closed="onClose()">
+  <el-dialog :title="form.id ? $t('table.edit') : $t('table.add') " :visible.sync="visible" :close-on-click-modal="false" :close-on-press-escape="false" @closed="onClose()">
     <el-form ref="form" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="类型" prop="type">
         <el-radio-group v-model="form.type">
@@ -19,47 +19,46 @@
       </el-form-item>
       <el-form-item v-if="form.type !== 2" :label="typeMaps[form.type] + '图标'" prop="icon">
         <el-popover
+          v-model="iconVisible"
           placement="bottom-start"
-          popper-class='p-menu__icon-popover'
+          popper-class="p-menu__icon-popover"
           trigger="click"
           :append-to-body="false"
-          v-model="iconVisible"
         >
           <span v-for="item of svgIcons" :key="item" class="popover-icons" @click="onHandleIcon(item)">
-            <svg-icon :icon-class="item" class="popover-icon-item"/>
+            <svg-icon :icon-class="item" class="popover-icon-item" />
           </span>
           <el-input slot="reference" v-model="form.icon" :placeholder="typeMaps[form.type] + '图标'" clearable>
-            <template slot="append" v-if="form.icon">
-              <svg-icon :icon-class="form.icon"/>
+            <template v-if="form.icon" slot="append">
+              <svg-icon :icon-class="form.icon" />
             </template>
           </el-input>
         </el-popover>
       </el-form-item>
       <el-form-item :label="'上级' + typeMaps[(form.type === 0 ? 1 : form.type) -1]" prop="pid">
         <el-popover
-          trigger='click'
-          ref='menuListPopover'
-          placement='bottom-start'
+          ref="menuListPopover"
           v-model="menuVisible"
+          trigger="click"
+          placement="bottom-start"
         >
           <el-tree
             v-if="menuVisible"
-            :data='menuList'
+            ref="menuListTree"
+            :data="menuList"
             :props="{ label: 'name', children: 'children' }"
-            node-key='id'
-            ref='menuListTree'
-            :default-expand-all='true'
-            :highlight-current='true'
-            :expand-on-click-node='false'
-            @node-click='menuListTreeCurrentChangeHandle'
-          >
-          </el-tree>
-          
+            node-key="id"
+            :default-expand-all="true"
+            :highlight-current="true"
+            :expand-on-click-node="false"
+            @node-click="menuListTreeCurrentChangeHandle"
+          />
+
           <el-input
+            slot="reference"
             v-model="form.parentName"
             :placeholder="'上级' + typeMaps[(form.type === 0 ? 1 : form.type) - 1]"
             clearable
-            slot="reference"
             @clear="onClearPid"
           />
         </el-popover>
@@ -90,7 +89,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
-import { dataList, addOrUpdate, menuItem } from '@/api/menu'
+import { dataList, addOrUpdate } from '@/api/menu'
 import { listTree } from '@/utils/index'
 import svgIcons from '@/utils/svg-icons'
 
@@ -122,7 +121,7 @@ export default {
         sort: 0,
         parentName: ''
       },
-      typeMaps: ["目录", "菜单", "按钮"],
+      typeMaps: ['目录', '菜单', '按钮'],
       menuRawList: [],
       rules: {
         name: [
@@ -130,7 +129,7 @@ export default {
           { validator: validateUsername, trigger: ['blur', 'change'] }
         ],
         alias: [
-          { required: true, message: '别名不能为空', trigger: ['blur', 'change'] },
+          { required: true, message: '别名不能为空', trigger: ['blur', 'change'] }
         ]
       }
     }
@@ -138,11 +137,11 @@ export default {
   computed: {
     menuList: {
       get() {
-        const types = [[0], [0], [0, 1]][this.form.type];
+        const types = [[0], [0], [0, 1]][this.form.type]
         return listTree(
           this.menuRawList.filter(m => types.includes(m.type)),
-          "id"
-        );
+          'id'
+        )
       }
     }
   },
@@ -162,14 +161,14 @@ export default {
     },
     onMenuList(id) {
       dataList().then(({ data = [] }) => {
-        const menuItem = data.filter(m => m.id === id)[0];
+        const menuItem = data.filter(m => m.id === id)[0]
         if (id) {
           Object.keys(this.form).forEach(k => {
-            this.form[k] = menuItem[k];
-          });
+            this.form[k] = menuItem[k]
+          })
         }
-        data = data.filter(m => m.id !== id);
-        this.menuRawList = data;
+        data = data.filter(m => m.id !== id)
+        this.menuRawList = data
       })
     },
     // 菜单树选中

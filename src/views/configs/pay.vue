@@ -18,6 +18,8 @@
       top="30px"
       title="配置"
       :visible.sync="visible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
       @closed="visible = false"
     >
       <div v-if="active === 1">

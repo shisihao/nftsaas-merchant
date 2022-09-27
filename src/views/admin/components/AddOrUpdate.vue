@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="form.id ? $t('table.edit') : $t('table.add') " :visible.sync="visible" @closed="onClose()">
+  <el-dialog :title="form.id ? $t('table.edit') : $t('table.add') " :visible.sync="visible" :close-on-click-modal="false" :close-on-press-escape="false" @closed="onClose()">
     <el-form ref="form" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" placeholder="名称" clearable />
@@ -22,8 +22,8 @@
             v-for="item in rolesOptions"
             :key="item.value"
             :label="item.label"
-            :value="item.value">
-          </el-option>
+            :value="item.value"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="状态" prop="state">
@@ -135,7 +135,7 @@ export default {
       this.visible = true
       this.getRoles()
       if (data) {
-        Object.keys(this.form).map( v => {
+        Object.keys(this.form).map(v => {
           if (data[v]) {
             this.form[v] = data[v]
           }
