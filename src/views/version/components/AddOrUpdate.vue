@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="form.id ? $t('table.edit') : $t('table.add')" :visible.sync="visible" @closed="onClose()">
+  <el-dialog :title="form.id ? $t('table.edit') : $t('table.add')" :visible.sync="visible" :close-on-click-modal="false" :close-on-press-escape="false" @closed="onClose()">
     <el-form ref="form" :model="form" :rules="rules" label-width="110px">
       <el-form-item label="版本类型" prop="type">
         <el-radio-group v-model="form.type" @change="onSelectType">
