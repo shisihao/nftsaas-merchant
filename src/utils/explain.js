@@ -43,6 +43,13 @@ export const logOrderStatusOptions = [
   { label: '已驳回', value: 3 }
 ]
 
+export const payStatusOptions = [
+  { label: '全部', value: '' },
+  { label: '待付款', value: 0, type: 'primary' },
+  { label: '已付款', value: 1, type: 'success' },
+  { label: '已关闭', value: 2, type: 'info' }
+]
+
 export const electricsStatusOptions = [
   { label: '全部', value: '' },
   { label: '待支付', value: 0 },

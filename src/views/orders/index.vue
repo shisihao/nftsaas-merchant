@@ -189,6 +189,19 @@
             </span>
             <el-divider direction="vertical" />
             <span>下单时间：{{ item.created_at }}</span>
+            <el-divider direction="vertical" />
+            <span>商户订单号：</span>
+            <el-tooltip v-if="item.sub_nos && item.sub_nos.length > 0" placement="top" effect="light">
+              <div slot="content">
+                <div v-for="(item, index) in item.sub_nos" :key="index" style="margin-top:5px;">
+                  <span>{{ index + 1 }}.</span>
+                  <span style="margin-left: 5px;">{{ item.sub_no }}</span>
+                  <el-tag effect="plain" :type="item.status | paraphrase(payStatusOptions, 'value', 'type')" style="margin-left: 5px;">{{ item.status | paraphrase(payStatusOptions) }}</el-tag>
+                </div>
+              </div>
+              <el-tag effect="dark" type="warning">+{{ item.sub_nos.length }}</el-tag>
+            </el-tooltip>
+            <span v-else>-</span>
           </template>
           <el-table-column min-width="240" header-align="center">
             <template slot-scope="{ row }">
@@ -420,7 +433,7 @@ import {
   getOrdersSafe,
   getOrdersIssued
 } from '@/api/order'
-import { orderTypeOptions, payOptions, pickerOptions, orderStatusOptions } from '@/utils/explain'
+import { orderTypeOptions, payOptions, pickerOptions, orderStatusOptions, payStatusOptions } from '@/utils/explain'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -433,6 +446,7 @@ export default {
       pickerOptions,
       payOptions,
       orderStatusOptions,
+      payStatusOptions,
       list: [],
       wait_count: 0,
       exception_count: 0,
