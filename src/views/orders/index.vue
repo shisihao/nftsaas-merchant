@@ -91,7 +91,7 @@
             <el-badge
               v-for="item in orderStatusOptions"
               :key="item.value"
-              :value="item.value === 0 && wait_count > 0 ? wait_count : item.value === 4 && exception_count > 0 ? exception_count : ''"
+              :value="item.value === 0 && wait_count > 0 ? wait_count : item.value === 5 && exception_count > 0 ? exception_count : ''"
               class="item"
             >
               <el-radio-button :label="item.value">

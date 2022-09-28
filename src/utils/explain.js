@@ -31,7 +31,8 @@ export const orderStatusOptions = [
   { label: '待发放', value: 1, type: 'primary' },
   { label: '已完成', value: 2, type: 'success' },
   { label: '已关闭', value: 3, type: 'info' },
-  { label: '异常订单', value: 4, type: 'danger' }
+  { label: '已退款', value: 4, type: 'info' },
+  { label: '异常订单', value: 5, type: 'danger' }
 ]
 
 export const logOrderStatusOptions = [
