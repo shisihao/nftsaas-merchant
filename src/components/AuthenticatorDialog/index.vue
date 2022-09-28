@@ -128,7 +128,7 @@ export default {
           addAuthenticator()
             .then(response => {
               this.data.secret = response.data.secret
-              QRCode.toDataURL(`otpauth://totp/提资产：${location.origin}?secret=${this.data.secret}`, opts, function(err, url) {
+              QRCode.toDataURL(`otpauth://totp/退款：${location.origin}?secret=${this.data.secret}`, opts, function(err, url) {
                 if (err) throw new Error(err)
                 _this.data.url = ''
                 _this.data.url = url
@@ -162,6 +162,7 @@ export default {
                 delAuthenticator(this.form)
                   .then(({ msg }) => {
                     setToken('1', 'security')
+                    this.form.code = ''
                     this.$message.success(msg)
                     this.authenticatorVisible = false
                   })
@@ -172,6 +173,7 @@ export default {
               } else {
                 setBind(this.form)
                   .then(({ msg }) => {
+                    this.form.code = ''
                     this.$message.success(msg)
                     this.authenticatorVisible = false
                   })
