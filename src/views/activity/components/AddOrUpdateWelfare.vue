@@ -64,7 +64,7 @@
               :disabled="oldfrom.id>0&&oldfrom.reward.stock>0"
             />
           </el-form-item>
-          <el-form-item :label="integral" prop="reward.wallet.integral">
+          <el-form-item v-if="integral_use" :label="integral" prop="reward.wallet.integral">
             <el-input-number
               v-model="form.reward.wallet.integral"
               :min="0"
@@ -80,7 +80,13 @@
               :disabled="oldfrom.id>0&&oldfrom.reward.stock>0"
             />
           </el-form-item>
-          <div class="notice notice-warning">注意：铸造券、兑换券、{{ integral }}、商品券填0代表不添加该奖励</div>
+          <div class="notice notice-warning">
+            注意：铸造券、兑换券、
+            <template v-if="integral_use">
+              {{ integral }}、
+            </template>
+            商品券填0代表不添加该奖励
+          </div>
           <el-form-item label="藏品/盲盒" prop="reward">
             <div v-for="(item, index) in form.reward.goods" :key="item.goods_id" class="box-wrapper">
               <span>
@@ -371,9 +377,6 @@ export default {
         'reward.wallet.voucher': [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ],
-        'reward.wallet.integral': [
-          { required: true, message: '不能为空', trigger: ['blur', 'change'] }
-        ],
         'reward.wallet.commodity': [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ],
@@ -387,7 +390,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral']),
+    ...mapGetters(['integral', 'integral_use']),
     surplusStock() {
       const boxStock = this.boxOptions.find(v => v.value === this.good.box_id)?.stock
       const goodStock = this.goodsOptions.find(v => v.value === this.good.goods_id)?.stock
@@ -401,8 +404,14 @@ export default {
     }
   },
   methods: {
+    initAboutIntegral() {
+      if (this.integral_use) {
+        this.rules = { ...this.rules, 'reward.wallet.integral': [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }] }
+      }
+    },
     init(data) {
       this.visible = true
+      this.initAboutIntegral()
       this.getGoodsList()
       this.getBoxList()
       if (data) {

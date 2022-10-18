@@ -197,7 +197,7 @@
       <el-form-item label="人民币价格" prop="cny_price">
         <el-input-number v-model="form.cny_price" :precision="2" :min="0" placeholder="请输入人民币价格" />
       </el-form-item>
-      <el-form-item :label="`${integral}价格`" prop="integral_price">
+      <el-form-item v-if="integral_use" :label="`${integral}价格`" prop="integral_price">
         <el-input-number v-model="form.integral_price" :precision="2" :min="0" placeholder="请输入价格" />
       </el-form-item>
       <el-divider />
@@ -365,7 +365,6 @@ export default {
         start_time: new Date(),
         images: [],
         cny_price: '',
-        integral_price: '',
         limit_num: '',
         stock: '',
         tags: [],
@@ -437,9 +436,6 @@ export default {
         author_avatar: [
           { required: true, message: '请选择创作者头像', trigger: ['blur', 'change'] }
         ],
-        integral_price: [
-          { required: true, message: `价格不能为空`, trigger: ['blur', 'change'] }
-        ],
         issuer: [
           { required: true, message: '请输入发行方', trigger: ['blur', 'change'] }
         ],
@@ -463,11 +459,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral'])
+    ...mapGetters(['integral', 'integral_use'])
   },
   methods: {
+    initAboutIntegral() {
+      if (this.integral_use) {
+        this.form = { ...this.form, integral_price: '' }
+        this.rules = { ...this.rules, integral_price: [{ required: true, message: `价格不能为空`, trigger: ['blur', 'change'] }] }
+      }
+    },
     init(data) {
       this.visible = true
+      this.initAboutIntegral()
       this.tagLists()
       this.castLists()
       if (data) {

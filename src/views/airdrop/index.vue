@@ -99,7 +99,7 @@
           <div>
             价格：¥{{ row.cny_price || 0.00 }}
           </div>
-          <div>
+          <div v-if="integral_use">
             {{ integral }}：{{ row.integral_price || 0.00 }}
           </div>
         </template>
@@ -296,7 +296,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral']),
+    ...mapGetters(['integral', 'integral_use']),
     swiper() {
       return function(v = 0) {
         return this.$refs[`mySwiper${v}`].$swiper

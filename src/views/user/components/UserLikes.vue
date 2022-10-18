@@ -56,7 +56,7 @@
       >
         <template slot-scope="{ row }">
           <div>人民币价格:{{ row.goods.cny_price || 0.00 }}</div>
-          <div>{{ integral }}价格:{{ row.goods.integral_price || 0.00 }}</div>
+          <div v-if="integral_use">{{ integral }}价格:{{ row.goods.integral_price || 0.00 }}</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -106,7 +106,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral'])
+    ...mapGetters(['integral', 'integral_use'])
   },
   methods: {
     init(data) {

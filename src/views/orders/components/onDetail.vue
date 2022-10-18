@@ -9,7 +9,7 @@
     <el-descriptions title="藏品信息" size="medium" style="margin-top: 10px" :column="3">
       <el-descriptions-item v-if="form.goods && form.goods.name" label="藏品名称">{{ form.goods.name }}</el-descriptions-item>
       <el-descriptions-item label="人民币价格">{{ form.cny_price || 0.00 }}</el-descriptions-item>
-      <el-descriptions-item :label="`${integral}价格`">{{ form.integral_price || 0.00 }}</el-descriptions-item>
+      <el-descriptions-item v-if="integral_use" :label="`${integral}价格`">{{ form.integral_price || 0.00 }}</el-descriptions-item>
       <el-descriptions-item label="下单时间">{{ form.created_at || '-' }}</el-descriptions-item>
       <el-descriptions-item label="数量">x{{ form.num }}</el-descriptions-item>
       <el-descriptions-item v-if="form.hash" label="交易HASH">{{ form.hash || '-' }}</el-descriptions-item>
@@ -25,14 +25,14 @@
     </el-descriptions>
     <el-descriptions title="支付价格" size="medium" style="margin-top: 10px" :column="3">
       <el-descriptions-item label="现金价格">¥ {{ form.cny_price || 0.00 }}</el-descriptions-item>
-      <el-descriptions-item :label="`${integral}价格`">{{ form.integral_price || 0.00 }}</el-descriptions-item>
+      <el-descriptions-item v-if="integral_use" :label="`${integral}价格`">{{ form.integral_price || 0.00 }}</el-descriptions-item>
     </el-descriptions>
     <el-descriptions title="支付方式" size="medium" style="margin-top: 10px" :column="3">
       <el-descriptions-item label="支付方式">
         <span v-if="form.cny_price > 0" style="margin-right: 5px">
           <svg-icon :icon-class="form.pay_type | paraphrase(payOptions, 'value', 'value')" /> {{ form.pay_type | paraphrase(payOptions) }}
         </span>
-        <span v-if="form.integral_price > 0">
+        <span v-if="form.integral_price > 0 && integral_use">
           <svg-icon icon-class="hd" /> {{ integral }}
         </span>
       </el-descriptions-item>
@@ -75,7 +75,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral'])
+    ...mapGetters(['integral', 'integral_use'])
   },
   methods: {
     init(data) {

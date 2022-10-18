@@ -311,13 +311,11 @@ export default {
       payTypeOptions: [
         { label: '藏品', value: 'goods_id' },
         { label: '盲盒', value: 'box_id' },
-        { label: this.$store.state.user.integral, value: 'integral' },
         { label: '铸造券', value: 'cast' },
         { label: '兑换券', value: 'voucher' },
         { label: '商品券', value: 'commodity' }
       ],
       typeObj: {
-        integral: this.$store.state.user.integral,
         cast: '铸造券',
         voucher: '兑换券',
         commodity: '商品券'
@@ -358,7 +356,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral']),
+    ...mapGetters(['integral', 'integral_use']),
     publicVisible() {
       const { reward_num, stock, icon, title } = this.selectRewardList
       return reward_num >= 1 && stock >= 0 && title.length > 0 && icon.length > 0 && this.stockStandard
@@ -377,8 +375,15 @@ export default {
     }
   },
   methods: {
+    initAboutIntegral() {
+      if (this.integral_use) {
+        this.payTypeOptions = [...this.payTypeOptions, { label: this.$store.state.user.integral, value: 'integral' }]
+        this.typeObj = { ...this.typeObj, integral: this.$store.state.user.integral }
+      }
+    },
     init(data) {
       this.visible = true
+      this.initAboutIntegral()
       if (data) {
         this.form.id = data.id
         this.getLuckDrawDetail(data.id)

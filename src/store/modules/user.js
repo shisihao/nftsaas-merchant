@@ -13,7 +13,8 @@ const state = {
   info: '',
   msgCount: '',
   roles: [],
-  integral: getToken('integral') || '积分'
+  integral: getToken('integral') || '积分',
+  integral_use: getToken('integral_use') === 'true' // 是否使用积分
 }
 
 const mutations = {
@@ -43,6 +44,9 @@ const mutations = {
   },
   SET_INTEGRAL: (state, data) => {
     state.integral = data
+  },
+  SET_INTEGRAL_USE: (state, data) => {
+    state.integral_use = data
   }
 }
 
@@ -97,6 +101,11 @@ const actions = {
         if (tenant && tip_day) {
           const info = Object.assign(tenant, tip_day)
           commit('SET_INFO', info)
+
+          const integral_use = info.template_id !== 2 // template_id为2时，不使用积分
+          commit('SET_INTEGRAL_USE', integral_use)
+          setToken(integral_use, 'integral_use')
+
           resolve(info)
         } else {
           reject('Has error')
@@ -156,6 +165,7 @@ const actions = {
       removeToken(DominKey)
       removeToken(AppKey)
       removeToken('integral')
+      removeToken('integral_use')
       resolve()
     })
   },

@@ -218,7 +218,7 @@
       <el-form-item label="人民币价格" prop="cny_price">
         <el-input-number v-model="form.cny_price" :precision="2" :min="0" placeholder="请输入人民币价格" />
       </el-form-item>
-      <el-form-item :label="`${integral}价格`" prop="integral_price">
+      <el-form-item v-if="integral_use" :label="`${integral}价格`" prop="integral_price">
         <el-input-number v-model="form.integral_price" :precision="2" :min="0" :placeholder="`请输入${integral}价格`" />
       </el-form-item>
       <el-divider />
@@ -352,7 +352,6 @@ export default {
         id: 0,
         type: '',
         is_three: 0,
-        integral_price: 0,
         name: '',
         cate_id: '',
         condition_goods_id: '',
@@ -413,7 +412,6 @@ export default {
         issuer_avatar: [{ required: true, message: '请选择发行方头像', trigger: ['blur', 'change'] }],
         issuer: [{ required: true, message: '请输入发行方', trigger: ['blur', 'change'] }],
         limit_num: [{ required: true, message: '请输入限购数量', trigger: ['blur', 'change'] }],
-        integral_price: [{ required: true, message: `价格不能为空`, trigger: ['blur', 'change'] }],
         start_time: [{ required: true, message: '请选择开售时间', trigger: ['blur', 'change'] }],
         is_more: [{ required: true, message: '请选择是否多次销售', trigger: ['blur', 'change'] }],
         total_stock: [{ required: true, message: '请输入本期发售数量', trigger: ['blur', 'change'] }],
@@ -428,7 +426,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral']),
+    ...mapGetters(['integral', 'integral_use']),
     dragOptions() {
       return {
         animation: 200,
@@ -439,7 +437,14 @@ export default {
     }
   },
   methods: {
+    initAboutIntegral() {
+      if (this.integral_use) {
+        this.form = { ...this.form, integral_price: 0 }
+        this.rules = { ...this.rules, integral_price: [{ required: true, message: `价格不能为空`, trigger: ['blur', 'change'] }] }
+      }
+    },
     init(data) {
+      this.initAboutIntegral()
       this.publicCategorys()
       this.tagLists()
       this.castLists()
