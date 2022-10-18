@@ -85,13 +85,11 @@ router.beforeEach(async(to, from, next) => {
 
               if (!store.getters.integral_use) {
                 const integralRoutes = ['integral', 'integral_price', 'task']
-                // 不使用积分，去除掉系统配置中关于积分的路由
+                // 不使用积分，过滤掉关于积分的路由
                 serverRoute = serverRoute.map(item => {
-                  if (item.alias === 'config') {
-                    item.list = item.list.filter((list_item) => {
-                      return !integralRoutes.includes(list_item.alias)
-                    })
-                  }
+                  item.list = item.list.filter((list_item) => {
+                    return !integralRoutes.includes(list_item.alias)
+                  })
                   return item
                 })
               }
