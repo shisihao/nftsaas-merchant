@@ -4,10 +4,10 @@
       <div class="app-step-title">
         请上传您的APP基本资料
       </div>
-      <el-steps :active="step" finish-status="success" simple>
+      <!-- <el-steps :active="step" finish-status="success" simple>
         <el-step title="1.上传基本资料" />
         <el-step title="2.选择APP模板" />
-      </el-steps>
+      </el-steps> -->
       <div class="app-step-content">
         <div v-show="step === 0">
           <div class="step-form">
@@ -31,7 +31,8 @@
             </el-form>
           </div>
           <div class="app-step-next">
-            <el-button type="primary" size="medium" @click="onStepNext">下一步</el-button>
+            <!-- <el-button type="primary" size="medium" @click="onStepNext">下一步</el-button> -->
+            <el-button type="primary" size="medium" :loading="btnLoading" @click="onDirectSubmit">确认</el-button>
           </div>
         </div>
         <div v-show="step === 1">
@@ -118,7 +119,8 @@
 
       <div>
         <p>
-          APP产品名：{{ form.app_name }}，模版：{{ templateList[activeIndex] ? templateList[activeIndex].name : '' }}，设计风格选择之后暂不可修改，确认选择？
+          <!-- 模版：{{ templateList[activeIndex] ? templateList[activeIndex].name : '' }}， -->
+          APP产品名：{{ form.app_name }}，设计风格选择之后暂不可修改，确认选择？
         </p>
         <p>
           <el-checkbox v-model="form.agree" label="我已阅读并同意" name="type" />
@@ -311,6 +313,19 @@ export default {
       this.activeIndex = this.activeName.split('_')[1]
       this.form.template_id = this.templateList[this.activeIndex].id
       this.agreementVisible = true
+    },
+    onDirectSubmit() {
+      // 现跳过下一步，直接提交
+      this.$refs['form'].validate(valid => {
+        if (valid) {
+          this.$refs.appStep.onsubmit()
+          if (this.form.start_logo && this.form.inside_logo && this.form.invite_logo) {
+            this.onSubmit()
+          }
+        } else {
+          this.$message.error('请输入APP产品名')
+        }
+      })
     },
     getAppLogoInfo(val) {
       for (const key in val) {
