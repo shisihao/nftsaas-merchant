@@ -120,12 +120,13 @@
       <div>
         <p>
           <!-- 模版：{{ templateList[activeIndex] ? templateList[activeIndex].name : '' }}， -->
-          APP产品名：{{ form.app_name }}，设计风格选择之后暂不可修改，确认选择？
+          <!-- APP产品名：{{ form.app_name }}，设计风格选择之后暂不可修改，确认选择？ -->
+          APP产品名：{{ form.app_name }}，确认提交？
         </p>
-        <p>
+        <!-- <p>
           <el-checkbox v-model="form.agree" label="我已阅读并同意" name="type" />
           <el-link type="primary" style="vertical-align: initial;" :underline="false" @click="dialogRenewalVisible = true">《使用协议》</el-link>
-        </p>
+        </p> -->
       </div>
 
       <div slot="footer" class="dialog-footer">
@@ -207,8 +208,8 @@ export default {
         start_logo: '',
         inside_logo: '',
         invite_logo: '',
-        template_id: 0,
-        agree: false
+        template_id: 0
+        // agree: false
       },
       appData: {},
       rules: {
@@ -336,9 +337,9 @@ export default {
       this.btnLoading = false
     },
     onConfirmAgreement() {
-      if (!this.form.agree) {
-        return this.$message.warning('请阅读并同意《使用协议》')
-      }
+      // if (!this.form.agree) {
+      //   return this.$message.warning('请阅读并同意《使用协议》')
+      // }
       setTem(this.form)
         .then(({ msg }) => {
           this.$message.success(msg)
