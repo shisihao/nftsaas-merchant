@@ -9,7 +9,7 @@
           </div>
           <div>
             <div>
-              <tem-app :color="form.default_color" :index="index" />
+              <tem-app :color="form.default_color" />
             </div>
             <div class="app-preview">
               我的APP预览
@@ -24,7 +24,7 @@
                 <div class="clolor-select" :style="`background-color: ${form.default_color};`" />
                 <p>推荐颜色</p>
                 <ul class="color-list">
-                  <li v-for="(value, index1) in colorList" :key="index1" :style="`background-color: ${value};`" @click="onSelectColor(value)" />
+                  <li v-for="(value, index) in colorList" :key="index" :style="`background-color: ${value};`" @click="onSelectColor(value)" />
                 </ul>
               </div>
             </div>
@@ -66,7 +66,6 @@ export default {
       contentLoading: true,
       btnLoading: false,
       activeName: 'app',
-      index: 0,
       originUrl: location.origin,
       colorList: [],
       defaultColor: '',
@@ -100,7 +99,6 @@ export default {
       dataList()
         .then((response) => {
           this.colorList = response.data.template.recommend_color
-          this.index = response.data.template.type
           this.defaultColor = response.data.default_color
           this.color = response.data.default_color
           this.form.default_color = response.data.default_color

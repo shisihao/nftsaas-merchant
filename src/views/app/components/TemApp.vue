@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul v-if="index === 1" class="app1">
+    <ul class="app1">
       <li v-for="(value, colorIndex) in templateList1" :key="colorIndex">
         <div class="phone-section">
           <el-image class="phone-box" :src="phoneBox" />
@@ -60,10 +60,6 @@ export default {
     color: {
       type: String,
       default: '#409EFF'
-    },
-    index: {
-      type: Number,
-      default: 0
     }
   },
   data() {
