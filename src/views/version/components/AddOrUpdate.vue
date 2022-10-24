@@ -22,6 +22,7 @@
           :show-file-list="true"
           :limit="1"
           :file-list="fileList"
+          source-type="ali"
           @handleBeforeUpload="beforeAvatarUpload"
           @handleSuccess="handleAvatarSuccess"
           @handleExceed="handleExceed"
@@ -159,10 +160,10 @@ export default {
       this.percentage = Number.parseFloat(p)
     },
     handleAvatarSuccess(response, file) {
-      this.form.link = response
+      this.form.link = response.name
       this.fileList = [{
-        name: response,
-        url: response
+        name: response.name,
+        url: response.name
       }]
     },
     beforeAvatarUpload(file, cb) {
