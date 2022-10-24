@@ -29,9 +29,7 @@
 <script>
 import { getToken, OssKey, setToken } from '@/utils/auth'
 import { getQiniuToken } from '@/api/qiniu'
-import { getAliToken } from '@/api/tenant'
 import COS from 'cos-js-sdk-v5'
-import OSS from 'ali-oss'
 import CalcVideo from '@/utils/calcVideo'
 import { mapGetters } from 'vuex'
 
@@ -78,10 +76,6 @@ export default {
       default: () => {
         return []
       }
-    },
-    sourceType: {
-      type: String,
-      default: 'tencent'
     }
   },
   data() {
@@ -99,27 +93,11 @@ export default {
     ...mapGetters(['info'])
   },
   created() {
-    if (this.sourceType === 'tencent') {
-      if (getToken(OssKey)) {
-        this.oss = JSON.parse(getToken(OssKey))
-      }
-    } else {
-      this.oss = {
-        AccessKeyId: '',
-        AccessKeySecret: '',
-        BucketName: '',
-        Expiration: '',
-        SecurityToken: ''
-      }
-      this.getAliToken()
+    if (getToken(OssKey)) {
+      this.oss = JSON.parse(getToken(OssKey))
     }
   },
   methods: {
-    getAliToken() {
-      getAliToken().then(({ data }) => {
-        this.oss = data
-      })
-    },
     handleBeforeUpload(file) {
       if (!this.showFileList) {
         this.loading = true
@@ -208,9 +186,15 @@ export default {
     },
     fnUploadRequest(options) {
       try {
-        if (getToken(OssKey) && this.sourceType === 'tencent') {
+        if (getToken(OssKey)) {
           this.oss = JSON.parse(getToken(OssKey))
         }
+
+        const cos = new COS({
+          SecretId: this.oss.credentials.tmpSecretId,
+          SecretKey: this.oss.credentials.tmpSecretKey,
+          SecurityToken: this.oss.credentials.sessionToken
+        })
 
         let filename = ''
         if (['three_url.three_image', 'three_url.three_bin'].includes(this.refName)) {
@@ -219,70 +203,36 @@ export default {
           filename = `${String(+new Date()) + Math.random().toString(36).substring(2)}.${options.file.name.split('.').pop()}`
         }
 
-        if (this.sourceType === 'tencent') {
-          const cos = new COS({
-            SecretId: this.oss.credentials.tmpSecretId,
-            SecretKey: this.oss.credentials.tmpSecretKey,
-            SecurityToken: this.oss.credentials.sessionToken
-          })
-
-          cos.putObject(
-            {
-              Bucket: this.oss.bucket,
-              Region: this.oss.region,
-              Key: this.info.id + '/' + filename,
-              Body: options.file,
-              onProgress: function(progressData) {
-                options.onProgress(progressData.percent)
-              }
-            },
-            (err, data) => {
-              if (err) {
-                console.log(err)
-                this.$message.error('上传失败，请重新上传')
-                getQiniuToken()
-                  .then((data) => {
-                    setToken(data.data, OssKey)
-                  })
-                this.loading = false
-                return
-              }
-              if (data.statusCode === 200) {
-                const newData = data.Location.split('/').splice(1).join('/')
-                options.onSuccess(newData)
-              } else {
-                options.onError('上传失败')
-              }
+        cos.putObject(
+          {
+            Bucket: this.oss.bucket,
+            Region: this.oss.region,
+            Key: this.info.id + '/' + filename,
+            Body: options.file,
+            onProgress: function(progressData) {
+              options.onProgress(progressData.percent)
+            }
+          },
+          (err, data) => {
+            if (err) {
+              console.log(err)
+              this.$message.error('上传失败，请重新上传')
+              getQiniuToken()
+                .then((data) => {
+                  setToken(data.data, OssKey)
+                })
               this.loading = false
+              return
             }
-          )
-        } else {
-          const client = new OSS({
-            region: 'oss-cn-hangzhou',
-            accessKeyId: this.oss.AccessKeyId,
-            accessKeySecret: this.oss.AccessKeySecret,
-            stsToken: this.oss.SecurityToken,
-            bucket: this.oss.BucketName,
-            refreshSTSToken: async() => {}
-          })
-
-          const _this = this
-          client.multipartUpload(filename, options.file, {
-            progress: function(p, cpt, res) {
-              _this.$emit('elProgress', p, cpt, res)
-            }
-          }).then(res => {
-            if (res.res.statusCode === 200) {
-              options.onSuccess(res)
+            if (data.statusCode === 200) {
+              const newData = data.Location.split('/').splice(1).join('/')
+              options.onSuccess(newData)
             } else {
               options.onError('上传失败')
             }
-          })
-            .catch((e) => {
-              this.$message.error('上传失败，请重新上传')
-              this.getAliToken()
-            })
-        }
+            this.loading = false
+          }
+        )
       } catch (e) {
         options.onError('上传失败')
       }

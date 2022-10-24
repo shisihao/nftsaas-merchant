@@ -22,7 +22,6 @@
           :show-file-list="true"
           :limit="1"
           :file-list="fileList"
-          source-type="ali"
           @handleBeforeUpload="beforeAvatarUpload"
           @handleSuccess="handleAvatarSuccess"
           @handleExceed="handleExceed"
