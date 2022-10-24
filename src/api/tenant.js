@@ -139,7 +139,7 @@ export function supplementOrder(params) {
 }
 
 // 服务器补充费订单支付
-export function paySupplementFee({id, ...data}) {
+export function paySupplementFee({ id, ...data }) {
   return request.post(`/tenantInfo/supplementOrders/pay/${id}`, {
     ...data
   })
@@ -160,7 +160,7 @@ export function maintainOrder(params) {
 }
 
 // 运维费订单支付
-export function payOprateFee({id, ...data}) {
+export function payOprateFee({ id, ...data }) {
   return request.post(`/tenantInfo/maintainOrders/pay/${id}`, {
     ...data
   })
@@ -169,6 +169,13 @@ export function payOprateFee({id, ...data}) {
 // 运维费订单列表导出
 export function maintainExport(params) {
   return request.get('/tenantInfo/maintainOrders/export', {
+    params
+  })
+}
+
+// 阿里云上传token
+export function getAliToken(params) {
+  return request.get('/oss_token', {
     params
   })
 }
