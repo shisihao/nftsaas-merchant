@@ -271,7 +271,7 @@ export default {
         ]
       } else {
         this.activeGoodsMetaOptions = [
-          this.goodsOptions.slice(0, 30),
+          ...this.goodsOptions.slice(0, 30),
           ...this.goodsGiveMetaOptions
         ]
       }
