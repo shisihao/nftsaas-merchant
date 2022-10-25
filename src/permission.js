@@ -81,7 +81,16 @@ router.beforeEach(async(to, from, next) => {
           // dynamically add accessible routes
           getMenuNav()
             .then(response => {
-              const serverRoute = response.data.menus || []
+              let serverRoute = response.data.menus || []
+
+              if (store.getters.info.wallet_status === 0) {
+                // 过滤掉云账号开户费用配置的路由
+                serverRoute = serverRoute.map(item => {
+                  item.list = item.list.filter(list_item => list_item.alias !== 'openAmount')
+                  return item
+                })
+              }
+
               const asyncRoutes = generateMenu([], serverRoute)
 
               store.dispatch('permission/generateRoutes1', { asyncRoutes: asyncRoutes, roles: roles })
