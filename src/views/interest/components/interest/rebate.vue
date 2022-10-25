@@ -269,12 +269,12 @@ export default {
     filterMethodGoodsSelect(val) {
       if (val) {
         this.activeGoodsMetaOptions = [
-          this.goodsOptions.filter((v) => v.label.indexOf(val) !== -1),
+          ...this.goodsOptions.filter((v) => v.label.indexOf(val) !== -1),
           ...this.goodsRebateMetaOptions
         ]
       } else {
         this.activeGoodsMetaOptions = [
-          this.goodsOptions.slice(0, 30),
+          ...this.goodsOptions.slice(0, 30),
           ...this.goodsRebateMetaOptions
         ]
       }
@@ -282,12 +282,12 @@ export default {
     filterMethodBoxSelect(val) {
       if (val) {
         this.activeBoxMetaOptions = [
-          this.boxOptions.filter((v) => v.label.indexOf(val) !== -1),
+          ...this.boxOptions.filter((v) => v.label.indexOf(val) !== -1),
           ...this.boxRebateMetaOptions
         ]
       } else {
         this.activeBoxMetaOptions = [
-          this.boxOptions.slice(0, 30),
+          ...this.boxOptions.slice(0, 30),
           ...this.boxRebateMetaOptions
         ]
       }

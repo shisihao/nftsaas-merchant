@@ -236,16 +236,16 @@ export default {
     },
     filterMethodGoodsSelect(val) {
       if (val) {
-        this.activeGoodsMetaOptions = [this.goodsOptions.filter(v => v.label.indexOf(val) !== -1), ...this.goodsFreeIntegralMetaOptions]
+        this.activeGoodsMetaOptions = [...this.goodsOptions.filter(v => v.label.indexOf(val) !== -1), ...this.goodsFreeIntegralMetaOptions]
       } else {
-        this.activeGoodsMetaOptions = [this.goodsOptions.slice(0, 30), ...this.goodsFreeIntegralMetaOptions]
+        this.activeGoodsMetaOptions = [...this.goodsOptions.slice(0, 30), ...this.goodsFreeIntegralMetaOptions]
       }
     },
     filterMethodBoxSelect(val) {
       if (val) {
-        this.activeBoxMetaOptions = [this.boxOptions.filter(v => v.label.indexOf(val) !== -1), ...this.boxFreeIntegralMetaOptions]
+        this.activeBoxMetaOptions = [...this.boxOptions.filter(v => v.label.indexOf(val) !== -1), ...this.boxFreeIntegralMetaOptions]
       } else {
-        this.activeBoxMetaOptions = [this.boxOptions.slice(0, 30), ...this.boxFreeIntegralMetaOptions]
+        this.activeBoxMetaOptions = [...this.boxOptions.slice(0, 30), ...this.boxFreeIntegralMetaOptions]
       }
     }
   }
