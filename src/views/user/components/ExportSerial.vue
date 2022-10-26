@@ -167,7 +167,7 @@ export default {
               exportSerialExcel(this.form)
                 .then((response) => {
                   this.visible = false
-                  location.href = this.domin + '/' + response.data.filename
+                  location.href = this.domin + response.data.filename
                 })
                 .catch(() => {})
                 .finally(() => {

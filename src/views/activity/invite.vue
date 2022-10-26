@@ -187,7 +187,7 @@ export default {
       this.downloadLoading = true
       exportInvite({ activity_id: data.id })
         .then(response => {
-          location.href = this.domin + '/' + response.data.filename
+          location.href = this.domin + response.data.filename
         })
         .catch(_ => {})
         .finally(_ => {

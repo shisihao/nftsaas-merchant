@@ -297,7 +297,7 @@ export default {
       this.downloadLoading = true
       exportExport(this.search)
         .then(response => {
-          location.href = this.domin + '/' + response.data.filename
+          location.href = this.domin + response.data.filename
         })
         .catch(() => {
         })

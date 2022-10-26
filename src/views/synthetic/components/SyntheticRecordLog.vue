@@ -126,7 +126,7 @@ export default {
       this.downloadLoading = true
       synthesisLogExport(this.id)
         .then(response => {
-          location.href = this.domin + '/' + response.data.filename
+          location.href = this.domin + response.data.filename
         })
         .catch(_ => {})
         .finally(_ => {
