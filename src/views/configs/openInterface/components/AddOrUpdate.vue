@@ -1,14 +1,14 @@
 <template>
   <div>
-    <p>{{ typeExplain[type] }}开发接口配置</p>
+    <p>{{ typeExplain[type] }}开放接口配置</p>
     <el-form ref="form" :model="form[type]" :rules="rules" label-width="110px">
       <template v-if="form[type]">
-        <el-form-item label="app_id" prop="app_id">
+        <el-form-item label="appId" prop="appId">
           <el-input
-            v-model="form[type].app_id"
+            v-model="form[type].appId"
             show-word-limit
             maxlength="50"
-            placeholder="请输入app_id"
+            placeholder="请输入appId"
           />
         </el-form-item>
         <el-form-item label="私钥" prop="private_key">
@@ -68,8 +68,8 @@ export default {
     return {
       btnLoading: false,
       rules: {
-        app_id: [
-          { required: true, message: 'app_id不能为空', trigger: 'blur' }
+        appId: [
+          { required: true, message: 'appId不能为空', trigger: 'blur' }
         ],
         private_key: [
           { required: true, message: '私钥不能为空', trigger: 'blur' }
