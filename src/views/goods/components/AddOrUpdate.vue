@@ -257,8 +257,14 @@
           <el-radio :label="0">是</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="是否同步" prop="sync_status">
+      <el-form-item label="是否同步奇藏果" prop="sync_status">
         <el-radio-group v-model="form.sync_status">
+          <el-radio :label="1">否</el-radio>
+          <el-radio :label="0">是</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="是否同步甘文交" prop="sync_gwj_status">
+        <el-radio-group v-model="form.sync_gwj_status">
           <el-radio :label="1">否</el-radio>
           <el-radio :label="0">是</el-radio>
         </el-radio-group>
@@ -376,6 +382,7 @@ export default {
         status: 0,
         give_status: 0,
         sync_status: 0,
+        sync_gwj_status: 0,
         total_stock: 0,
         serial: '',
         give_time: '',
@@ -421,6 +428,7 @@ export default {
         desc: [{ required: true, message: '请输入权益说明', trigger: ['blur', 'change'] }],
         give_status: [{ required: true, message: '请选择能否转赠', trigger: ['blur', 'change'] }],
         sync_status: [{ required: true, message: '请选择是否同步', trigger: ['blur', 'change'] }],
+        sync_gwj_status: [{ required: true, message: '请选择是否同步', trigger: ['blur', 'change'] }],
         reserve_stock: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
         prior_stock: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
         is_hot: [{ required: true, message: '请选择是否热销', trigger: ['blur', 'change'] }]
