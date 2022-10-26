@@ -222,22 +222,12 @@
       </el-table-column>
       <el-table-column width="70" label="是否同步奇藏果" align="center">
         <template slot-scope="{ row }">
-          <el-switch
-            v-model="row.sync_status"
-            :active-value="0"
-            :inactive-value="1"
-            @change="onChangeSellOut(row, 'sync_status')"
-          />
+          {{ row.sync_status?'否':'是' }}
         </template>
       </el-table-column>
       <el-table-column width="70" label="是否同步甘文交" align="center">
         <template slot-scope="{ row }">
-          <el-switch
-            v-model="row.sync_gwj_status"
-            :active-value="0"
-            :inactive-value="1"
-            @change="onChangeSellOut(row, 'sync_gwj_status')"
-          />
+          {{ row.sync_gwj_status?'否':'是' }}
         </template>
       </el-table-column>
       <el-table-column
