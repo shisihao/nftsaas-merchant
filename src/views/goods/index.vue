@@ -141,6 +141,12 @@
             类型：
             <el-link class="preview-btn" :underline="false" :type="goodShowType(row) | paraphrase(goodShowTypeOptions, 'value', 'type')">{{ goodShowType(row) | paraphrase(goodShowTypeOptions) }}</el-link>
           </div>
+          <div>
+            是否同步奇藏果：{{ row.sync_status?'否':'是' }}
+          </div>
+          <div>
+            是否同步甘文交：{{ row.sync_gwj_status?'否':'是' }}
+          </div>
         </template>
       </el-table-column>
 
@@ -218,16 +224,6 @@
             :inactive-value="1"
             @change="onChangeSellOut(row, 'give_status')"
           />
-        </template>
-      </el-table-column>
-      <el-table-column width="70" label="是否同步奇藏果" align="center">
-        <template slot-scope="{ row }">
-          {{ row.sync_status?'否':'是' }}
-        </template>
-      </el-table-column>
-      <el-table-column width="70" label="是否同步甘文交" align="center">
-        <template slot-scope="{ row }">
-          {{ row.sync_gwj_status?'否':'是' }}
         </template>
       </el-table-column>
       <el-table-column
