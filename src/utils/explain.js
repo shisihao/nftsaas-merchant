@@ -1,16 +1,22 @@
 import store from '@/store'
 const integral = store.getters.integral
+const info = store.getters.info
 
-export const payOptions = [
+const init_wallet = (array) => {
+  return info.wallet_status === 0 ? array : [...array, { label: '云账号钱包', value: 'sandpay' }]
+}
 
-  { label: '全部', value: '' },
-  { label: integral, value: 'integral' },
-  { label: '微信', value: 'wxpay' },
-  { label: '支付宝', value: 'alipay' },
-  // { label: '农行', value: 'abcpay' },
-  // { label: '京东', value: 'jdpay' },
-  { label: '银行卡快捷', value: 'bank' }
-]
+export const payOptions = init_wallet(
+  [
+    { label: '全部', value: '' },
+    { label: integral, value: 'integral' },
+    { label: '微信', value: 'wxpay' },
+    { label: '支付宝', value: 'alipay' },
+    // { label: '农行', value: 'abcpay' },
+    // { label: '京东', value: 'jdpay' },
+    { label: '银行卡快捷', value: 'bank' }
+  ]
+)
 
 export const whetherOptions = [
   { label: '全部', value: '' },

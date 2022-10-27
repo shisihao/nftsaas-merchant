@@ -620,3 +620,14 @@ export function putIntegralPrice(data) {
   })
 }
 
+// 云账号开户费用配置
+export function openAmount() {
+  return request.get('/configs/open_amount')
+}
+
+// 云账号开户费用配置
+export function putOpenAmount(data) {
+  return request.put('/configs/open_amount', {
+    ...data
+  })
+}
