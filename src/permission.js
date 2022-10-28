@@ -84,12 +84,14 @@ router.beforeEach(async(to, from, next) => {
               let serverRoute = response.data.menus || []
 
               if (!store.getters.integral_use) {
-                const integralRoutes = ['integral', 'integral_price', 'task']
+                const filterRoutes = ['integral', 'integral_price', 'task']
                 // 不使用积分，过滤掉关于积分的路由
                 serverRoute = serverRoute.map(item => {
-                  item.list = item.list.filter((list_item) => {
-                    return !integralRoutes.includes(list_item.alias)
-                  })
+                  if (Array.isArray(item.list)) {
+                    item.list = item.list.filter((list_item) => {
+                      return !filterRoutes.includes(list_item.alias)
+                    })
+                  }
                   return item
                 })
               }
