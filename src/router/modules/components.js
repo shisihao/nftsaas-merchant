@@ -87,5 +87,12 @@ export const localMap = {
   operationsOrder: () => import('@/views/tenant/operationsOrder'), // 运维费支付记录
   integralPrice: () => import('@/views/configs/integral-price'), // 积分单价配置
   openAmount: () => import('@/views/configs/openAmount'), // 云账号开户费用配置
-  refund: () => import('@/views/refund/index') // 退款管理
+  refund: () => import('@/views/refund/index'), // 退款管理
+  shop: () => import('@/views/shop/index'), // 商品分类
+  shopClassify: () => import('@/views/shop-classify/index'), // 商品管理
+  shopOrders: () => import('@/views/shop-orders/index'), // 实体商品订单管理
+  shopsCategory: () => import('@/views/shop-category/categoryIndex'), // 商品分类
+  orderRefund: () => import('@/views/orderRefund/index'), // 售后管理
+  refundTag: () => import('@/views/refundTag/index'), // 退货标签
+  deliverys: () => import('@/views/delivery/index') // 运费模版
 }

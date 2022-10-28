@@ -63,6 +63,9 @@
         <el-button type="primary" icon="el-icon-plus" @click="airBalanceBtn">
           用户资产空投
         </el-button>
+        <el-button type="primary" icon="el-icon-document" @click="onHandleDownloadFeeRank">
+          导出用户消费金额排名
+        </el-button>
       </el-form>
     </div>
     <el-table
@@ -277,6 +280,11 @@
       v-if="airBalanceVisible"
       ref="airBalance"
     />
+    <!-- 导出消费金额排名 -->
+    <fee-rank
+      v-if="feeRankVisible"
+      ref="feeRank"
+    />
   </div>
 </template>
 
@@ -296,10 +304,11 @@ import CollectionUpdate from '@/views/user/components/CollectionUpdate'
 import follow from '@/views/user/components/follow'
 import fans from '@/views/user/components/fans'
 import AirBalance from '@/views/user/components/AirBalance'
+import FeeRank from '@/views/user/components/FeeRank'
 
 export default {
   name: 'User',
-  components: { UserLikes, CollectionUpdate, Pagination, AddOrUpdate, Subset, Wallet, follow, fans, ExportSerial, AirBalance },
+  components: { UserLikes, CollectionUpdate, Pagination, AddOrUpdate, Subset, Wallet, follow, fans, ExportSerial, AirBalance, FeeRank },
   data() {
     return {
       domin: getToken(DominKey),
@@ -338,7 +347,8 @@ export default {
       fansVisible: false,
       followVisible: false,
       userLikesVisible: false,
-      airBalanceVisible: false
+      airBalanceVisible: false,
+      feeRankVisible: false
     }
   },
   created() {
@@ -494,6 +504,12 @@ export default {
       this.airBalanceVisible = true
       this.$nextTick(() => {
         this.$refs.airBalance && this.$refs.airBalance.init()
+      })
+    },
+    onHandleDownloadFeeRank() {
+      this.feeRankVisible = true
+      this.$nextTick(() => {
+        this.$refs.feeRank && this.$refs.feeRank.init()
       })
     }
   }

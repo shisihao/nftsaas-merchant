@@ -30,6 +30,11 @@
             <el-option v-for="item in sync_status_options" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
+        <el-form-item :label="`是否奖励${integral}`">
+          <el-select v-model="search.is_integral_reward" clearable @change="getList(1)">
+            <el-option v-for="item in whetherOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="发表时间">
           <el-date-picker
             v-model="dateRangeValue"
@@ -176,6 +181,14 @@
         </template>
       </el-table-column>
       <el-table-column
+        :label="`奖励${integral}`"
+        header-align="center"
+      >
+        <template slot-scope="{ row }">
+          <div>{{ row.integral_reward }}</div>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="商品标签"
         header-align="center"
       >
@@ -309,7 +322,8 @@ export default {
         sync_gwj_status: '',
         start_time: '',
         end_time: '',
-        tags: []
+        tags: [],
+        is_integral_reward: ''
       },
       pages: {
         total: 0,

@@ -200,7 +200,7 @@
           </div>
         </div>
       </el-form-item>
-      <el-form-item label="发行发头像" prop="issuer_avatar">
+      <el-form-item label="发行方头像" prop="issuer_avatar">
         <div class="filter-list-box">
           <div v-if="!!form.issuer_avatar" class="upload-images">
             <el-image :src="form.issuer_avatar && domin + form.issuer_avatar" class="upload-image" fit="cover" @click="onPicturePreview(form.issuer_avatar)" />
@@ -224,6 +224,9 @@
       <el-divider />
       <el-form-item label="限购数量" prop="limit_num">
         <el-input-number v-model="form.limit_num" :precision="0" :min="1" placeholder="请输入限购数量" />
+      </el-form-item>
+      <el-form-item :label="`奖励${integral}`" prop="integral_reward">
+        <el-input-number v-model="form.integral_reward" :precision="0" :min="0" :placeholder="`请输入奖励${integral}价格`" />
       </el-form-item>
       <el-form-item label="优先购库存" prop="prior_stock">
         <el-input-number v-model="form.prior_stock" :disabled="!!form.id" :precision="0" :min="0" :step="1" placeholder="请输入优先购库存" />
@@ -395,7 +398,8 @@ export default {
           three_bin: '',
           three_image: []
         },
-        sort: ''
+        sort: '',
+        integral_reward: 0
       },
       rules: {
         cast_goods_id: [{ required: true, message: '请选择铸造藏品', trigger: ['blur', 'change'] }],
@@ -431,7 +435,8 @@ export default {
         sync_gwj_status: [{ required: true, message: '请选择是否同步', trigger: ['blur', 'change'] }],
         reserve_stock: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
         prior_stock: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
-        is_hot: [{ required: true, message: '请选择是否热销', trigger: ['blur', 'change'] }]
+        is_hot: [{ required: true, message: '请选择是否热销', trigger: ['blur', 'change'] }],
+        integral_reward: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }]
       }
     }
   },

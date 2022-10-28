@@ -204,6 +204,9 @@
       <el-form-item label="限购数量" prop="limit_num">
         <el-input-number v-model="form.limit_num" :precision="0" :min="1" placeholder="请输入限购数量" />
       </el-form-item>
+      <el-form-item :label="`奖励${integral}`" prop="integral_reward">
+        <el-input-number v-model="form.integral_reward" :precision="0" :min="0" :placeholder="`请输入奖励${integral}价格`" />
+      </el-form-item>
       <div v-if="!form.id">
         <el-form-item label="发行方" prop="issuer">
           <el-input v-model="form.issuer" disabled placeholder="请输入发行方" />
@@ -389,7 +392,8 @@ export default {
           three_bin: '',
           three_image: []
         },
-        sort: ''
+        sort: '',
+        integral_reward: 0
       },
       rules: {
         cast_goods_id: [
@@ -466,7 +470,8 @@ export default {
           { required: true, message: '请选择能否转赠', trigger: ['blur', 'change'] }
         ],
         sync_status: [{ required: true, message: '请选择是否同步', trigger: ['blur', 'change'] }],
-        sync_gwj_status: [{ required: true, message: '请选择是否同步', trigger: ['blur', 'change'] }]
+        sync_gwj_status: [{ required: true, message: '请选择是否同步', trigger: ['blur', 'change'] }],
+        integral_reward: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }]
       }
     }
   },

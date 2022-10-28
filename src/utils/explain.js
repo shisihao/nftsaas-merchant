@@ -224,3 +224,36 @@ export const pickerOptions = {
     }
   }]
 }
+
+export const shopCateOptions = [
+  { label: '全部', value: '' },
+  { label: '普通专区', value: 1, type: 'primary' },
+  { label: '专属专区', value: 2, type: 'warning' },
+  { label: '兑换专区', value: 3, type: 'success' }
+]
+
+export const shopTypeOptions = [
+  { label: '全部', value: '' },
+  { label: '常规', value: 'common', type: 'primary' },
+  { label: '兑换', value: 'voucher', type: 'danger' },
+  { label: '商品劵', value: 'commodity', type: 'success' }
+]
+
+export const handleOptions = [
+  { label: '待处理', value: 0, type: 'primary' },
+  { label: '处理中', value: 1, type: 'warning' },
+  { label: '退货成功', value: 2, type: 'success' },
+  { label: '已拒绝', value: 3, type: 'danger' },
+  { label: '已撤销', value: 4, type: 'info' }
+]
+
+export const shopStatusOptions = [
+  { label: '全部', value: '' },
+  { label: '待付款', value: 0, count: 'wait_count', type: 'warning' },
+  { label: '待发货', value: 1, count: 'paid_count', type: 'primary' },
+  { label: '已发货', value: 2, count: 'delivery_count', type: 'success' },
+  { label: '已收货', value: 3, count: 'receipt_count', type: 'success' },
+  { label: '售后中', value: 6, count: 'close_count', type: 'danger' },
+  { label: '已完成', value: 4, count: 'success_count', type: 'info' },
+  { label: '已关闭', value: 5, count: 'close_count', type: 'danger' }
+]
