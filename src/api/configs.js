@@ -631,3 +631,14 @@ export function putOpenAmount(data) {
     ...data
   })
 }
+
+// 奖励积分有效期配置
+export function integralReward() {
+  return request.get('/configs/integral_reward')
+}
+
+export function putIntegralReward(data) {
+  return request.put('/configs/integral_reward', {
+    ...data
+  })
+}

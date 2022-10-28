@@ -42,6 +42,7 @@
 <script>
 import { exportSerialExcel } from '@/api/user'
 import { pickerOptions } from '@/utils/explain'
+import { getToken, DominKey } from '@/utils/auth'
 
 export default {
   name: 'FeeRank',
@@ -54,6 +55,7 @@ export default {
       }
     }
     return {
+      domin: getToken(DominKey),
       visible: false,
       btnLoading: false,
       pickerOptions,
@@ -100,9 +102,9 @@ export default {
             .then(() => {
               this.btnLoading = true
               exportSerialExcel(this.form)
-                .then(({ msg }) => {
+                .then((response) => {
                   this.visible = false
-                  this.$message.success(msg)
+                  location.href = this.domin + response.data.filename
                 })
                 .catch(() => {})
                 .finally(() => {

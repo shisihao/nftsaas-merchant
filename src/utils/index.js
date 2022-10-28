@@ -435,3 +435,32 @@ export function parseDate(input) {
   var parts = input.match(/(\d+)/g)
   return new Date(parts[0], parts[1] - 1, parts[2])
 }
+
+/**
+ * 笛卡尔积
+ * @param {*} arr
+ * @returns
+ */
+export function descartes(arr) {
+  var result = []
+  var point = []
+  var count = 1
+  for (var i = 0; i < arr.length; i++) {
+    point.push(arr[i].length)
+    count *= arr[i].length
+  }
+  for (let i = 0; i < count; i++) {
+    var _zb = []
+    var _tmp = i
+    for (var j = point.length - 1; j > -1; j--) {
+      _zb[j] = _tmp % point[j]
+      _tmp = parseInt(_tmp / point[j])
+    }
+    var _item = []
+    for (var k = 0; k < _zb.length; k++) {
+      _item[k] = arr[k][_zb[k]]
+    }
+    !!_item.length && result.push(_item)
+  }
+  return result
+}

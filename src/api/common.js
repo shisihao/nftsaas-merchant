@@ -196,3 +196,15 @@ export function usersSales(params) {
     params
   })
 }
+
+// 商品分类映射
+export function goodsCategoryList(params) {
+  return request.get('/public/goodsCategory/filter', {
+    params
+  })
+}
+
+// 运费模板列表
+export function filterDelivery() {
+  return request.get('public/filter/delivery')
+}
