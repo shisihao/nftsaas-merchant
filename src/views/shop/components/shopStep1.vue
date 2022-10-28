@@ -131,12 +131,12 @@
     <el-form-item label="默认等级折扣" prop="default_rebate">
       <el-input-number v-model="form.default_rebate" controls-position="right" :precision="0" :min="0" :max="100" />
     </el-form-item>
-    <el-form-item label="首页专区" prop="is_home">
+    <!-- <el-form-item label="首页专区" prop="is_home">
       <el-radio-group v-model="form.is_home">
         <el-radio :label="0">否</el-radio>
         <el-radio :label="1">是</el-radio>
       </el-radio-group>
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="开售时间" prop="start_time">
       <el-date-picker
         v-model="form.start_time"

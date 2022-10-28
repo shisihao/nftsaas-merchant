@@ -60,7 +60,7 @@ export default {
         sub_id: '',
         market_icon: '',
         market_price: 0,
-        is_home: 0,
+        // is_home: 0,
         cny_price: 0,
         integral_price: 0,
         images: [],
@@ -143,9 +143,7 @@ export default {
         start_time: [
           { required: true, message: '不能为空', trigger: ['change', 'blur'] }
         ],
-        is_home: [
-          { required: true, message: '不能为空', trigger: ['change', 'blur'] }
-        ],
+        // is_home: [{ required: true, message: '不能为空', trigger: ['change', 'blur'] }],
         is_postage: [
           { required: true, message: '不能为空', trigger: ['change', 'blur'] }
         ],
