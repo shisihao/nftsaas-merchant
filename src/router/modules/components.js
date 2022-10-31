@@ -95,5 +95,6 @@ export const localMap = {
   orderRefund: () => import('@/views/orderRefund/index'), // 售后管理
   refundTag: () => import('@/views/refundTag/index'), // 退货标签
   deliverys: () => import('@/views/delivery/index'), // 运费模版
-  integralReward: () => import('@/views/configs/integral-reward') // 奖励积分有效期配置
+  integralReward: () => import('@/views/configs/integral-reward'), // 奖励积分有效期配置
+  qualification: () => import('@/views/configs/qualification') // 购买资格提示
 }

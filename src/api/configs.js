@@ -642,3 +642,15 @@ export function putIntegralReward(data) {
     ...data
   })
 }
+
+// 购买资格提示
+export function qualification() {
+  return request.get('/configs/qualification')
+}
+
+// 购买资格提示
+export function putQualification(data) {
+  return request.put('/configs/qualification', {
+    ...data
+  })
+}
