@@ -86,7 +86,9 @@ router.beforeEach(async(to, from, next) => {
               if (store.getters.info.wallet_status === 0) {
                 // 过滤掉云账号开户费用配置的路由
                 serverRoute = serverRoute.map(item => {
-                  item.list = item.list.filter(list_item => list_item.alias !== 'openAmount')
+                  if (Array.isArray(item.list)) {
+                    item.list = item.list.filter(list_item => list_item.alias !== 'openAmount')
+                  }
                   return item
                 })
               }
