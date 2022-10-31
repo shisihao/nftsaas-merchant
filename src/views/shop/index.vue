@@ -11,7 +11,7 @@
             @keyup.enter.native="getList(1)"
           />
         </el-form-item>
-        <el-form-item label="商品分类">
+        <!-- <el-form-item label="商品分类">
           <el-select v-model="search.cate_id" clearable placeholder="商品分类" @change="getList(1)">
             <el-option
               v-for="(item, index) in shopCateOptions"
@@ -20,7 +20,7 @@
               :value="item.value"
             />
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="上架状态">
           <el-select v-model="search.status" clearable placeholder="上架状态" @change="getList(1)">
             <el-option label="全部" value="" />
@@ -162,7 +162,7 @@ export default {
       list: [],
       search: {
         name: '',
-        cate_id: '',
+        // cate_id: '',
         status: ''
       },
       pages: {
