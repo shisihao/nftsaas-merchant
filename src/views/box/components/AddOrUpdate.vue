@@ -117,7 +117,7 @@
           <el-input-number v-model="form.stock" disabled :min="0" :precision="0" placeholder="库存" />
         </el-form-item>
         <el-form-item label="预留库存" prop="reserve_stock">
-          <el-input-number v-model="form.reserve_stock" :disabled="!!form.id" :max="form.stock" :precision="0" :min="0" :step="1" placeholder="请输入预留库存" />
+          <el-input-number v-model="form.reserve_stock" :disabled="!!form.id" :max="form.id?form.reserve_stock:form.stock" :precision="0" :min="0" :step="1" placeholder="请输入预留库存" />
         </el-form-item>
         <el-form-item label="开售时间" prop="start_time">
           <el-date-picker
