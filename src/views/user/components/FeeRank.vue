@@ -40,7 +40,7 @@
   </el-dialog>
 </template>
 <script>
-import { exportSerialExcel } from '@/api/user'
+import { exportSpendExcel } from '@/api/user'
 import { pickerOptions } from '@/utils/explain'
 import { getToken, DominKey } from '@/utils/auth'
 
@@ -101,7 +101,7 @@ export default {
           })
             .then(() => {
               this.btnLoading = true
-              exportSerialExcel(this.form)
+              exportSpendExcel(this.form)
                 .then((response) => {
                   this.visible = false
                   location.href = this.domin + response.data.filename

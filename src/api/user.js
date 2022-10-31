@@ -121,3 +121,10 @@ export function airBalance(data) {
     ...data
   })
 }
+
+// 导出用户消费金额排名
+export function exportSpendExcel(params) {
+  return request.get(`/users/spend/export`, {
+    params
+  })
+}
