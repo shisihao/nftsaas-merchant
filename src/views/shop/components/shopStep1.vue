@@ -313,7 +313,7 @@ export default {
   },
   watch: {
     form(newVal) {
-      this.cateValue = [this.form.c_id, this.form.sub_id]
+      this.cateValue = this.form.sub_id ? [this.form.c_id, this.form.sub_id] : [this.form.c_id]
     }
   },
   created() {
