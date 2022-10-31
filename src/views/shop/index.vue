@@ -70,8 +70,11 @@
       <el-table-column label="商品信息" min-width="180" header-align="center">
         <template slot-scope="{ row }">
           <!-- <div>分类：<el-tag effect="plain" :type="row.cate_id | paraphrase(shopCateOptions, 'value', 'type')">{{ row.cate_id | paraphrase(shopCateOptions) }}</el-tag></div> -->
-          <div>价格：￥{{ row.cny_price || 0 | moneyToFormat }}</div>
-          <div>{{ integral }}：{{ row.integral_price || 0 | moneyToFormat }}</div>
+          <div v-if="row.type === 'voucher'">兑换藏品数量：{{ row.goods_num || 0 }}</div>
+          <template v-else>
+            <div>价格：￥{{ row.cny_price || 0 | moneyToFormat }}</div>
+            <div>{{ integral }}：{{ row.integral_price || 0 | moneyToFormat }}</div>
+          </template>
           <div>库存：{{ row.total_stock || 0 }}</div>
           <div>销量：{{ row.sales_num || 0 }}</div>
         </template>
