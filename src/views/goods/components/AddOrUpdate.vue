@@ -36,7 +36,7 @@
         <el-input-number v-model="form.stock" :disabled="!!form.id" :precision="0" :min="0" :step="1" placeholder="请输入库存" />
       </el-form-item>
       <el-form-item label="预留库存" prop="reserve_stock">
-        <el-input-number v-model="form.reserve_stock" :disabled="!!form.id" :max="form.stock" :precision="0" :min="0" :step="1" placeholder="请输入预留库存" />
+        <el-input-number v-model="form.reserve_stock" :disabled="!!form.id" :max="form.id?form.reserve_stock:form.stock*0.8" :precision="0" :min="0" :step="1" placeholder="请输入预留库存" />
       </el-form-item>
       <div v-if="[0].includes(form.type)">
         <div v-if="!form.id">

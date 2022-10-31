@@ -117,7 +117,7 @@
           <el-input-number v-model="form.stock" disabled :min="0" :precision="0" placeholder="库存" />
         </el-form-item>
         <el-form-item label="预留库存" prop="reserve_stock">
-          <el-input-number v-model="form.reserve_stock" :disabled="!!form.id" :max="form.stock" :precision="0" :min="0" :step="1" placeholder="请输入预留库存" />
+          <el-input-number v-model="form.reserve_stock" :disabled="!!form.id" :max="form.id?form.reserve_stock:form.stock" :precision="0" :min="0" :step="1" placeholder="请输入预留库存" />
         </el-form-item>
         <el-form-item label="开售时间" prop="start_time">
           <el-date-picker
@@ -128,6 +128,15 @@
             :picker-options="pickerOptions0"
             clearable
           />
+        </el-form-item>
+        <el-form-item label="能否转赠" prop="give_status">
+          <el-radio-group v-model="form.give_status">
+            <el-radio :label="1">否</el-radio>
+            <el-radio :label="0">是</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="转赠时间" prop="give_time">
+          <el-date-picker v-model="form.give_time" type="datetime" placeholder="转赠时间" value-format="yyyy-MM-dd HH:mm:ss" :picker-options="pickerOptions" clearable />
         </el-form-item>
         <div v-if="!form.id">
           <el-form-item label="发行方" prop="issuer">
@@ -217,7 +226,7 @@ import CustomUpload from '@/components/Upload/CustomUpload'
 import draggable from 'vuedraggable'
 import EditTinymce from './EditTinymce'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
-import { typeOptions } from '@/utils/explain'
+import { typeOptions, pickerOptions } from '@/utils/explain'
 import { conditionList } from '@/api/collection'
 import { mapGetters } from 'vuex'
 
@@ -231,6 +240,7 @@ export default {
           return time.getTime() < Date.now() - 8.64e7
         }
       },
+      pickerOptions,
       visible: false,
       btnLoading: false,
       drag: false,
@@ -280,7 +290,9 @@ export default {
         is_pre: 0,
         is_hot: 0,
         status: 0,
-        sort: 0
+        sort: 0,
+        give_status: 0,
+        give_time: ''
       },
       rules: {
         name: [
@@ -339,7 +351,8 @@ export default {
         ],
         issuer_avatar: [
           { required: true, message: '请选择发行方头像', trigger: ['blur', 'change'] }
-        ]
+        ],
+        give_status: [{ required: true, message: '请选择能否转赠', trigger: ['blur', 'change'] }]
       }
     }
   },
