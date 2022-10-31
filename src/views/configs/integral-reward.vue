@@ -43,7 +43,7 @@ export default {
       integralReward({ ...this.form })
         .then(response => {
           if (response.code !== 0) return
-          this.form = Object.assign({}, response.data.value)
+          this.form.integral_reward = response.data.value
         })
         .catch(() => {
         })
