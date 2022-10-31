@@ -116,6 +116,9 @@
           <div>
             排序: {{ row.sort }}
           </div>
+          <div>
+            转赠：{{ row.give_time }}
+          </div>
         </template>
       </el-table-column>
       <el-table-column
@@ -157,6 +160,16 @@
             :active-value="1"
             :inactive-value="0"
             @change="onChangeSellOut(row, 'sell_out')"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column width="70" label="是否转赠" align="center">
+        <template slot-scope="{ row }">
+          <el-switch
+            v-model="row.give_status"
+            :active-value="0"
+            :inactive-value="1"
+            @change="onChangeSellOut(row, 'give_status')"
           />
         </template>
       </el-table-column>
