@@ -351,6 +351,7 @@ export default {
               image: v.images && v.images[0]
             }
           })
+          this.newGoodsOptions = this.goodsOptions
         })
         .catch(() => { })
     },
