@@ -101,9 +101,9 @@ export default {
     },
     handleAvatarSuccess(response, file) {
       if (this.refName === 'image') {
-        this.form.image = response.name
+        this.form.image = response
       } else if (this.refName === 'icon') {
-        this.form.icon = response.name
+        this.form.icon = response
       }
     },
     beforeAvatarUpload(file, cb, refName) {

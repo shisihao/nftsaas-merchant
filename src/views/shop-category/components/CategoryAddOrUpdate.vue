@@ -107,7 +107,7 @@ export default {
       })
     },
     handleAvatarSuccess(response, file) {
-      this.form.image = response.name
+      this.form.image = response
     },
     beforeAvatarUpload(file, cb) {
       const type = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']

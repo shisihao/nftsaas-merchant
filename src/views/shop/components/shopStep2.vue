@@ -168,16 +168,6 @@
               <el-input-number v-model="row.goods_num" :disabled="form.is_change_stock?false:true" controls-position="right" class="table-input-number" :min="0" :precision="2" />
             </template>
           </el-table-column>
-          <el-table-column
-            v-if="form.type==='commodity'"
-            label="商品劵数量"
-            min-width="160"
-            align="center"
-          >
-            <template slot-scope="{ row }">
-              <el-input-number v-model="row.commodity_price" :disabled="form.is_change_stock?false:true" controls-position="right" class="table-input-number" :min="0" :precision="0" />
-            </template>
-          </el-table-column>
         </el-table>
 
         <div class="batch">
@@ -192,7 +182,7 @@
             >
               <template v-for="(item, index) in numOptions">
                 <el-option
-                  v-if="form.type==='commodity'&& item.value!==4 || form.type==='voucher'&& item.value!==3|| form.type==='common'&&item.value!==3&&item.value!==4"
+                  v-if="form.type==='commodity'&& item.value!==4 || form.type==='voucher'&& ![1,2].includes(item.value)|| form.type==='common'&&![4].includes(item.value)"
                   :key="index"
                   :label="item.label"
                   :value="item.value"
@@ -252,13 +242,6 @@ export default {
         numType: 0,
         numTotal: 0
       },
-      numOptions: [
-        { label: '剩余库存', value: 0 },
-        { label: '人民币价格', value: 1 },
-        { label: `${this.integral}价格`, value: 2 },
-        { label: '商品劵数量', value: 3 },
-        { label: '藏品数量', value: 4 }
-      ],
       temp: {
         name: '',
         value: ''
@@ -266,7 +249,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral'])
+    ...mapGetters(['integral']),
+    numOptions() {
+      return [
+        { label: '剩余库存', value: 0 },
+        { label: '人民币价格', value: 1 },
+        { label: `${this.integral}价格`, value: 2 },
+        { label: '藏品数量', value: 4 }
+      ]
+    }
   },
   created() {
     this.formatSkusList()
@@ -353,7 +344,7 @@ export default {
     },
     onSetNum() {
       const { numType, numTotal } = this.batch
-      const name = ['stock', 'cny_price', 'integral_price', 'commodity_price', 'goods_num']
+      const name = ['stock', 'cny_price', 'integral_price', 'goods_num']
       this.form.skus.forEach((v, i) => {
         this.form.skus[i][name[numType]] = numTotal
       })
@@ -364,7 +355,7 @@ export default {
     },
     handleAvatarSuccess(response, file) {
       const index = this.currentName.split('_')[1]
-      this.form.skus[index].image = response.name
+      this.form.skus[index].image = response
     },
     beforeAvatarUpload(file, cb, refName) {
       const type = ['image/jpeg', 'image/jpg', 'image/png']

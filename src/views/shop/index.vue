@@ -69,7 +69,7 @@
       />
       <el-table-column label="商品信息" min-width="180" header-align="center">
         <template slot-scope="{ row }">
-          <div>分类：<el-tag effect="plain" :type="row.cate_id | paraphrase(shopCateOptions, 'value', 'type')">{{ row.cate_id | paraphrase(shopCateOptions) }}</el-tag></div>
+          <!-- <div>分类：<el-tag effect="plain" :type="row.cate_id | paraphrase(shopCateOptions, 'value', 'type')">{{ row.cate_id | paraphrase(shopCateOptions) }}</el-tag></div> -->
           <div>价格：￥{{ row.cny_price || 0 | moneyToFormat }}</div>
           <div>{{ integral }}：{{ row.integral_price || 0 | moneyToFormat }}</div>
           <div>库存：{{ row.total_stock || 0 }}</div>

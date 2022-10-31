@@ -235,8 +235,8 @@ export const shopCateOptions = [
 export const shopTypeOptions = [
   { label: '全部', value: '' },
   { label: '常规', value: 'common', type: 'primary' },
-  { label: '兑换', value: 'voucher', type: 'danger' },
-  { label: '商品劵', value: 'commodity', type: 'success' }
+  { label: '兑换', value: 'voucher', type: 'danger' }
+  // { label: '商品劵', value: 'commodity', type: 'success' }
 ]
 
 export const handleOptions = [

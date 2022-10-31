@@ -23,7 +23,7 @@
         <el-option v-for="item in deliveryOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </el-form-item>
-    <el-form-item label="专区分类" prop="cate_id">
+    <!-- <el-form-item label="专区分类" prop="cate_id">
       <el-select v-model="form.cate_id" clearable placeholder="专区分类">
         <el-option
           v-for="(item, index) in shopCateOptions"
@@ -32,13 +32,12 @@
           :value="item.value"
         />
       </el-select>
-    </el-form-item>
-    <el-form-item v-if="form.cate_id" label="商品类型" prop="type">
+    </el-form-item> -->
+    <el-form-item label="商品类型" prop="type">
       <el-select v-model="form.type" clearable placeholder="商品类型" @change="changeShopType">
         <el-option
           v-for="(item, index) in shopTypeOptions"
           :key="index"
-          :disabled="form.cate_id===3&&item.value==='voucher'||form.cate_id===1&&['voucher','commodity'].includes(item.value)||form.cate_id===2&&item.value==='commodity'"
           :label="item.label"
           :value="item.value"
         />
@@ -65,21 +64,21 @@
       </el-select>
     </el-form-item>
     <div class="notice">
-      注意：专区分类为专属专区，必须选择指定藏品
+      注意：商品类型为兑换，必须选择指定藏品
     </div>
     <div v-if="form.type === 'common'">
-      <el-form-item v-if="form.cate_id!==3" label="人民币价格" prop="cny_price">
+      <el-form-item label="人民币价格" prop="cny_price">
         <el-input-number v-model="form.cny_price" controls-position="right" :precision="2" :min="0" />
       </el-form-item>
       <el-form-item :label="`${integral}价格`" prop="integral_price">
         <el-input-number v-model="form.integral_price" controls-position="right" :precision="2" :min="0" />
       </el-form-item>
     </div>
-    <div v-else-if="form.type==='commodity'">
+    <!-- <div v-else-if="form.type==='commodity'">
       <el-form-item label="商品劵数量" prop="commodity_price">
         <el-input-number v-model="form.commodity_price" controls-position="right" :precision="0" :min="0" />
       </el-form-item>
-    </div>
+    </div> -->
     <div v-else-if="form.type === 'voucher'">
       <el-form-item label="兑换藏品数量" prop="goods_num">
         <el-input-number v-model="form.goods_num" controls-position="right" :precision="0" :min="0" />
@@ -128,9 +127,9 @@
     <el-form-item label="单次限购数量" prop="single_limit_num">
       <el-input-number v-model="form.single_limit_num" controls-position="right" :precision="0" :min="1" />
     </el-form-item>
-    <el-form-item label="默认等级折扣" prop="default_rebate">
+    <!-- <el-form-item label="默认等级折扣" prop="default_rebate">
       <el-input-number v-model="form.default_rebate" controls-position="right" :precision="0" :min="0" :max="100" />
-    </el-form-item>
+    </el-form-item> -->
     <!-- <el-form-item label="首页专区" prop="is_home">
       <el-radio-group v-model="form.is_home">
         <el-radio :label="0">否</el-radio>
@@ -147,7 +146,7 @@
         clearable
       />
     </el-form-item>
-    <el-form-item label="平台logo" prop="market_icon">
+    <!-- <el-form-item label="平台logo" prop="market_icon">
       <custom-upload
         class-name="avatar-uploader"
         @handleBeforeUpload="beforeAvatarUpload"
@@ -160,7 +159,7 @@
     <div class="notice">注意：建议图片尺寸 64*64px</div>
     <el-form-item v-if="form.market_icon" label="划线价格" prop="market_price">
       <el-input-number v-model="form.market_price" placeholder="请输入" :precision="2" :min="0" controls-position="right" />
-    </el-form-item>
+    </el-form-item> -->
     <div class="more">
       <el-form-item label="商品图片" prop="images">
         <div class="filter-list-box">
@@ -246,7 +245,7 @@ export default {
       default: () => {
         return {
           name: '',
-          cate_id: '',
+          // cate_id: '',
           type: '',
           supplier: '',
           commodity_price: 0,
@@ -325,7 +324,7 @@ export default {
     init() {
       this.getPowerCategory()
       this.getPowerGood()
-      this.getLevelList()
+      // this.getLevelList()
       this.getDelivery()
     },
     getDelivery() {
@@ -386,10 +385,10 @@ export default {
       cb(true)
     },
     handleAvatarSuccesses(response, file) {
-      this.form.images.push(response.name)
+      this.form.images.push(response)
     },
     handleAvatarSuccess(response, file) {
-      this.form.market_icon = response.name
+      this.form.market_icon = response
     },
     onPicturePreview(img) {
       this.imageViewer.list = [this.domin + img]
@@ -428,6 +427,10 @@ export default {
       this.form.grade.splice(index, 1)
     },
     changeShopType() {
+      this.form.commodity_price = 0
+      this.form.cny_price = 0
+      this.form.integral_price = 0
+      this.form.goods_num = 0
       this.form.skus.forEach(v => {
         v.commodity_price = 0
         v.cny_price = 0
@@ -437,7 +440,7 @@ export default {
     },
     handleCateChange(val) {
       this.form.c_id = val[0]
-      this.form.sub_id = val[1] || ''
+      this.form.sub_id = val[1] || 0
     }
   }
 }

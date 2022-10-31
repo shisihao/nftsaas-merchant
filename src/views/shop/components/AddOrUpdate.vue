@@ -31,7 +31,7 @@ export default {
   components: { Step1, Step2, Step3 },
   data() {
     const validateConditionGoods = (rule, value, callback) => {
-      if (this.form.cate_id === 2 && this.form.condition_goods.length === 0) {
+      if (this.form.type === 'voucher' && this.form.condition_goods.length === 0) {
         callback(new Error('请选择'))
       } else {
         callback()
@@ -95,15 +95,15 @@ export default {
         supplier: [
           { required: true, message: '不能为空', trigger: ['change', 'blur'] }
         ],
-        cate_id: [
-          { required: true, message: '不能为空', trigger: ['change', 'blur'] }
-        ],
+        // cate_id: [
+        //   { required: true, message: '不能为空', trigger: ['change', 'blur'] }
+        // ],
         type: [
           { required: true, message: '不能为空', trigger: ['change', 'blur'] }
         ],
-        commodity_price: [
-          { required: true, message: '不能为空', trigger: ['change', 'blur'] }
-        ],
+        // commodity_price: [
+        //   { required: true, message: '不能为空', trigger: ['change', 'blur'] }
+        // ],
         goods_num: [
           { required: true, message: '不能为空', trigger: ['change', 'blur'] }
         ],
@@ -186,7 +186,7 @@ export default {
     onNext() {
       let isNext = true
       if (this.active === 1) {
-        this.$refs.form.validateField(['cate_id', 'name', 'desc', 'cny_price', 'integral_price', 'limit_num', 'images', 'sort', 'is_postage', 'condition_goods'], errMsg => {
+        this.$refs.form.validateField(['name', 'desc', 'cny_price', 'integral_price', 'limit_num', 'images', 'sort', 'is_postage', 'condition_goods'], errMsg => {
           if (errMsg) {
             isNext = false
           }
