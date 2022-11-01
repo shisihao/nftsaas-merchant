@@ -224,7 +224,7 @@
                     名称：{{ row.goods.name || '' }}
                   </div>
                   <div>价格：¥ {{ row.cny_price || 0.0 }}</div>
-                  <div>{{ integral }}：{{ row.integral_price || 0.0 }}</div>
+                  <div v-if="integral_use">{{ integral }}：{{ row.integral_price || 0.0 }}</div>
                   <div>数量：x{{ row.num }}</div>
                 </div>
               </div>
@@ -255,13 +255,13 @@
           <el-table-column width="180" header-align="center">
             <template slot-scope="{ row }">
               <div>支付价格：¥ {{ row.cny_price || 0.0 }}</div>
-              <div>支付{{ integral }}：{{ row.integral_price || 0.0 }}</div>
+              <div v-if="integral_use">支付{{ integral }}：{{ row.integral_price || 0.0 }}</div>
               <div>
                 支付方式：
                 <span v-if="row.cny_price > 0">
                   <svg-icon :icon-class="row.pay_type | paraphrase(payOptions, 'value', 'value')" /> {{ row.pay_type | paraphrase(payOptions) }}
                 </span>
-                <span v-if="row.integral_price > 0">
+                <span v-if="row.integral_price > 0 && integral_use">
                   <svg-icon icon-class="hd" /> {{ integral }}
                 </span>
               </div>
@@ -349,13 +349,25 @@
                   trigger="hover"
                 >
                   <div>
-                    {{
-                      [1].includes(row.trade_status)
-                        ? `${integral}链上交易失败`
-                        : [2].includes(row.trade_status)
-                          ? '藏品链上交易失败'
-                          : `${integral}、藏品链上交易失败`
-                    }}
+                    <template v-if="integral_use">
+                      {{
+                        [1].includes(row.trade_status)
+                          ? `${integral}链上交易失败`
+                          : [2].includes(row.trade_status)
+                            ? '藏品链上交易失败'
+                            : `${integral}、藏品链上交易失败`
+                      }}
+                    </template>
+                    <template v-else>
+                      {{
+                        [1].includes(row.trade_status)
+                          ? `链上交易失败`
+                          : [2].includes(row.trade_status)
+                            ? '藏品链上交易失败'
+                            : `藏品链上交易失败`
+                      }}
+                    </template>
+
                   </div>
                   <div slot="reference">
                     异常原因<i class="el-icon-question" />
@@ -491,7 +503,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['info', 'integral'])
+    ...mapGetters(['info', 'integral', 'integral_use'])
   },
   created() {
     this.init()

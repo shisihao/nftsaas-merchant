@@ -15,6 +15,7 @@ const getters = {
   errorLogs: state => state.errorLog.logs,
   configInfo: state => state.deploys.configInfo,
   msgCount: state => state.user.msgCount,
-  integral: state => state.user.integral
+  integral: state => state.user.integral,
+  integral_use: state => state.user.integral_use
 }
 export default getters

@@ -1,21 +1,30 @@
 import store from '@/store'
 const integral = store.getters.integral
+const integral_use = store.getters.integral_use
 const info = store.getters.info
+
+// 过滤积分相关内容
+const integralFilter = (array, value) => {
+  return integral_use ? array : array.filter(item => { return item.value !== value })
+}
 
 const init_wallet = (array) => {
   return info.wallet_status === 0 ? array : [...array, { label: '云账号钱包', value: 'sandpay' }]
 }
 
-export const payOptions = init_wallet(
-  [
-    { label: '全部', value: '' },
-    { label: integral, value: 'integral' },
-    { label: '微信', value: 'wxpay' },
-    { label: '支付宝', value: 'alipay' },
-    // { label: '农行', value: 'abcpay' },
-    // { label: '京东', value: 'jdpay' },
-    { label: '银行卡快捷', value: 'bank' }
-  ]
+export const payOptions = integralFilter(
+  init_wallet(
+    [
+      { label: '全部', value: '' },
+      { label: integral, value: 'integral' },
+      { label: '微信', value: 'wxpay' },
+      { label: '支付宝', value: 'alipay' },
+      // { label: '农行', value: 'abcpay' },
+      // { label: '京东', value: 'jdpay' },
+      { label: '银行卡快捷', value: 'bank' }
+    ]
+  ),
+  'integral'
 )
 
 export const whetherOptions = [
@@ -92,10 +101,13 @@ export const examineStatusOptions = [
   { label: '驳回', value: 2, type: 'danger' }
 ]
 
-export const payTypeOptions = [
-  { label: '全部', value: '' },
-  { label: integral, value: 'integral' }
-]
+export const payTypeOptions = integralFilter(
+  [
+    { label: '全部', value: '' },
+    { label: integral, value: 'integral' }
+  ],
+  'integral'
+)
 
 export const typeOptions = [
   { label: '全部', value: '' },
@@ -136,13 +148,16 @@ export const goodShowTypeOptions = [
   { label: '视频', value: 2, type: 'warning' }
 ]
 
-export const interestOptions = [
-  { label: '优先购', value: 'prior' },
-  { label: '转赠', value: 'give' },
-  { label: `免${integral}`, value: 'free_integral' },
-  { label: '零元购', value: 'free_cny' },
-  { label: '折扣购', value: 'rebate' }
-]
+export const interestOptions = integralFilter(
+  [
+    { label: '优先购', value: 'prior' },
+    { label: '转赠', value: 'give' },
+    { label: `免${integral}`, value: 'free_integral' },
+    { label: '零元购', value: 'free_cny' },
+    { label: '折扣购', value: 'rebate' }
+  ],
+  'free_integral'
+)
 
 export const streamTypeOptions = [
   { label: '全部', value: '' },

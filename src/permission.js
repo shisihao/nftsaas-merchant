@@ -105,6 +105,19 @@ router.beforeEach(async(to, from, next) => {
                 })
               }
 
+              if (!store.getters.integral_use) {
+                const filterRoutes = ['integral', 'integral_price', 'task']
+                // 不使用积分，过滤掉关于积分的路由
+                serverRoute = serverRoute.map(item => {
+                  if (Array.isArray(item.list)) {
+                    item.list = item.list.filter((list_item) => {
+                      return !filterRoutes.includes(list_item.alias)
+                    })
+                  }
+                  return item
+                })
+              }
+
               const asyncRoutes = generateMenu([], serverRoute)
 
               store.dispatch('permission/generateRoutes1', { asyncRoutes: asyncRoutes, roles: roles })

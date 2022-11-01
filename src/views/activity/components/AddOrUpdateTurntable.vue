@@ -152,7 +152,7 @@
         <el-form-item label="抽奖次数" prop="condition.num">
           <el-input-number v-model="form.condition.num" placeholder="请输入" :min="1" controls-position="right" />
         </el-form-item>
-        <el-form-item :label="`抽奖消耗(${integral})`" prop="condition.integral_num">
+        <el-form-item v-if="integral_use" :label="`抽奖消耗(${integral})`" prop="condition.integral_num">
           <el-input-number v-model="form.condition.integral_num" :min="0" :precision="2" controls-position="right" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="排序" prop="sort">
@@ -231,13 +231,11 @@ export default {
       payTypeOptions: [
         { label: '藏品', value: 'goods_id' },
         { label: '盲盒', value: 'box_id' },
-        { label: this.$store.state.user.integral, value: 'integral' },
         { label: '铸造券', value: 'cast' },
         { label: '兑换券', value: 'voucher' },
         { label: '商品券', value: 'commodity' }
       ],
       typeObj: {
-        integral: this.$store.state.user.integral,
         cast: '铸造券',
         voucher: '兑换券',
         commodity: '商品券'
@@ -275,15 +273,12 @@ export default {
         ],
         'condition.num': [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
-        ],
-        'condition.integral_num': [
-          { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ]
       }
     }
   },
   computed: {
-    ...mapGetters(['integral']),
+    ...mapGetters(['integral', 'integral_use']),
     publicVisible() {
       const { reward_num, stock } = this.selectRewardList
       return reward_num >= 1 && stock >= 0 && this.stockStandard
@@ -302,8 +297,16 @@ export default {
     }
   },
   methods: {
+    initAboutIntegral() {
+      if (this.integral_use) {
+        this.payTypeOptions = [...this.payTypeOptions, { label: this.$store.state.user.integral, value: 'integral' }]
+        this.typeObj = { ...this.typeObj, integral: this.$store.state.user.integral }
+        this.rules = { ...this.rules, 'condition.integral_num': [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }] }
+      }
+    },
     init(data) {
       this.visible = true
+      this.initAboutIntegral()
       if (data) {
         this.form.id = data.id
         this.getTurntableDetail(data.id)

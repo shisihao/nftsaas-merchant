@@ -102,7 +102,7 @@
         <el-form-item label="中奖人数" prop="num">
           <el-input-number v-model="form.num" :precision="0" :min="0" :disabled="!!form.id" />
         </el-form-item>
-        <el-form-item label="报名价格" prop="integral_price">
+        <el-form-item v-if="integral_use" label="报名价格" prop="integral_price">
           <el-input-number v-model="form.integral_price" :precision="2" :min="0" :disabled="!!form.id" />
         </el-form-item>
         <el-form-item label="排序" prop="sort">
@@ -141,6 +141,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { DominKey, getToken } from '@/utils/auth'
 import { addOrUpdate, activitiesList } from '@/api/activity'
 import CustomUpload from '@/components/Upload/CustomUpload'
@@ -194,7 +195,6 @@ export default {
         open_time: '',
         target_type: '',
         num: 0,
-        integral_price: 0,
         desc: '',
         detail: ''
       },
@@ -218,9 +218,6 @@ export default {
         num: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ],
-        integral_price: [
-          { required: true, message: '不能为空', trigger: ['blur', 'change'] }
-        ],
         desc: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] }
         ],
@@ -236,9 +233,19 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['integral_use'])
+  },
   methods: {
+    initAboutIntegral() {
+      if (this.integral_use) {
+        this.form = { ...this.form, integral_price: 0 }
+        this.rules = { ...this.rules, integral_price: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }] }
+      }
+    },
     init(data) {
       this.visible = true
+      this.initAboutIntegral()
       if (data) {
         this.activitiesOptions = [{
           label: data.goods.name,

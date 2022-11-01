@@ -60,7 +60,7 @@
         <el-button type="success" icon="el-icon-document" @click="onHandleDownloadSerial">
           指定藏品{{ $t('table.export') }} Excel
         </el-button>
-        <el-button type="primary" icon="el-icon-plus" @click="airBalanceBtn">
+        <el-button v-if="integral_use" type="primary" icon="el-icon-plus" @click="airBalanceBtn">
           用户资产空投
         </el-button>
         <el-button type="primary" icon="el-icon-document" @click="onHandleDownloadFeeRank">
@@ -289,6 +289,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Pagination from '@/components/Pagination'
 import { dataList, deleteData, exportOrder } from '@/api/user'
 import { forbidCancel } from '@/api/topic'
@@ -350,6 +351,9 @@ export default {
       airBalanceVisible: false,
       feeRankVisible: false
     }
+  },
+  computed: {
+    ...mapGetters(['integral_use'])
   },
   created() {
     this.init()

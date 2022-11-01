@@ -78,7 +78,7 @@
               <span v-show="item.goods_id > 0">
                 <el-tag type="primary">藏品</el-tag> <el-tag v-if="item.goodType" :type="item.goodType | paraphrase(typeOptions, 'value', 'type')">{{ item.goodType | paraphrase(typeOptions) }}</el-tag> <span class="box-name ellipsis">名称：{{ item.name }}</span> <span class="box-stock">库存：{{ item.stock }}</span><span class="box-stock">剩余：{{ item.stock - (item.sales_num || 0) }}</span>
               </span>
-              <span v-show="item.goods_id === 0">
+              <span v-show="item.goods_id === 0 && integral_use">
                 <el-tag type="warning">{{ integral }}</el-tag> <span class="box-name ellipsis">数量：{{ item.integral_num }}</span><span class="box-stock">库存：{{ item.stock }}</span>
               </span>
               <i v-show="!form.id" class="el-icon-delete del-good" @click="onDelGood(index)" />
@@ -95,7 +95,7 @@
                 </el-option>
               </el-select>
             </div>
-            <div v-if="good.type === 1" class="add-box">
+            <div v-if="good.type === 1 && integral_use" class="add-box">
               {{ integral }}：
               <el-input-number v-model="good.integral_num" :min="0" :precision="2" :placeholder="`${integral}`" />
             </div>
@@ -110,7 +110,7 @@
           </div>
           <div v-else>
             <el-button v-show="!form.id" type="primary" plain @click="onAddBoxType(0)">+ 藏品</el-button>
-            <el-button v-show="!form.id" type="warning" plain @click="onAddBoxType(1)">+{{ integral }}</el-button>
+            <el-button v-show="!form.id && integral_use" type="warning" plain @click="onAddBoxType(1)">+{{ integral }}</el-button>
           </div>
         </el-form-item>
         <el-form-item label="库存" prop="stock">
@@ -160,7 +160,7 @@
         <el-form-item label="人民币价格" prop="cny_price">
           <el-input-number v-model="form.cny_price" :min="0" :precision="2" placeholder="人民币价格" />
         </el-form-item>
-        <el-form-item :label="`${integral}价格`" prop="integral_price">
+        <el-form-item v-if="integral_use" :label="`${integral}价格`" prop="integral_price">
           <el-input-number v-model="form.integral_price" :min="0" :precision="2" :placeholder="`${integral}价格`" />
         </el-form-item>
         <el-form-item label="限购数量" prop="limit_num">
@@ -260,7 +260,6 @@ export default {
         name: '',
         type: '',
         goodType: '',
-        integral_num: 0,
         goods_id: 0,
         stock: 0,
         max_stock: 0
@@ -357,7 +356,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral']),
+    ...mapGetters(['integral', 'integral_use']),
     dragOptions() {
       return {
         animation: 200,
@@ -390,8 +389,14 @@ export default {
     }
   },
   methods: {
+    initAboutIntegral() {
+      if (this.integral_use) {
+        this.good = { ...this.good, integral_num: 0 }
+      }
+    },
     init(data) {
       this.visible = true
+      this.initAboutIntegral()
       this.getAuthorList()
       this.boxCategory()
       this.getTagList()
@@ -514,13 +519,15 @@ export default {
         }
       }
       if (this.good.type === 1) {
-        if (this.form.goods.some(v => parseFloat(this.good.integral_num) === parseFloat(v.integral_num))) {
-          this.$message.warning('不能重复添加')
-          return false
-        }
-        if (this.good.integral_num <= 0) {
-          this.$message.warning(`${this.integral}数量必须大于 0`)
-          return false
+        if (this.integral_use) {
+          if (this.form.goods.some(v => parseFloat(this.good.integral_num) === parseFloat(v.integral_num))) {
+            this.$message.warning('不能重复添加')
+            return false
+          }
+          if (this.good.integral_num <= 0) {
+            this.$message.warning(`${this.integral}数量必须大于 0`)
+            return false
+          }
         }
       }
       /* if (this.good.stock <= 0) {

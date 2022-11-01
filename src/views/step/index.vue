@@ -4,10 +4,10 @@
       <div class="app-step-title">
         请上传您的APP基本资料
       </div>
-      <el-steps :active="step" finish-status="success" simple>
+      <!-- <el-steps :active="step" finish-status="success" simple>
         <el-step title="1.上传基本资料" />
         <el-step title="2.选择APP模板" />
-      </el-steps>
+      </el-steps> -->
       <div class="app-step-content">
         <div v-show="step === 0">
           <div class="step-form">
@@ -31,7 +31,8 @@
             </el-form>
           </div>
           <div class="app-step-next">
-            <el-button type="primary" size="medium" @click="onStepNext">下一步</el-button>
+            <!-- <el-button type="primary" size="medium" @click="onStepNext">下一步</el-button> -->
+            <el-button type="primary" size="medium" :loading="btnLoading" @click="onDirectSubmit">确认</el-button>
           </div>
         </div>
         <div v-show="step === 1">
@@ -118,12 +119,14 @@
 
       <div>
         <p>
-          APP产品名：{{ form.app_name }}，模版：{{ templateList[activeIndex] ? templateList[activeIndex].name : '' }}，设计风格选择之后暂不可修改，确认选择？
+          <!-- 模版：{{ templateList[activeIndex] ? templateList[activeIndex].name : '' }}， -->
+          <!-- APP产品名：{{ form.app_name }}，设计风格选择之后暂不可修改，确认选择？ -->
+          APP产品名：{{ form.app_name }}，确认提交？
         </p>
-        <p>
+        <!-- <p>
           <el-checkbox v-model="form.agree" label="我已阅读并同意" name="type" />
           <el-link type="primary" style="vertical-align: initial;" :underline="false" @click="dialogRenewalVisible = true">《使用协议》</el-link>
-        </p>
+        </p> -->
       </div>
 
       <div slot="footer" class="dialog-footer">
@@ -205,8 +208,8 @@ export default {
         start_logo: '',
         inside_logo: '',
         invite_logo: '',
-        template_id: 0,
-        agree: false
+        template_id: 0
+        // agree: false
       },
       appData: {},
       rules: {
@@ -312,6 +315,19 @@ export default {
       this.form.template_id = this.templateList[this.activeIndex].id
       this.agreementVisible = true
     },
+    onDirectSubmit() {
+      // 现跳过下一步，直接提交
+      this.$refs['form'].validate(valid => {
+        if (valid) {
+          this.$refs.appStep.onsubmit()
+          if (this.form.start_logo && this.form.inside_logo && this.form.invite_logo) {
+            this.onSubmit()
+          }
+        } else {
+          this.$message.error('请输入APP产品名')
+        }
+      })
+    },
     getAppLogoInfo(val) {
       for (const key in val) {
         this.form[key] = val[key]
@@ -321,9 +337,9 @@ export default {
       this.btnLoading = false
     },
     onConfirmAgreement() {
-      if (!this.form.agree) {
-        return this.$message.warning('请阅读并同意《使用协议》')
-      }
+      // if (!this.form.agree) {
+      //   return this.$message.warning('请阅读并同意《使用协议》')
+      // }
       setTem(this.form)
         .then(({ msg }) => {
           this.$message.success(msg)

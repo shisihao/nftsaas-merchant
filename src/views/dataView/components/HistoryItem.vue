@@ -37,22 +37,24 @@
               累计销售额 <span> {{ statistics.sale.cny.total | moneyToFormat }}</span>
             </div>
             <el-divider />
-            <div class="user-title">
-              昨日销售{{ integral }}（个）
-            </div>
-            <div class="user-num">
-              <span>{{ statistics.sale.integral.yesterday }}</span>
-            </div>
-            <div class="user-text">
-              累计销售{{ integral }} <span> {{ statistics.sale.integral.total }}</span>
-            </div>
+            <template v-if="integral_use">
+              <div class="user-title">
+                昨日销售{{ integral }}（个）
+              </div>
+              <div class="user-num">
+                <span>{{ statistics.sale.integral.yesterday }}</span>
+              </div>
+              <div class="user-text">
+                累计销售{{ integral }} <span> {{ statistics.sale.integral.total }}</span>
+              </div>
+            </template>
           </el-card>
         </el-col>
       </el-row>
     </el-col>
     <el-col :xs="24" :span="12" class="card-panel-col">
       <el-row :gutter="20" class="panel-group">
-        <el-col :xs="24" :span="12">
+        <el-col v-if="integral_use" :xs="24" :span="12">
           <el-card shadow="never" class="card-boder">
             <div class="user-title">
               用户剩余{{ integral }}数量（个）
@@ -175,7 +177,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral'])
+    ...mapGetters(['integral', 'integral_use'])
   },
   created() {
   },

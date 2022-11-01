@@ -109,6 +109,7 @@
         align="center"
       />
       <el-table-column
+        v-if="integral_use"
         prop="integral_price"
         width="90"
         label="报名价格"
@@ -192,6 +193,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { dataList, deleteData, openData, openStatus } from '@/api/draw'
 import { getToken, DominKey } from '@/utils/auth'
 import { pickerOptions, statusOptions } from '@/utils/explain'
@@ -221,6 +223,9 @@ export default {
       },
       addOrUpdateVisible: false
     }
+  },
+  computed: {
+    ...mapGetters(['integral_use'])
   },
   created() {
     this.init()

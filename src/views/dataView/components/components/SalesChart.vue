@@ -72,8 +72,7 @@ export default {
     return {
       chart: null,
       payTypeOptions: [
-        { label: '现金', value: 'cny' },
-        { label: this.$store.state.user.integral, value: 'integral' }
+        { label: '现金', value: 'cny' }
       ],
       datas: {
         info: []
@@ -89,7 +88,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral'])
+    ...mapGetters(['integral', 'integral_use'])
   },
   watch: {
     datas: {
@@ -115,7 +114,13 @@ export default {
     this.chart = null
   },
   methods: {
+    initAboutIntegral() {
+      if (this.integral_use) {
+        this.payTypeOptions = [...this.payTypeOptions, { label: this.$store.state.user.integral, value: 'integral' }]
+      }
+    },
     init() {
+      this.initAboutIntegral()
       this.getList()
     },
     getList() {
