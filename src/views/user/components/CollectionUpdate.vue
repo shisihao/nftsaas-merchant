@@ -7,6 +7,15 @@
             <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
+        <el-form-item label="关键词">
+          <el-input v-model="search.keywords" placeholder="请输入关键词搜索" clearable @clear="getList(1)" @keyup.enter.native="getList(1)" />
+        </el-form-item>
+        <el-button icon="el-icon-search" @click="getList(1)">
+          {{ $t('table.search') }}
+        </el-button>
+        <el-button type="danger" icon="el-icon-collection-tag" :disabled="selectValue.length === 0" @click="onDeleteMore()">
+          批量转移
+        </el-button>
       </el-form>
       <h4>商品总数: {{ pages.total }}</h4>
       <el-table
@@ -14,7 +23,14 @@
         border
         highlight-current-row
         :data="list"
+        @selection-change="onHandleSelectionChange"
       >
+        <el-table-column
+          type="selection"
+          width="55"
+          align="center"
+          :selectable="getSelectEnable"
+        />
         <el-table-column
           prop="id"
           label="ID"
@@ -137,12 +153,14 @@ export default {
         current: 1
       },
       search: {
-        target_type: ''
+        target_type: '',
+        keywords: ''
       },
       form: {
         id: '',
         name: ''
-      }
+      },
+      selectValue: []
     }
   },
   methods: {
@@ -191,6 +209,21 @@ export default {
       this.GoogleCodeVisible = true
       this.$nextTick(() => {
         this.$refs.GoogleCode && this.$refs.GoogleCode.init(row)
+      })
+    },
+    getSelectEnable(row, rowIndex) {
+      if (row.status === 0) {
+        return true
+      }
+    },
+    onHandleSelectionChange(val) {
+      this.selectValue = val
+    },
+    onDeleteMore() {
+      const ids = this.selectValue.map(item => item.id)
+      this.GoogleCodeVisible = true
+      this.$nextTick(() => {
+        this.$refs.GoogleCode && this.$refs.GoogleCode.init({ id: ids })
       })
     }
   }
