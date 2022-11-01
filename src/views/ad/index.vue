@@ -153,13 +153,17 @@ export default {
       posList()
         .then(response => {
           const posOptions = [{ label: '全部', value: '' }]
-          this.adsPosOptions = posOptions.concat(response.data.map(v => {
-            return {
-              label: v.name,
-              value: v.id,
-              size: v.size
+          const showOptions = []
+          response.data.map(v => {
+            if (!['app:goods', 'app:box'].includes(v.alias)) {
+              showOptions.push({
+                label: v.name,
+                value: v.id,
+                size: v.size
+              })
             }
-          })).slice(0, 2)
+          })
+          this.adsPosOptions = posOptions.concat(showOptions)
         })
     },
     onHandleClick() {
