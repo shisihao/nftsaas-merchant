@@ -73,7 +73,7 @@
           <div v-if="row.type === 'voucher'">兑换藏品数量：{{ row.goods_num || 0 }}</div>
           <template v-else>
             <div>价格：￥{{ row.cny_price || 0 | moneyToFormat }}</div>
-            <div>{{ integral }}：{{ row.integral_price || 0 | moneyToFormat }}</div>
+            <div v-if="integral_use">{{ integral }}：{{ row.integral_price || 0 | moneyToFormat }}</div>
           </template>
           <div>库存：{{ row.total_stock || 0 }}</div>
           <div>销量：{{ row.sales_num || 0 }}</div>
@@ -180,7 +180,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral']),
+    ...mapGetters(['integral', 'integral_use']),
     swiper() {
       return function(v = 0) {
         return this.$refs[`mySwiper${v}`].$swiper

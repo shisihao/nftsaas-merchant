@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { addOrUpdate, getDataItem } from '@/api/shop'
 import Step1 from './shopStep1'
 import Step2 from './shopStep2'
@@ -62,7 +63,6 @@ export default {
         market_price: 0,
         // is_home: 0,
         cny_price: 0,
-        integral_price: 0,
         images: [],
         specs_properties: [],
         specifications: 1,
@@ -111,9 +111,6 @@ export default {
           { required: true, message: '不能为空', trigger: ['change', 'blur'] }
         ],
         cny_price: [
-          { required: true, message: '不能为空', trigger: ['change', 'blur'] }
-        ],
-        integral_price: [
           { required: true, message: '不能为空', trigger: ['change', 'blur'] }
         ],
         images: [
@@ -165,8 +162,18 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['integral_use'])
+  },
   methods: {
+    initAboutIntegral() {
+      if (this.integral_use) {
+        this.form = { ...this.form, integral_price: 0 }
+        this.rules = { ...this.rules, integral_price: [{ required: true, message: '不能为空', trigger: ['change', 'blur'] }] }
+      }
+    },
     init(data) {
+      this.initAboutIntegral()
       this.visible = true
       if (data?.id) {
         this.getGoodsItem(data?.id)

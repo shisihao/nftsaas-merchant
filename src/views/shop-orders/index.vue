@@ -182,7 +182,7 @@
             <div>
               价格：¥{{ row.cny_price || 0 | moneyToFormat }}
             </div>
-            <div>
+            <div v-if="integral_use">
               {{ integral }}：{{ row.integral_price || 0 }}
             </div>
             <div>购买量：{{ row.num }}</div>
@@ -327,7 +327,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral'])
+    ...mapGetters(['integral', 'integral_use'])
   },
   created() {
     this.init()

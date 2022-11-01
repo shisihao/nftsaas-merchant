@@ -70,7 +70,7 @@
       <el-form-item label="人民币价格" prop="cny_price">
         <el-input-number v-model="form.cny_price" controls-position="right" :precision="2" :min="0" />
       </el-form-item>
-      <el-form-item :label="`${integral}价格`" prop="integral_price">
+      <el-form-item v-if="integral_use" :label="`${integral}价格`" prop="integral_price">
         <el-input-number v-model="form.integral_price" controls-position="right" :precision="2" :min="0" />
       </el-form-item>
     </div>
@@ -301,7 +301,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral']),
+    ...mapGetters(['integral', 'integral_use']),
     dragOptions() {
       return {
         animation: 200,

@@ -33,7 +33,7 @@
         <el-descriptions-item label="支付方式">{{ form.entity_goods_order.pay_type | paraphrase(payTypeOptions) }}</el-descriptions-item>
         <el-descriptions-item label="人民币价格">{{ form.entity_goods_order.cny_price }}</el-descriptions-item>
         <el-descriptions-item label="商品券数量">{{ form.entity_goods_order.commodity_price }}</el-descriptions-item>
-        <el-descriptions-item :label="`${integral}数量`">{{ form.entity_goods_order.integral_price }}</el-descriptions-item>
+        <el-descriptions-item v-if="integral_use" :label="`${integral}数量`">{{ form.entity_goods_order.integral_price }}</el-descriptions-item>
       </el-descriptions>
 
       <el-descriptions title="售后状态" size="medium" :column="4">
@@ -52,7 +52,7 @@
       <el-descriptions v-if="[1,2,3].includes(form.status) " title="确认退款金额" size="medium" :column="4">
         <el-descriptions-item label="退款金额(元)">{{ form.cny_price }}</el-descriptions-item>
         <el-descriptions-item label="商品券数量">{{ form.entity_goods_order.commodity_price }}</el-descriptions-item>
-        <el-descriptions-item :label="`${integral}数量`">{{ form.entity_goods_order.integral_price }}</el-descriptions-item>
+        <el-descriptions-item v-if="integral_use" :label="`${integral}数量`">{{ form.entity_goods_order.integral_price }}</el-descriptions-item>
         <!-- <el-descriptions-item label="积分">{{ form.entity_goods_order.integral_deduction || 0 }}</el-descriptions-item> -->
       </el-descriptions>
 
@@ -120,7 +120,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral'])
+    ...mapGetters(['integral', 'integral_use'])
   },
   methods: {
     init(data) {

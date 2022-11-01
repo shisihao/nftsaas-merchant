@@ -149,6 +149,7 @@
               </template>
             </el-table-column>
             <el-table-column
+              v-if="integral_use"
               :label="integral"
               min-width="160"
               align="center"
@@ -249,14 +250,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral']),
+    ...mapGetters(['integral', 'integral_use']),
     numOptions() {
-      return [
+      let baseOption = [
         { label: '剩余库存', value: 0 },
         { label: '人民币价格', value: 1 },
         { label: `${this.integral}价格`, value: 2 },
         { label: '藏品数量', value: 4 }
       ]
+      if (!this.integral_use) {
+        baseOption = baseOption.filter(item => item.value !== 2)
+      }
+      return baseOption
     }
   },
   created() {

@@ -149,6 +149,7 @@
         prop="commodity_price"
       />
       <el-table-column
+        v-if="integral_use"
         :label="integral"
         width="100"
         align="center"
@@ -263,7 +264,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral']),
+    ...mapGetters(['integral', 'integral_use']),
     swiper() {
       return function(v = 0) {
         return this.$refs[`mySwiper${v}`].$swiper
