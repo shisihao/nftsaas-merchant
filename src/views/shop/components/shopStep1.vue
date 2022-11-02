@@ -128,7 +128,7 @@
       <el-input-number v-model="form.single_limit_num" controls-position="right" :precision="0" :min="1" />
     </el-form-item>
     <el-form-item v-if="form.type==='common'" label="默认等级折扣" prop="default_rebate">
-      <el-input-number v-model="form.default_rebate" controls-position="right" :precision="0" :min="0" :max="100" />
+      <el-input-number v-model="form.default_rebate" controls-position="right" :precision="0" :min="1" :max="100" />
     </el-form-item>
     <!-- <el-form-item label="首页专区" prop="is_home">
       <el-radio-group v-model="form.is_home">

@@ -51,7 +51,7 @@ export default {
         goods_num: 0,
         single_limit_num: 0,
         is_destroy: 0,
-        default_rebate: 0,
+        default_rebate: 100,
         desc: '',
         detail: '',
         cate_id: '',
