@@ -156,22 +156,6 @@ export default {
       visible: false,
       downloadLoading: false,
       payTypeOptions,
-      typeOptions: [
-        { label: '全部', value: '' },
-        { label: '完成任务', value: 'complete_task' },
-        { label: '开启盲盒', value: 'box_open' },
-        { label: '购买商品', value: 'goods' },
-        { label: '购买盲盒', value: 'box' },
-        // { label: '藏品铸造', value: 'cast' },
-        // { label: '铸造券购买', value: 'cast_buy' },
-        // { label: '话题上链', value: 'topic' },
-        { label: '申购抽签', value: 'activity' },
-        // { label: '徽章兑换', value: 'badge' },
-        { label: '退款', value: 'refund' },
-        { label: '其它', value: 'admin_assets' },
-        { label: '实体商品', value: 'entity_goods' },
-        { label: `${this.integral}奖励`, value: 'integral_reward' }
-      ],
       domin: getToken(DominKey),
       data: {
         id: 0,
@@ -217,7 +201,25 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral'])
+    ...mapGetters(['integral']),
+    typeOptions() {
+      return [
+        { label: '全部', value: '' },
+        { label: '完成任务', value: 'complete_task' },
+        { label: '开启盲盒', value: 'box_open' },
+        { label: '购买商品', value: 'goods' },
+        { label: '购买盲盒', value: 'box' },
+        // { label: '藏品铸造', value: 'cast' },
+        // { label: '铸造券购买', value: 'cast_buy' },
+        // { label: '话题上链', value: 'topic' },
+        { label: '申购抽签', value: 'activity' },
+        // { label: '徽章兑换', value: 'badge' },
+        { label: '退款', value: 'refund' },
+        { label: '其它', value: 'admin_assets' },
+        { label: '实体商品', value: 'entity_goods' },
+        { label: `${this.integral}奖励`, value: 'integral_reward' }
+      ]
+    }
   },
   watch: {
     activeNames(val, oldVal) { // 普通的watch监听
