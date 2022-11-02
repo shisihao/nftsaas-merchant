@@ -203,7 +203,7 @@ export default {
         })
     },
     onClose() {
-      this.visible = false
+      this.$reset('data', false)
     },
     onDelete(row, index) {
       this.GoogleCodeVisible = true

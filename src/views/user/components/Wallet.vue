@@ -21,7 +21,7 @@
           </template>
           <div v-for="(item, index) in walletDetail" :key="index">
             <template v-if="item.currency === 'integral'">
-              <el-divider content-position="left">铸造券数量</el-divider>
+              <el-divider content-position="left">{{ integral }}数量</el-divider>
               <el-row>
                 <el-col :span="8">剩余：{{ item.balance || 0 | cutZero }}</el-col>
                 <el-col :span="8">收入：{{ item.income || 0 | cutZero }}</el-col>
@@ -141,6 +141,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Pagination from '@/components/Pagination'
 import { wallet, walletList, exportExcel } from '@/api/user'
 import { DominKey, getToken } from '@/utils/auth'
@@ -212,6 +213,9 @@ export default {
       loadingWallet: false,
       setWalletVisible: false
     }
+  },
+  computed: {
+    ...mapGetters(['integral'])
   },
   watch: {
     activeNames(val, oldVal) { // 普通的watch监听
