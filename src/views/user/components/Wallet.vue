@@ -169,7 +169,8 @@ export default {
         // { label: '徽章兑换', value: 'badge' },
         { label: '退款', value: 'refund' },
         { label: '其它', value: 'admin_assets' },
-        { label: '实体商品', value: 'entity_goods' }
+        { label: '实体商品', value: 'entity_goods' },
+        { label: `${this.integral}奖励`, value: 'integral_reward' }
       ],
       domin: getToken(DominKey),
       data: {
