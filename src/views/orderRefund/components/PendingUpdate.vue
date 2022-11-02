@@ -32,8 +32,9 @@
       <el-descriptions title="付款信息" size="medium" :column="4">
         <el-descriptions-item label="支付方式">{{ form.entity_goods_order.pay_type | paraphrase(payTypeOptions) }}</el-descriptions-item>
         <el-descriptions-item label="人民币价格">{{ form.entity_goods_order.cny_price }}</el-descriptions-item>
-        <el-descriptions-item label="商品券数量">{{ form.entity_goods_order.commodity_price }}</el-descriptions-item>
         <el-descriptions-item :label="`${integral}数量`">{{ form.entity_goods_order.integral_price }}</el-descriptions-item>
+        <el-descriptions-item label="藏品数量">{{ form.entity_goods_order.goods_num }}</el-descriptions-item>
+        <!-- <el-descriptions-item label="商品券数量">{{ form.entity_goods_order.commodity_price }}</el-descriptions-item> -->
       </el-descriptions>
 
       <el-descriptions title="售后状态" size="medium" :column="4">
@@ -51,8 +52,9 @@
 
       <el-descriptions v-if="[1,2,3].includes(form.status) " title="确认退款金额" size="medium" :column="4">
         <el-descriptions-item label="退款金额(元)">{{ form.cny_price }}</el-descriptions-item>
-        <el-descriptions-item label="商品券数量">{{ form.entity_goods_order.commodity_price }}</el-descriptions-item>
         <el-descriptions-item :label="`${integral}数量`">{{ form.entity_goods_order.integral_price }}</el-descriptions-item>
+        <el-descriptions-item label="藏品数量">{{ form.entity_goods_order.goods_num }}</el-descriptions-item>
+        <!-- <el-descriptions-item label="商品券数量">{{ form.entity_goods_order.commodity_price }}</el-descriptions-item> -->
         <!-- <el-descriptions-item label="积分">{{ form.entity_goods_order.integral_deduction || 0 }}</el-descriptions-item> -->
       </el-descriptions>
 
@@ -87,7 +89,7 @@ export default {
       visible: false,
       btnLoading: false,
       domin: getToken(DominKey),
-      payTypeOptions: payTypeOptions.concat(payOptions),
+      payTypeOptions: payTypeOptions.concat(payOptions).concat({ label: '藏品兑换', value: 'voucherpay' }),
       handleOptions,
       form: {
         entity_goods_order: {

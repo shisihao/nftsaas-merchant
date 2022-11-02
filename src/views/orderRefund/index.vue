@@ -142,12 +142,12 @@
         align="center"
         prop="cny_price"
       />
-      <el-table-column
+      <!-- <el-table-column
         label="商品劵"
         width="100"
         align="center"
         prop="commodity_price"
-      />
+      /> -->
       <el-table-column
         :label="integral"
         width="100"
