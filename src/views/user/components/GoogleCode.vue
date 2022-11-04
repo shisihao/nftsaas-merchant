@@ -73,7 +73,10 @@ export default {
               onDestroy(this.form)
                 .then(({ msg = '转移成功' }) => {
                   this.visible = false
-                  this.$emit('refreshList')
+                  // 此处服务端是异步操作，暂延迟1s刷新
+                  setTimeout(() => {
+                    this.$emit('refreshList')
+                  }, 1000)
                 })
                 .catch(() => {})
                 .finally(() => {

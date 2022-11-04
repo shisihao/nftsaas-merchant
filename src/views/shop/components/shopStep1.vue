@@ -90,7 +90,7 @@
         </el-radio-group>
       </el-form-item>
     </div>
-    <el-form-item v-if="form.type==='common'" label="等级折扣" prop="grade">
+    <!-- <el-form-item v-if="form.type==='common'" label="等级折扣" prop="grade">
       <div v-for="(item,index) in form.grade" :key="index">
         等级：
         <el-tag type="warning">{{ item.grade_id | paraphrase(levelOptions,'id','name') }} </el-tag>
@@ -119,7 +119,7 @@
           注意：折扣范围 1-100 ，输入88代表8.8折
         </div>
       </div>
-    </el-form-item>
+    </el-form-item> -->
 
     <el-form-item label="限购数量" prop="limit_num">
       <el-input-number v-model="form.limit_num" controls-position="right" :precision="0" :min="1" />
@@ -127,9 +127,9 @@
     <el-form-item label="单次限购数量" prop="single_limit_num">
       <el-input-number v-model="form.single_limit_num" controls-position="right" :precision="0" :min="1" />
     </el-form-item>
-    <!-- <el-form-item label="默认等级折扣" prop="default_rebate">
-      <el-input-number v-model="form.default_rebate" controls-position="right" :precision="0" :min="0" :max="100" />
-    </el-form-item> -->
+    <el-form-item v-if="form.type==='common'" label="默认等级折扣" prop="default_rebate">
+      <el-input-number v-model="form.default_rebate" controls-position="right" :precision="0" :min="1" :max="100" />
+    </el-form-item>
     <!-- <el-form-item label="首页专区" prop="is_home">
       <el-radio-group v-model="form.is_home">
         <el-radio :label="0">否</el-radio>

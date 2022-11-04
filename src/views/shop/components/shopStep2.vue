@@ -254,6 +254,7 @@ export default {
     numOptions() {
       let baseOption = [
         { label: '剩余库存', value: 0 },
+        { label: '加权库存', value: 5 },
         { label: '人民币价格', value: 1 },
         { label: `${this.integral}价格`, value: 2 },
         { label: '藏品数量', value: 4 }
@@ -349,7 +350,7 @@ export default {
     },
     onSetNum() {
       const { numType, numTotal } = this.batch
-      const name = ['stock', 'cny_price', 'integral_price', 'goods_num']
+      const name = ['stock', 'cny_price', 'integral_price', '', 'goods_num', 'show_stock']
       this.form.skus.forEach((v, i) => {
         this.form.skus[i][name[numType]] = numTotal
       })

@@ -185,6 +185,9 @@
             <div v-if="integral_use">
               {{ integral }}：{{ row.integral_price || 0 }}
             </div>
+            <div>
+              藏品数量：{{ row.goods_num || 0 }}
+            </div>
             <div>购买量：{{ row.num }}</div>
             <div>
               <span v-if="row.pay_type === 'free'">
@@ -311,7 +314,7 @@ export default {
       },
       dateRangeValue: [],
       pickerOptions,
-      payOptions: payOptions.concat(payTypeOptions),
+      payOptions: payOptions.concat(payTypeOptions).concat({ label: '藏品兑换', value: 'voucherpay' }),
       shopStatusOptions,
       typeOptions,
       loading: false,
@@ -407,8 +410,8 @@ export default {
     onHandleDownload() {
       this.downloadLoading = true
       exportExcel(this.search)
-        .then(({ msg }) => {
-          this.$message.success(msg)
+        .then((response) => {
+          location.href = this.domin + response.data.filename
         })
         .catch((_) => {})
         .finally(() => {

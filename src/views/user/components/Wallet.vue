@@ -21,7 +21,7 @@
           </template>
           <div v-for="(item, index) in walletDetail" :key="index">
             <template v-if="item.currency === 'integral'">
-              <el-divider content-position="left">铸造券数量</el-divider>
+              <el-divider content-position="left">{{ integral }}数量</el-divider>
               <el-row>
                 <el-col :span="8">剩余：{{ item.balance || 0 | cutZero }}</el-col>
                 <el-col :span="8">收入：{{ item.income || 0 | cutZero }}</el-col>
@@ -141,6 +141,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Pagination from '@/components/Pagination'
 import { wallet, walletList, exportExcel } from '@/api/user'
 import { DominKey, getToken } from '@/utils/auth'
@@ -155,20 +156,6 @@ export default {
       visible: false,
       downloadLoading: false,
       payTypeOptions,
-      typeOptions: [
-        { label: '全部', value: '' },
-        { label: '完成任务', value: 'complete_task' },
-        { label: '开启盲盒', value: 'box_open' },
-        { label: '购买商品', value: 'goods' },
-        { label: '购买盲盒', value: 'box' },
-        // { label: '藏品铸造', value: 'cast' },
-        // { label: '铸造券购买', value: 'cast_buy' },
-        // { label: '话题上链', value: 'topic' },
-        { label: '申购抽签', value: 'activity' },
-        // { label: '徽章兑换', value: 'badge' },
-        { label: '退款', value: 'refund' },
-        { label: '其它', value: 'admin_assets' }
-      ],
       domin: getToken(DominKey),
       data: {
         id: 0,
@@ -211,6 +198,27 @@ export default {
       loading: false,
       loadingWallet: false,
       setWalletVisible: false
+    }
+  },
+  computed: {
+    ...mapGetters(['integral']),
+    typeOptions() {
+      return [
+        { label: '全部', value: '' },
+        { label: '完成任务', value: 'complete_task' },
+        { label: '开启盲盒', value: 'box_open' },
+        { label: '购买商品', value: 'goods' },
+        { label: '购买盲盒', value: 'box' },
+        // { label: '藏品铸造', value: 'cast' },
+        // { label: '铸造券购买', value: 'cast_buy' },
+        // { label: '话题上链', value: 'topic' },
+        { label: '申购抽签', value: 'activity' },
+        // { label: '徽章兑换', value: 'badge' },
+        { label: '退款', value: 'refund' },
+        { label: '其它', value: 'admin_assets' },
+        { label: '实体商品', value: 'entity_goods' },
+        { label: `${this.integral}奖励`, value: 'integral_reward' }
+      ]
     }
   },
   watch: {

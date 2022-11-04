@@ -128,3 +128,12 @@ export function moneyToFormat(value, length = 2) {
   const x = new BigNumber(`${value}`)
   return x.toFormat(length)
 }
+
+/**
+ * 注销用户手机号格式化
+ * @param {*} value
+ * @returns
+ */
+export function cancelPhone(value) {
+  return value.split('DEL').reverse()[0]
+}
