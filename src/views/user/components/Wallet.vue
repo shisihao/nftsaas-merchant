@@ -20,7 +20,7 @@
             <span style="color: #409eff;">{{ `${collapseTitle ? '收起' : '展开' }资产详情` }}</span>
           </template>
           <div v-for="(item, index) in walletDetail" :key="index">
-            <template v-if="item.currency === 'integral'">
+            <template v-if="item.currency === 'integral' && integral_use">
               <el-divider content-position="left">{{ integral }}数量</el-divider>
               <el-row>
                 <el-col :span="8">剩余：{{ item.balance || 0 | cutZero }}</el-col>
@@ -201,9 +201,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral']),
+    ...mapGetters(['integral', 'integral_use']),
     typeOptions() {
-      return [
+      const options = [
         { label: '全部', value: '' },
         { label: '完成任务', value: 'complete_task' },
         { label: '开启盲盒', value: 'box_open' },
@@ -219,6 +219,7 @@ export default {
         { label: '实体商品', value: 'entity_goods' },
         { label: `${this.integral}奖励`, value: 'integral_reward' }
       ]
+      return this.integral_use ? options : options.filter(item => item.value !== 'integral_reward')
     }
   },
   watch: {

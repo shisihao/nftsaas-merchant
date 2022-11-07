@@ -225,7 +225,7 @@
       <el-form-item label="限购数量" prop="limit_num">
         <el-input-number v-model="form.limit_num" :precision="0" :min="1" placeholder="请输入限购数量" />
       </el-form-item>
-      <el-form-item :label="`奖励${integral}`" prop="integral_reward">
+      <el-form-item v-if="integral_use" :label="`奖励${integral}`" prop="integral_reward">
         <el-input-number v-model="form.integral_reward" :precision="0" :min="0" :placeholder="`请输入奖励${integral}价格`" />
       </el-form-item>
       <el-form-item label="优先购库存" prop="prior_stock">
@@ -397,8 +397,7 @@ export default {
           three_bin: '',
           three_image: []
         },
-        sort: '',
-        integral_reward: 0
+        sort: ''
       },
       rules: {
         cast_goods_id: [{ required: true, message: '请选择铸造藏品', trigger: ['blur', 'change'] }],
@@ -433,8 +432,7 @@ export default {
         sync_gwj_status: [{ required: true, message: '请选择是否同步', trigger: ['blur', 'change'] }],
         reserve_stock: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
         prior_stock: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
-        is_hot: [{ required: true, message: '请选择是否热销', trigger: ['blur', 'change'] }],
-        integral_reward: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }]
+        is_hot: [{ required: true, message: '请选择是否热销', trigger: ['blur', 'change'] }]
       }
     }
   },
@@ -452,8 +450,12 @@ export default {
   methods: {
     initAboutIntegral() {
       if (this.integral_use) {
-        this.form = { ...this.form, integral_price: 0 }
-        this.rules = { ...this.rules, integral_price: [{ required: true, message: `价格不能为空`, trigger: ['blur', 'change'] }] }
+        this.form = { ...this.form, integral_price: 0, integral_reward: 0 }
+        this.rules = {
+          ...this.rules,
+          integral_price: [{ required: true, message: `价格不能为空`, trigger: ['blur', 'change'] }],
+          integral_reward: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }]
+        }
       }
     },
     init(data) {

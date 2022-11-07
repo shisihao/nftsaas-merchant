@@ -20,13 +20,13 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { pay, putPay } from '@/api/configs'
 import { payOptions } from '@/utils/explain'
 export default {
   name: 'Pay',
   data() {
     return {
-      payOptions: payOptions.slice(-2),
       btnLoading: false,
       form: {
         // on-开启 off-关闭
@@ -34,6 +34,12 @@ export default {
         bank: 'off'
       },
       rules: {}
+    }
+  },
+  computed: {
+    ...mapGetters(['integral_use']),
+    payOptions() {
+      return this.integral_use ? payOptions.slice(3) : payOptions.slice(2)
     }
   },
   created() {

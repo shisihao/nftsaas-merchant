@@ -279,7 +279,6 @@ export default {
         delete this.form.interests[val.value]
         this.tabIndex = this.checkLists[this.checkLists.length - 1] ?? ''
       }
-      console.log(this.tabIndex)
     },
     onRemoveTab(val) {
       this.checkLists.forEach((v, i) => {

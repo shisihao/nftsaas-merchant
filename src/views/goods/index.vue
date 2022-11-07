@@ -30,7 +30,7 @@
             <el-option v-for="item in sync_status_options" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`是否奖励${integral}`">
+        <el-form-item v-if="integral_use" :label="`是否奖励${integral}`">
           <el-select v-model="search.is_integral_reward" clearable @change="getList(1)">
             <el-option v-for="item in whetherOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
@@ -181,6 +181,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="integral_use"
         :label="`奖励${integral}`"
         header-align="center"
       >
