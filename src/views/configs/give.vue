@@ -20,6 +20,9 @@
       <el-form-item label="铸造藏品再次赠送限制天数" prop="cast_again">
         <el-input-number v-model="form.cast_again" :min="0" />
       </el-form-item> -->
+      <el-form-item v-if="info.template_id === 2" label="转赠费用" prop="fee">
+        <el-input-number v-model="form.fee" :min="0" />
+      </el-form-item>
       <el-form-item label="温馨提示">
         <el-input v-model="form.reminder" type="textarea" :rows="10" />
       </el-form-item>
@@ -33,6 +36,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { giveList, addGiveList } from '@/api/configs'
 
 export default {
@@ -60,11 +64,19 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['info'])
+  },
   created() {
+    console.log(this.info)
     this.init()
   },
   methods: {
     init() {
+      if (this.info.template_id === 2) {
+        this.form = { ...this.form, fee: 0 }
+        this.rule = { ...this.rule, fee: [{ required: true, message: '请输入转赠费用', trigger: 'blur' }] }
+      }
       this.getList()
     },
     getList(loading = true) {

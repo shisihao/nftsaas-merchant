@@ -189,6 +189,7 @@ export default {
         if (getToken(OssKey)) {
           this.oss = JSON.parse(getToken(OssKey))
         }
+
         const cos = new COS({
           SecretId: this.oss.credentials.tmpSecretId,
           SecretKey: this.oss.credentials.tmpSecretKey,
@@ -201,6 +202,7 @@ export default {
         } else {
           filename = `${String(+new Date()) + Math.random().toString(36).substring(2)}.${options.file.name.split('.').pop()}`
         }
+
         cos.putObject(
           {
             Bucket: this.oss.bucket,

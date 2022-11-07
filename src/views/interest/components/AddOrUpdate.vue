@@ -60,229 +60,54 @@
             </el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-        <el-tabs
-          v-model="tabIndex"
-          tab-position="left"
-          @tab-remove="onRemoveTab"
-        >
-          <el-tab-pane
-            v-for="item in checkLists"
-            :key="item"
-            :label="
-              priorOptions.find((v) => v.value === item) &&
-                priorOptions.find((v) => v.value === item).label
-            "
-            :closable="!oldCheckLists.find((v) => v === item)"
-            :name="item"
-          >
-            <el-form-item
-              label="权益类型"
-              :prop="'interests.' + item + '.type'"
-              :rules="{
-                required: true,
-                message: '请选择权益类型',
-                trigger: 'blur'
-              }"
-            >
-              <el-select
-                v-model="form.interests[item].type"
-                clearable
-                :disabled="!!form.id && !!oldCheckLists.find((v) => v === item)"
-                @change="onChangeType(item)"
-              >
-                <el-option
-                  v-for="(item1, index1) in priorItemOptions[item]"
-                  :key="index1"
-                  :label="item1.value | paraphrase(interestsOptions)"
-                  :value="item1.value"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item
-              v-if=" (!['rebate','give'].includes(item) &&
-                form.interests[item].type !== 'appoint' )||
-                (item !== 'prior' && form.interests[item].type === 'once' ) "
-              label="权益次数"
-              :prop="'interests.' + item + '.num'"
-              :rules="{
-                required: true,
-                message: '请输入权益次数',
-                trigger: 'blur'
-              }"
-            >
-              <el-input-number
-                v-model="form.interests[item].num"
-                :min="1"
-                :precision="0"
-                label="权益次数"
-              />
-            </el-form-item>
-            <el-form-item
-              v-if="item=== 'prior'"
-              label="优先购提前时间(分)"
-              :prop="'interests.' + item + '.prior_time'"
-              :rules="{
-                required: true,
-                message: '请输入优先购时间',
-                trigger: 'blur'
-              }"
-            >
-              <el-input-number
-                v-model="form.interests[item].prior_time"
-                :min="1"
-                :precision="0"
-                label="提前时间(分)"
-              />
-            </el-form-item>
-            <el-form-item
-              v-if="item=== 'give'"
-              label="藏品转赠解锁时间(天)"
-              :prop="'interests.' + item + '.give_days'"
-              :rules="{
-                required: true,
-                message: '请输入转赠时间',
-                trigger: 'blur'
-              }"
-            >
-              <el-input-number
-                v-model="form.interests[item].give_days"
-                :min="1"
-                :precision="0"
-                label="藏品转赠解锁时间(天)"
-              />
-            </el-form-item>
-            <el-form-item
-              v-if="
-                ['rebate', 'give'].includes(item) &&
-                  form.interests[item].type === 'long'
-              "
-              label="是否开启"
-            >
-              <el-switch
-                v-model="form.interests[item].num"
-                :active-value="1"
-                :inactive-value="0"
-              />
-            </el-form-item>
-            <div v-if="['rebate', 'entity'].includes(item)">
-              <el-form-item
-                label="折扣"
-                :prop="'interests.' + item + '.discount'"
-                :rules="{
-                  required: true,
-                  message: '请输入折扣',
-                  trigger: ['blur', 'change']
-                }"
-              >
-                <el-input-number
-                  v-model="form.interests[item].discount"
-                  :precision="0"
-                  :min="1"
-                  :max="100"
-                  placeholder="请输入折扣"
-                />
-              </el-form-item>
-              <div class="notice">注意：折扣范围 1-100 ，输入88代表8.8折</div>
-            </div>
-            <div v-if="form.interests[item].type === 'once'">
-              <el-form-item
-                label="有效时间"
-                :prop="'interests.' + item + '.expire_time'"
-                :rules="{
-                  required: true,
-                  message: '请选择有效时间',
-                  trigger: 'blur'
-                }"
-              >
-                <el-date-picker
-                  v-model="form.interests[item].expire_time"
-                  type="datetime"
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  placeholder="选择日期时间"
-                  :picker-options="pickerOptions0"
-                  align="right"
-                />
-              </el-form-item>
-            </div>
 
-            <div v-if="form.interests[item].type === 'once'">
-              <el-form-item
-                label="是否销毁"
-                :prop="'interests.' + item + '.is_destroy'"
-                :rules="{
-                  required: true,
-                  message: '请选择是否销毁',
-                  trigger: 'blur'
-                }"
-              >
-                <el-radio-group v-model="form.interests[item].is_destroy">
-                  <el-radio :label="0">否</el-radio>
-                  <el-radio :label="1">是</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </div>
-            <div v-if="form.interests[item].type === 'appoint'">
-              <el-form-item
-                label="指定藏品"
-                :prop="'interests.' + item + '.buy.goods'"
-                :rules="{ validator: validateGoodAndBox, trigger: ['blur', 'change'] }"
-              >
-                <el-select
-                  v-model="form.interests[item].buy.goods"
-                  class="select-input"
-                  filterable
-                  multiple
-                  clearable
-                >
-                  <el-option
-                    v-for="(goodsItem, index) in goodsOptions"
-                    :key="index"
-                    :label="goodsItem.label"
-                    :value="goodsItem.value"
-                  >
-                    <span>#{{ goodsItem.value }}</span>
-                    <el-image
-                      class="good-img"
-                      fit="cover"
-                      :src="goodsItem.image && domin + goodsItem.image"
-                    />
-                    <span>
-                      {{ goodsItem.label }}
-                    </span>
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item
-                label="指定盲盒"
-                :prop="'interests.' + item + '.buy.box'"
-                :rules="{ validator: validateGoodAndBox, trigger: ['blur', 'change'] }"
-              >
-                <el-select
-                  v-model="form.interests[item].buy.box"
-                  class="select-input"
-                  filterable
-                  multiple
-                  clearable
-                >
-                  <el-option
-                    v-for="(boxItem, index) in boxOptions"
-                    :key="index"
-                    :label="boxItem.label"
-                    :value="boxItem.value"
-                  >
-                    <span>#{{ boxItem.value }}</span>
-                    <el-image
-                      class="good-img"
-                      fit="cover"
-                      :src="boxItem.image && domin + boxItem.image"
-                    />
-                    <span>
-                      {{ boxItem.label }}
-                    </span>
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </div>
+        <el-tabs v-model="tabIndex" tab-position="left" @tab-remove="onRemoveTab">
+          <el-tab-pane v-for="item in checkLists" :key="item" :label="priorOptions.find(v => v.value === item) && priorOptions.find(v => v.value === item).label" :closable="!oldCheckLists.find(v => v === item)" :name="item">
+            <!-- 优先购 -->
+            <prior
+              v-if="tabIndex === 'prior'"
+              :form.sync="form"
+              :old-check-lists="oldCheckLists"
+              :prior-item-options="JSON.stringify(priorItemOptions)"
+              :goods-options="goodsOptions"
+              :box-options="boxOptions"
+            />
+            <!-- 转赠 -->
+            <give
+              v-if="tabIndex === 'give'"
+              :form.sync="form"
+              :old-check-lists="oldCheckLists"
+              :prior-item-options="JSON.stringify(priorItemOptions)"
+              :goods-options="goodsOptions"
+              :box-options="boxOptions"
+            />
+            <!-- 折扣购 -->
+            <rebate
+              v-if="tabIndex === 'rebate'"
+              :form.sync="form"
+              :old-check-lists="oldCheckLists"
+              :prior-item-options="JSON.stringify(priorItemOptions)"
+              :goods-options="goodsOptions"
+              :box-options="boxOptions"
+            />
+            <!-- 零元购 -->
+            <free-cny
+              v-if="tabIndex === 'free_cny'"
+              :form.sync="form"
+              :old-check-lists="oldCheckLists"
+              :prior-item-options="JSON.stringify(priorItemOptions)"
+              :goods-options="goodsOptions"
+              :box-options="boxOptions"
+            />
+            <!-- 免积分 -->
+            <free-integral
+              v-if="tabIndex === 'free_integral'"
+              :form.sync="form"
+              :old-check-lists="oldCheckLists"
+              :prior-item-options="JSON.stringify(priorItemOptions)"
+              :goods-options="goodsOptions"
+              :box-options="boxOptions"
+            />
           </el-tab-pane>
         </el-tabs>
       </el-form>
@@ -302,9 +127,15 @@
 import { DominKey, getToken } from '@/utils/auth'
 import { addOrUpdate, interestList, goodsList } from '@/api/interest'
 import { interestsOptions } from '@/utils/explain'
+import prior from './interest/prior'
+import give from './interest/give'
+import rebate from './interest/rebate'
+import freeCny from './interest/freeCny'
+import freeIntegral from './interest/freeIntegral'
 
 export default {
   name: 'AddOrUpdate',
+  components: { prior, give, rebate, freeCny, freeIntegral },
   data() {
     return {
       pickerOptions0: {
@@ -317,6 +148,7 @@ export default {
       visible: false,
       btnLoading: false,
       interestGoodOptions: [],
+      interestGoodMetaOptions: [],
       goodsOptions: [],
       boxOptions: [],
       priorOptions: [],
@@ -424,18 +256,14 @@ export default {
 
           Object.keys(response.data).forEach((v) => {
             this.priorItemOptions[v] = response.data[v].map((x) => {
-              return { value: x.type }
+              const label = this.interestsOptions.find(
+                (y) => y.value === x.type
+              )?.label
+              return { label: label, value: x.type }
             })
           })
         })
         .catch(() => {})
-    },
-    validateGoodAndBox(rule, value, callback) {
-      if (this.form.interests[rule.field.split('.')[1]].buy.goods.length === 0 && this.form.interests[rule.field.split('.')[1]].buy.box.length === 0) {
-        callback(new Error('指定藏品和指定盲盒必选一个'))
-      } else {
-        callback()
-      }
     },
     onChangeCheckItem(val) {
       if (this.checkLists.includes(val.value)) {
@@ -451,6 +279,7 @@ export default {
         delete this.form.interests[val.value]
         this.tabIndex = this.checkLists[this.checkLists.length - 1] ?? ''
       }
+      console.log(this.tabIndex)
     },
     onRemoveTab(val) {
       this.checkLists.forEach((v, i) => {
@@ -460,17 +289,6 @@ export default {
       })
       delete this.form.interests[val]
       this.tabIndex = this.checkLists[this.checkLists.length - 1] ?? ''
-    },
-    onChangeType(val) {
-      this.form.interests[val].buy.goods = []
-      this.form.interests[val].buy.box = []
-      if (this.form.interests[val].type === 'appoint') {
-        this.form.interests[val].num = 1
-      }
-
-      if (this.form.interests[val].type !== 'long') {
-        this.form.interests[val].expire_time = ''
-      }
     },
     onFormSubmit() {
       this.$refs['form'].validate((valid) => {
