@@ -138,6 +138,18 @@
         <el-form-item label="转赠时间" prop="give_time">
           <el-date-picker v-model="form.give_time" type="datetime" placeholder="转赠时间" value-format="yyyy-MM-dd HH:mm:ss" :picker-options="pickerOptions" clearable />
         </el-form-item>
+        <el-form-item label="是否同步奇藏果" prop="sync_status">
+          <el-radio-group v-model="form.sync_status">
+            <el-radio :label="1">否</el-radio>
+            <el-radio :label="0" :disabled="form.sync_gwj_status===0">是</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="是否同步甘文交" prop="sync_gwj_status">
+          <el-radio-group v-model="form.sync_gwj_status">
+            <el-radio :label="1">否</el-radio>
+            <el-radio :label="0" :disabled="form.sync_status===0">是</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <div v-if="!form.id">
           <el-form-item label="发行方" prop="issuer">
             <el-input v-model="form.issuer" placeholder="发行方" clearable />
@@ -290,6 +302,8 @@ export default {
         is_pre: 0,
         is_hot: 0,
         status: 0,
+        sync_status: 1,
+        sync_gwj_status: 1,
         sort: 0,
         give_status: 0,
         give_time: ''
@@ -352,7 +366,9 @@ export default {
         issuer_avatar: [
           { required: true, message: '请选择发行方头像', trigger: ['blur', 'change'] }
         ],
-        give_status: [{ required: true, message: '请选择能否转赠', trigger: ['blur', 'change'] }]
+        give_status: [{ required: true, message: '请选择能否转赠', trigger: ['blur', 'change'] }],
+        sync_status: [{ required: true, message: '请选择是否同步', trigger: ['blur', 'change'] }],
+        sync_gwj_status: [{ required: true, message: '请选择是否同步', trigger: ['blur', 'change'] }]
       }
     }
   },
