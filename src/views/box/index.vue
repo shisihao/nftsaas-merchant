@@ -15,6 +15,16 @@
             <el-option v-for="item in whetherOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
+        <el-form-item label="是否同步奇藏果">
+          <el-select v-model="search.sync_status" clearable @change="getList(1)">
+            <el-option v-for="item in sync_status_options" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否同步甘文交">
+          <el-select v-model="search.sync_gwj_status" clearable @change="getList(1)">
+            <el-option v-for="item in sync_status_options" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="时间">
           <el-date-picker
             v-model="dateRangeValue"
@@ -118,6 +128,12 @@
           </div>
           <div>
             转赠：{{ row.give_time }}
+          </div>
+          <div>
+            是否同步奇藏果：{{ row.sync_status?'否':'是' }}
+          </div>
+          <div>
+            是否同步甘文交：{{ row.sync_gwj_status?'否':'是' }}
           </div>
         </template>
       </el-table-column>
@@ -258,7 +274,9 @@ export default {
         start_time: '',
         end_time: '',
         tags: [],
-        sellout: ''
+        sellout: '',
+        sync_status: '',
+        sync_gwj_status: ''
       },
       pages: {
         total: 0,
@@ -271,7 +289,12 @@ export default {
       list: [],
       addOrUpdateVisible: false,
       airUpdateVisible: false,
-      boxLogsVisible: false
+      boxLogsVisible: false,
+      sync_status_options: [
+        { label: '全部', value: '' },
+        { label: '否', value: 1 },
+        { label: '是', value: 0 }
+      ]
     }
   },
   computed: {
