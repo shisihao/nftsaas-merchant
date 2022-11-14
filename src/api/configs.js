@@ -654,3 +654,15 @@ export function putQualification(data) {
     ...data
   })
 }
+
+// 藏品寄售协议
+export function consignment() {
+  return request.get('/configs/consignment_config')
+}
+
+// 藏品寄售协议
+export function putConsignment(data) {
+  return request.put('/configs/consignment_config', {
+    ...data
+  })
+}

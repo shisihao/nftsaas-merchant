@@ -257,3 +257,11 @@ export const shopStatusOptions = [
   { label: '已完成', value: 4, count: 'success_count', type: 'info' },
   { label: '已关闭', value: 5, count: 'close_count', type: 'danger' }
 ]
+
+export const consignmentOptions = [
+  { label: '全部', value: '' },
+  { label: '下架', value: 0, type: 'danger' },
+  { label: '在售', value: 1, type: 'primary' },
+  { label: '锁定', value: 2, type: 'warning' },
+  { label: '售出', value: 3, type: 'success' }
+]
