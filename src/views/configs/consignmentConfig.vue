@@ -4,12 +4,12 @@
       <el-form-item label="寄售开关">
         <el-switch v-model="form.switch" active-value="on" inactive-value="off" />
       </el-form-item>
-      <el-form-item label="购买后寄售时间(天)" prop="buy">
+      <!-- <el-form-item label="购买后寄售时间(天)" prop="buy">
         <el-input-number v-model="form.buy" :min="0" placeholder="请输入" />
       </el-form-item>
       <el-form-item label="钱包转回后寄售时间(天)" prop="again">
         <el-input-number v-model="form.again" :min="0" placeholder="请输入" />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="最高寄售价格(元)" prop="sell_price">
         <el-input-number v-model="form.sell_price" :min="0" placeholder="请输入" />
       </el-form-item>
@@ -48,8 +48,8 @@ export default {
     return {
       form: {
         switch: 'off',
-        again: 0,
-        buy: 0,
+        // again: 0,
+        // buy: 0,
         sell_price: 0,
         agreement: '',
         charge_fee: 0,
@@ -59,8 +59,8 @@ export default {
       },
       btnLoading: false,
       rules: {
-        again: [{ required: true, message: '请输入购买后寄售天数', trigger: 'blur' }],
-        buy: [{ required: true, message: '请输入钱包转回后寄售天数', trigger: 'blur' }],
+        // again: [{ required: true, message: '请输入购买后寄售天数', trigger: 'blur' }],
+        // buy: [{ required: true, message: '请输入钱包转回后寄售天数', trigger: 'blur' }],
         sell_price: [{ required: true, message: '请输入最高寄售价格', trigger: 'blur' }],
         charge_fee: [{ required: true, message: '请输入手续费', trigger: 'blur' }],
         un_order_num: [{ required: true, message: '请输入未完成订单限制数量', trigger: 'blur' }],
