@@ -279,7 +279,7 @@
         <el-date-picker v-model="form.give_time" type="datetime" placeholder="转赠时间" value-format="yyyy-MM-dd HH:mm:ss" :picker-options="pickerOptions" clearable />
       </el-form-item>
 
-      <template v-if="form.id">
+      <template v-if="form.id && info.consignment_status === 1">
         <el-form-item label="是否允许寄售" prop="consignment_status">
           <el-radio-group v-model="form.consignment_status">
             <el-radio v-for="(item,index) in whetherOptions.slice(1)" :key="index" :label="item.value">{{ item.label }}</el-radio>
@@ -472,7 +472,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['integral']),
+    ...mapGetters(['integral', 'info']),
     dragOptions() {
       return {
         animation: 200,

@@ -105,6 +105,17 @@ router.beforeEach(async(to, from, next) => {
                 })
               }
 
+              if (store.getters.info.consignment_status === 0) {
+                // 过滤掉寄售相关的路由
+                const filterRoutes = ['consignment_order', 'consignment', 'consignment_config', 'lock']
+                serverRoute = serverRoute.map(item => {
+                  if (Array.isArray(item.list)) {
+                    item.list = item.list.filter(list_item => !filterRoutes.includes(list_item.alias))
+                  }
+                  return item
+                })
+              }
+
               const asyncRoutes = generateMenu([], serverRoute)
 
               store.dispatch('permission/generateRoutes1', { asyncRoutes: asyncRoutes, roles: roles })
