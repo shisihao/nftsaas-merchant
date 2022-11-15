@@ -141,15 +141,37 @@
         <el-form-item label="是否同步奇藏果" prop="sync_status">
           <el-radio-group v-model="form.sync_status">
             <el-radio :label="1">否</el-radio>
-            <el-radio :label="0" :disabled="form.sync_gwj_status===0">是</el-radio>
+            <el-radio :label="0" :disabled="form.sync_gwj_status === 0 || form.consignment_status === 1">是</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="是否同步甘文交" prop="sync_gwj_status">
           <el-radio-group v-model="form.sync_gwj_status">
             <el-radio :label="1">否</el-radio>
-            <el-radio :label="0" :disabled="form.sync_status===0">是</el-radio>
+            <el-radio :label="0" :disabled="form.sync_status === 0 || form.consignment_status === 1">是</el-radio>
           </el-radio-group>
         </el-form-item>
+
+        <template v-if="form.id && info.consignment_status === 1">
+          <el-form-item label="是否允许寄售" prop="consignment_status">
+            <el-radio-group v-model="form.consignment_status">
+              <el-radio v-for="(item,index) in whetherOptions.slice(1)" :key="index" :label="item.value" :disabled="form.sync_gwj_status === 0 || form.sync_status === 0">
+                {{ item.label }}
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="寄售限价区间" prop="price_min">
+            <el-input-number v-model="form.price_min" :precision="2" :step="0.1" :min="1" /> —— <el-input-number v-model="form.price_max" :precision="2" :step="0.1" :min="1" />
+          </el-form-item>
+          <el-form-item label="自动锁单" prop="lock">
+            <el-radio-group v-model="form.lock">
+              <el-radio v-for="(item,index) in whetherOptions.slice(1)" :key="index" :label="item.value">{{ item.label }}</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="自动锁单价格" prop="lock_price">
+            <el-input-number v-model="form.lock_price" placeholder="请输入价格" :min="0" :precision="2" />
+          </el-form-item>
+        </template>
+
         <div v-if="!form.id">
           <el-form-item label="发行方" prop="issuer">
             <el-input v-model="form.issuer" placeholder="发行方" clearable />
@@ -238,7 +260,7 @@ import CustomUpload from '@/components/Upload/CustomUpload'
 import draggable from 'vuedraggable'
 import EditTinymce from './EditTinymce'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
-import { typeOptions, pickerOptions } from '@/utils/explain'
+import { typeOptions, pickerOptions, whetherOptions } from '@/utils/explain'
 import { conditionList } from '@/api/collection'
 import { mapGetters } from 'vuex'
 
@@ -253,6 +275,7 @@ export default {
         }
       },
       pickerOptions,
+      whetherOptions,
       visible: false,
       btnLoading: false,
       drag: false,
@@ -304,6 +327,11 @@ export default {
         status: 0,
         sync_status: 1,
         sync_gwj_status: 1,
+        price_min: 0,
+        price_max: 0,
+        consignment_status: 0,
+        lock: 0,
+        lock_price: 0,
         sort: 0,
         give_status: 0,
         give_time: ''
@@ -368,12 +396,17 @@ export default {
         ],
         give_status: [{ required: true, message: '请选择能否转赠', trigger: ['blur', 'change'] }],
         sync_status: [{ required: true, message: '请选择是否同步', trigger: ['blur', 'change'] }],
-        sync_gwj_status: [{ required: true, message: '请选择是否同步', trigger: ['blur', 'change'] }]
+        sync_gwj_status: [{ required: true, message: '请选择是否同步', trigger: ['blur', 'change'] }],
+        lock_price: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
+        consignment_status: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
+        price_min: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
+        price_max: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
+        price_range_status: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }]
       }
     }
   },
   computed: {
-    ...mapGetters(['integral']),
+    ...mapGetters(['integral', 'info']),
     dragOptions() {
       return {
         animation: 200,
