@@ -255,21 +255,21 @@
       <el-form-item label="是否同步奇藏果" prop="sync_status">
         <el-radio-group v-model="form.sync_status">
           <el-radio :label="1">否</el-radio>
-          <el-radio :label="0" :disabled="form.sync_gwj_status === 0 || form.consignment_status === 1">是</el-radio>
+          <el-radio :label="0" :disabled="form.sync_gwj_status === 0 || form.consignment_status === 0">是</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="是否同步甘文交" prop="sync_gwj_status">
         <el-radio-group v-model="form.sync_gwj_status">
           <el-radio :label="1">否</el-radio>
-          <el-radio :label="0" :disabled="form.sync_status === 0 || form.consignment_status === 1">是</el-radio>
+          <el-radio :label="0" :disabled="form.sync_status === 0 || form.consignment_status === 0">是</el-radio>
         </el-radio-group>
       </el-form-item>
 
       <template v-if="form.id && info.consignment_status === 1">
         <el-form-item label="是否允许寄售" prop="consignment_status">
           <el-radio-group v-model="form.consignment_status">
-            <el-radio :label="0">否</el-radio>
-            <el-radio :label="1" :disabled="form.sync_gwj_status === 0 || form.sync_status === 0">是</el-radio>
+            <el-radio :label="1">否</el-radio>
+            <el-radio :label="0" :disabled="form.sync_gwj_status === 0 || form.sync_status === 0">是</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="寄售限价区间" prop="price_min">
@@ -417,7 +417,7 @@ export default {
         },
         price_min: 0,
         price_max: 0,
-        consignment_status: 0,
+        consignment_status: 1,
         lock: 0,
         lock_price: 0,
         sort: '',
