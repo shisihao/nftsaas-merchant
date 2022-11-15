@@ -99,7 +99,8 @@ export const localMap = {
   qualification: () => import('@/views/configs/qualification'), // 购买资格提示
   consignment: () => import('@/views/consignment/index'), // 寄售管理
   consignmentOrder: () => import('@/views/consignment-order/index'), // 寄售订单
-  consignmentGoods: () => import('@/views/consignment-goods/index'), // 专区藏品列表
-  consignmentPrice: () => import('@/views/consignment-price/index'), // 商品基准价
-  consignmentConfig: () => import('@/views/configs/consignmentConfig') // 藏品寄售配置
+  // consignmentGoods: () => import('@/views/consignment-goods/index'), // 专区藏品列表
+  // consignmentPrice: () => import('@/views/consignment-price/index'), // 商品基准价
+  consignmentConfig: () => import('@/views/configs/consignmentConfig'), // 藏品寄售配置
+  lock: () => import('@/views/configs/locksetting') // 寄售锁单配置
 }

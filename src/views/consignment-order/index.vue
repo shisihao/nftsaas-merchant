@@ -38,16 +38,6 @@
             @keyup.enter.native="getList(1)"
           />
         </el-form-item>
-        <el-form-item label="所属市场">
-          <el-select v-model="search.issuer_id" placeholder="请选择" clearable @change="getList(1)">
-            <el-option v-for="(item,index) in issuerList" :key="index" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="买方服务商">
-          <el-select v-model="search.partner_id" placeholder="请选择" clearable @change="getList(1)">
-            <el-option v-for="(item,index) in partnerList" :key="index" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
         <el-form-item label="下单时间">
           <el-date-picker
             v-model="dateRangeValue"
@@ -361,8 +351,6 @@ export default {
   },
   methods: {
     init() {
-      this.getIssuerList()
-      this.getPartnerList()
       this.getList()
     },
     getList(page = this.pages.current, loading = true) {

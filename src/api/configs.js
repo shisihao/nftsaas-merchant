@@ -666,3 +666,15 @@ export function putConsignment(data) {
     ...data
   })
 }
+
+// 链上锁单配置
+export function lock() {
+  return request.get('/configs/lock')
+}
+
+// 链上锁单配置
+export function putLock(data) {
+  return request.put('/configs/lock', {
+    ...data
+  })
+}
