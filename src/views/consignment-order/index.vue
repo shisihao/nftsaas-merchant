@@ -399,8 +399,8 @@ export default {
     onHandleDownload() {
       this.downloadLoading = true
       exportOrder(this.search)
-        .then(({ msg }) => {
-          this.$message.success(msg)
+        .then((response) => {
+          location.href = this.domin + response.data.filename
         })
         .catch(() => {})
         .finally(() => {
