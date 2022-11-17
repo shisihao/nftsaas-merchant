@@ -286,6 +286,11 @@
             <el-radio :label="0" :disabled="form.sync_gwj_status === 0 || form.sync_status === 0">是</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item label="寄售限价开关" prop="price_range_status">
+          <el-radio-group v-model="form.price_range_status">
+            <el-radio v-for="(item,index) in whetherOptions.slice(1)" :key="index" :label="item.value">{{ item.label }}</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="寄售限价区间" prop="price_min">
           <el-input-number v-model="form.price_min" :precision="2" :step="0.1" :min="1" /> —— <el-input-number v-model="form.price_max" :precision="2" :step="0.1" :min="1" />
         </el-form-item>
@@ -420,6 +425,7 @@ export default {
           three_bin: '',
           three_image: []
         },
+        price_range_status: 0,
         price_min: 0,
         price_max: 0,
         consignment_status: 1,
