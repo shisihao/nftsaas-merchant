@@ -8,6 +8,13 @@
           inactive-value="off"
         />
       </el-form-item>
+      <el-form-item label="是否需要验证码">
+        <el-switch
+          v-model="form.sms"
+          :active-value="1"
+          :inactive-value="0"
+        />
+      </el-form-item>
       <el-form-item label="购买后赠送限制天数" prop="buy">
         <el-input-number v-model="form.buy" :min="0" />
       </el-form-item>
@@ -47,8 +54,8 @@ export default {
         airdrop_buy: 0,
         airdrop_again: 0,
         reminder: '',
-        switch: ''
-        // on-开启 off-关闭
+        switch: '', // on-开启 off-关闭
+        sms: 0 // 1-开启 0-关闭
       },
       rule: {
         buy: [{ required: true, message: '请输入购买后赠送限制天数', trigger: 'blur' }],
