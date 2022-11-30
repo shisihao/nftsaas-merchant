@@ -134,6 +134,9 @@
             库存：{{ row.stock || 0 }}
           </div>
           <div>
+            预留库存：{{ row.reserve_stock || 0 }}
+          </div>
+          <div>
             已售：{{ row.sales_num || 0 }}
           </div>
           <div>

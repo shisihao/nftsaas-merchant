@@ -105,6 +105,9 @@
           <div>
             库存：{{ row.stock }}
           </div>
+          <div>
+            预留库存：{{ row.reserve_stock || 0 }}
+          </div>
         </template>
       </el-table-column>
       <el-table-column
