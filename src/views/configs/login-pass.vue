@@ -44,7 +44,7 @@ export default {
       loginPass()
         .then(response => {
           if (response.code !== 0) return
-          this.form = Object.assign({}, response.data.value)
+          this.form.login_pass = response.data.value
         })
         .catch(() => {
         })
