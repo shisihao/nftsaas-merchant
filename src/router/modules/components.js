@@ -23,6 +23,7 @@ export const localMap = {
   help: () => import('@/views/help/index'),
   goods: () => import('@/views/goods/index'),
   category: () => import('@/views/goods/categoryIndex'),
+  tagCategory: () => import('@/views/goods/tagCategoryIndex'),
   // agent: () => import('@/views/agent/index'),
   // newsCate: () => import('@/views/newsCate/index'),
   // new: () => import('@/views/new/index'),
