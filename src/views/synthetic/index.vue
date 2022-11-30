@@ -123,7 +123,7 @@
             <el-button type="primary" @click="onAddOrUpdate(row)">编辑</el-button>
             <el-button type="primary" plain @click="onRecordLog(row)">合成记录</el-button>
             <el-button type="danger" @click="onDelete(row)">删除</el-button>
-            <el-button v-if="(row.status === 1)" @click="onRecycleStock(row)">回收</el-button>
+            <el-button v-if="moment(row.end_time) <= moment()" style="margin-top: 5px;" @click="onRecycleStock(row)">回收</el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -153,6 +153,7 @@ import { pickerOptions, statusOptions } from '@/utils/explain'
 import AddOrUpdate from './components/AddOrUpdate'
 import Pagination from '@/components/Pagination'
 import SyntheticRecordLog from './components/SyntheticRecordLog'
+import moment from 'moment'
 
 export default {
   name: 'Synthetic',
@@ -183,6 +184,7 @@ export default {
     this.init()
   },
   methods: {
+    moment,
     init() {
       this.getList()
     },

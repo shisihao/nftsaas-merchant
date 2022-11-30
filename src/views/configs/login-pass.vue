@@ -27,7 +27,7 @@ export default {
       loading: false,
       btnLoading: false,
       form: {
-        login_pass: '' // on-开启 off-关闭
+        login_pass: 'on' // on-开启 off-关闭
       }
     }
   },
