@@ -81,7 +81,8 @@ export default {
         { label: '账号换绑', value: 'change-account' },
         { label: '认证审核', value: 'identification' },
         { label: '注销', value: 'close_account' },
-        { label: '修改密码', value: 'set-login-pass' }
+        { label: '修改密码', value: 'set-login-pass' },
+        { label: '转赠', value: 'give_collect' }
       ],
       typeOptions: [
         { label: '手机短信', value: 'sms' },
