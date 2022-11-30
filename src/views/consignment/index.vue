@@ -123,6 +123,15 @@
           label="寄售时间"
           width="180"
         />
+        <el-table-column
+          label="操作"
+          width="150"
+          align="center"
+        >
+          <template slot-scope="{ row }">
+            <el-button v-if="(row.status === 1)" type="success" @click="onUnsold(row)">下架</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <pagination v-show="pages.total > 0" :total="pages.total" :page.sync="pages.current" :limit.sync="pages.limit" @pagination="getList()" />
@@ -132,7 +141,7 @@
 <script>
 import Pagination from '@/components/Pagination'
 import { getToken, DominKey } from '@/utils/auth'
-import { dataList, filterIssuer } from '@/api/consignment'
+import { dataList, filterIssuer, unsold } from '@/api/consignment'
 import { consignmentOptions, orderTypeOptions, payOptions } from '@/utils/explain'
 
 export default {
@@ -201,6 +210,29 @@ export default {
       if (rowIndex > 0) {
         return { display: 'none' }
       }
+    },
+    onUnsold(row) {
+      this.$confirm(
+        `确定对[(#${row.id})]进行[下架]操作?`,
+        '下架',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'error',
+          cancelButtonClass: 'btn-custom-cancel'
+        }
+      )
+        .then(() => {
+          unsold(row.id)
+            .then(({ msg = '下架成功' }) => {
+              this.$message.success(msg)
+              this.getList()
+            })
+            .catch(({ msg = '下架失败' }) => {
+              this.$message.error(msg)
+            })
+        })
+        .catch(() => {})
     }
   }
 }

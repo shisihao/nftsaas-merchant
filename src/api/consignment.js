@@ -18,3 +18,8 @@ export function detailList(id, params) {
 export function filterIssuer() {
   return request.get('/public/filter/issuer')
 }
+
+// 寄售藏品下架
+export function unsold(consignment) {
+  return request.put(`/consignment/${consignment}/unsold`)
+}

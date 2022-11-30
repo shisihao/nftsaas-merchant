@@ -123,6 +123,7 @@
             <el-button type="primary" @click="onAddOrUpdate(row)">编辑</el-button>
             <el-button type="primary" plain @click="onRecordLog(row)">合成记录</el-button>
             <el-button type="danger" @click="onDelete(row)">删除</el-button>
+            <el-button v-if="(row.status === 1)" @click="onRecycleStock(row)">回收</el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -146,7 +147,7 @@
 </template>
 
 <script>
-import { dataList, deleteData } from '@/api/synthetic'
+import { dataList, deleteData, recycleStock } from '@/api/synthetic'
 import { getToken, DominKey } from '@/utils/auth'
 import { pickerOptions, statusOptions } from '@/utils/explain'
 import AddOrUpdate from './components/AddOrUpdate'
@@ -238,6 +239,25 @@ export default {
       this.$nextTick(() => {
         this.$refs.recordLog && this.$refs.recordLog.init(data)
       })
+    },
+    onRecycleStock(row) {
+      this.$confirm(`确定对合成活动[(#${row.id})]进行[回收]操作?`, '回收', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: '',
+        cancelButtonClass: 'btn-custom-cancel'
+      })
+        .then(() => {
+          recycleStock(row.id)
+            .then(({ msg = '回收成功' }) => {
+              this.$message.success(msg)
+              this.init()
+            })
+            .catch(() => {
+              this.$message.error('回收失败')
+            })
+        })
+        .catch(() => {})
     }
   }
 }
