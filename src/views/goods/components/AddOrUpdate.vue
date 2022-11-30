@@ -263,13 +263,13 @@
       <el-form-item label="是否同步奇藏果" prop="sync_status">
         <el-radio-group v-model="form.sync_status">
           <el-radio :label="1">否</el-radio>
-          <el-radio :label="0" :disabled="form.sync_gwj_status===0">是</el-radio>
+          <el-radio :label="0" :disabled="form.sync_gwj_status === 0 || form.consignment_status === 0">是</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="是否同步甘文交" prop="sync_gwj_status">
         <el-radio-group v-model="form.sync_gwj_status">
           <el-radio :label="1">否</el-radio>
-          <el-radio :label="0" :disabled="form.sync_status===0">是</el-radio>
+          <el-radio :label="0" :disabled="form.sync_status === 0 || form.consignment_status === 0">是</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="开售时间" prop="start_time">
@@ -278,6 +278,32 @@
       <el-form-item label="转赠时间" prop="give_time">
         <el-date-picker v-model="form.give_time" type="datetime" placeholder="转赠时间" value-format="yyyy-MM-dd HH:mm:ss" :picker-options="pickerOptions" clearable />
       </el-form-item>
+
+      <template v-if="form.id && info.consignment_status === 1">
+        <el-form-item label="是否允许寄售" prop="consignment_status">
+          <el-radio-group v-model="form.consignment_status">
+            <el-radio :label="1">否</el-radio>
+            <el-radio :label="0" :disabled="form.sync_gwj_status === 0 || form.sync_status === 0">是</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="寄售限价开关" prop="price_range_status">
+          <el-radio-group v-model="form.price_range_status">
+            <el-radio v-for="(item,index) in whetherOptions.slice(1)" :key="index" :label="item.value">{{ item.label }}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="寄售限价区间" prop="price_min">
+          <el-input-number v-model="form.price_min" :precision="2" :step="0.1" :min="1" /> —— <el-input-number v-model="form.price_max" :precision="2" :step="0.1" :min="1" />
+        </el-form-item>
+        <el-form-item label="自动锁单" prop="lock">
+          <el-radio-group v-model="form.lock">
+            <el-radio v-for="(item,index) in whetherOptions.slice(1)" :key="index" :label="item.value">{{ item.label }}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="自动锁单价格" prop="lock_price">
+          <el-input-number v-model="form.lock_price" placeholder="请输入价格" :min="0" :precision="2" />
+        </el-form-item>
+      </template>
+
       <el-form-item label="排序" prop="sort">
         <el-input-number v-model="form.sort" :min="0" :precision="0" />
       </el-form-item>
@@ -310,7 +336,7 @@ import { castList } from '@/api/cast'
 import { addOrUpdate, goodsItem, conditionList } from '@/api/collection'
 import { DominKey, getToken } from '@/utils/auth'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
-import { pickerOptions, typeOptions } from '@/utils/explain'
+import { pickerOptions, typeOptions, whetherOptions } from '@/utils/explain'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -341,6 +367,7 @@ export default {
       tagsOptions: [],
       castOptions: [],
       typeOptions: typeOptions.filter(v => !['', 2, 4, 6].includes(v.value)),
+      whetherOptions,
       conditionOptions: [],
       currentName: '',
       percentage: 0,
@@ -398,6 +425,12 @@ export default {
           three_bin: '',
           three_image: []
         },
+        price_range_status: 0,
+        price_min: 0,
+        price_max: 0,
+        consignment_status: 1,
+        lock: 0,
+        lock_price: 0,
         sort: '',
         integral_reward: 0
       },
@@ -436,12 +469,17 @@ export default {
         reserve_stock: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
         prior_stock: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
         is_hot: [{ required: true, message: '请选择是否热销', trigger: ['blur', 'change'] }],
-        integral_reward: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }]
+        integral_reward: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
+        lock_price: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
+        consignment_status: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
+        price_min: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
+        price_max: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }],
+        price_range_status: [{ required: true, message: '不能为空', trigger: ['blur', 'change'] }]
       }
     }
   },
   computed: {
-    ...mapGetters(['integral']),
+    ...mapGetters(['integral', 'info']),
     dragOptions() {
       return {
         animation: 200,

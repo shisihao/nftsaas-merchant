@@ -655,6 +655,30 @@ export function putQualification(data) {
   })
 }
 
+// 藏品寄售协议
+export function consignment() {
+  return request.get('/configs/consignment_config')
+}
+
+// 藏品寄售协议
+export function putConsignment(data) {
+  return request.put('/configs/consignment_config', {
+    ...data
+  })
+}
+
+// 链上锁单配置
+export function lock() {
+  return request.get('/configs/lock')
+}
+
+// 链上锁单配置
+export function putLock(data) {
+  return request.put('/configs/lock', {
+    ...data
+  })
+}
+
 // 登录开关
 export function loginPass() {
   return request.get('/configs/login_pass')

@@ -11,11 +11,6 @@
         <el-form-item label="用户地址" prop="address">
           <el-input v-model="search.address" placeholder="用户地址" clearable @clear="getList(1)" @keyup.enter.native="getList(1)" />
         </el-form-item>
-        <el-form-item label="所属市场">
-          <el-select v-model="search.issuer_id" placeholder="请选择" clearable @change="getList(1)">
-            <el-option v-for="(item,index) in issuerList" :key="index" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
         <el-form-item label="状态" style="margin-left: 10px">
           <el-radio-group v-model="search.status" size="mini" @change="getList(1)">
             <el-badge v-for="item in consignmentOptions" :key="item.value" class="badge-item">
@@ -175,7 +170,6 @@ export default {
   },
   methods: {
     init() {
-      this.getIssuerList()
       this.getList()
     },
     getIssuerList() {
