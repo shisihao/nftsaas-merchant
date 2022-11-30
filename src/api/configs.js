@@ -654,3 +654,15 @@ export function putQualification(data) {
     ...data
   })
 }
+
+// 登录开关
+export function loginPass() {
+  return request.get('/configs/login_pass')
+}
+
+// 登录开关
+export function putLoginPass(data) {
+  return request.put('/configs/login_pass', {
+    ...data
+  })
+}
