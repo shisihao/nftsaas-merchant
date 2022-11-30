@@ -123,7 +123,13 @@
             <el-button type="primary" @click="onAddOrUpdate(row)">编辑</el-button>
             <el-button type="primary" plain @click="onRecordLog(row)">合成记录</el-button>
             <el-button type="danger" @click="onDelete(row)">删除</el-button>
-            <el-button v-if="moment(row.end_time) <= moment()" style="margin-top: 5px;" @click="onRecycleStock(row)">回收</el-button>
+            <el-button
+              v-if="((moment(row.end_time) <= moment()) && ((row.limit_num - row.synthesis_num) > 0))"
+              style="margin-top: 5px;"
+              @click="onRecycleStock(row)"
+            >
+              回收
+            </el-button>
           </el-button-group>
         </template>
       </el-table-column>
