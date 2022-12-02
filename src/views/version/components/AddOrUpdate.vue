@@ -17,7 +17,7 @@
         <el-input v-model="form.description" type="textarea" placeholder="更新说明" clearable />
       </el-form-item>
       <el-form-item label="上传APP包" prop="link">
-        <custom-upload-ali
+        <custom-upload
           class-name=""
           :show-file-list="true"
           :limit="1"
@@ -28,7 +28,7 @@
           @handleProgress="elProgress"
         >
           <el-button type="primary">点击上传</el-button>
-        </custom-upload-ali>
+        </custom-upload>
         <el-progress v-if="![0, 1].includes(percentage)" style="margin-top:5px" :percentage="percentage * 100" />
       </el-form-item>
       <el-form-item v-if="form.type === 1" label="包名" prop="package_name">
@@ -59,11 +59,11 @@
 import { validNumber } from '@/utils/validate'
 import { DominKey, getToken } from '@/utils/auth'
 import { addOrUpdate } from '@/api/version'
-import CustomUploadAli from '@/components/Upload/CustomUploadAli'
+import CustomUpload from '@/components/Upload/CustomUpload'
 
 export default {
   name: 'AddOrUpdate',
-  components: { CustomUploadAli },
+  components: { CustomUpload },
   data() {
     const validateVersionCode = (rule, value, callback) => {
       if (!validNumber(value)) {
@@ -159,10 +159,10 @@ export default {
       this.percentage = Number.parseFloat(p)
     },
     handleAvatarSuccess(response, file) {
-      this.form.link = response.name
+      this.form.link = response
       this.fileList = [{
-        name: response.name,
-        url: response.name
+        name: response,
+        url: response
       }]
     },
     beforeAvatarUpload(file, cb) {

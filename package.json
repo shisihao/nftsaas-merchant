@@ -17,6 +17,7 @@
     "release": "npm run build:prod && gulp upload"
   },
   "dependencies": {
+    "esdk-obs-browserjs": "^3.22.3",
     "axios": "0.18.1",
     "bignumber.js": "^9.0.1",
     "clipboard": "2.0.4",

@@ -58,7 +58,7 @@ const actions = {
         const { data } = response
         dispatch('getIntegral')
         commit('SET_TOKEN', data.admin.admin_token)
-        setToken(data.oss.domain, DominKey)
+        setToken('https://wlnfts.obs.cn-east-3.myhuaweicloud.com/', DominKey)
         setToken(data.admin.admin_token)
         setToken(data.admin.is_first, 'is_first')
         setToken(data.security, 'security')

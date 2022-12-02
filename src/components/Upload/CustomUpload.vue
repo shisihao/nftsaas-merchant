@@ -27,11 +27,11 @@
 </template>
 
 <script>
-import { getToken, OssKey, setToken } from '@/utils/auth'
-import { getQiniuToken } from '@/api/qiniu'
-import COS from 'cos-js-sdk-v5'
+import { getToken, OssKey } from '@/utils/auth'
+// import { getQiniuToken } from '@/api/qiniu'
 import CalcVideo from '@/utils/calcVideo'
 import { mapGetters } from 'vuex'
+import ObsClient from 'esdk-obs-browserjs/src/obs'
 
 export default {
   props: {
@@ -80,11 +80,7 @@ export default {
   },
   data() {
     return {
-      oss: {
-        SecretId: '',
-        SecretKey: '',
-        Bucket: '',
-        Region: ''
+      obs: {
       },
       loading: false
     }
@@ -94,7 +90,7 @@ export default {
   },
   created() {
     if (getToken(OssKey)) {
-      this.oss = JSON.parse(getToken(OssKey))
+      this.obs = JSON.parse(getToken(OssKey))
     }
   },
   methods: {
@@ -186,51 +182,44 @@ export default {
     },
     fnUploadRequest(options) {
       try {
-        if (getToken(OssKey)) {
-          this.oss = JSON.parse(getToken(OssKey))
+        const obs = {
+          access_key_id: '3QZLEIDMZ7TAWELJTF8D',
+          secret_access_key: 'U869tYGNQp1KnfUqGqeX61gP2Mm548DAk256YzH4',
+          server: 'https://obs.cn-east-3.myhuaweicloud.com',
+          timeout: 3000, // 设置超时时间
+          folder: this.obs.folder,
+          Bucket: this.obs.bucket
         }
 
-        const cos = new COS({
-          SecretId: this.oss.credentials.tmpSecretId,
-          SecretKey: this.oss.credentials.tmpSecretKey,
-          SecurityToken: this.oss.credentials.sessionToken
+        var obsClient = new ObsClient({
+          access_key_id: obs.access_key_id,
+          secret_access_key: obs.secret_access_key,
+          server: obs.server,
+          timeout: obs.timeout
         })
 
         let filename = ''
         if (['three_url.three_image', 'three_url.three_bin'].includes(this.refName)) {
-          filename = options.file.name
+          filename = obs.folder + '/' + Math.random().toString(36).substring(2) + options.file.name
         } else {
-          filename = `${String(+new Date()) + Math.random().toString(36).substring(2)}.${options.file.name.split('.').pop()}`
+          filename = obs.folder + '/' + `${String(+new Date()) + Math.random().toString(36).substring(2)}.${options.file.name.split('.').pop()}`
         }
-
-        cos.putObject(
+        obsClient.putObject(
           {
-            Bucket: this.oss.bucket,
-            Region: this.oss.region,
-            Key: this.info.id + '/' + filename,
-            Body: options.file,
-            onProgress: function(progressData) {
-              options.onProgress(progressData.percent)
-            }
+            Bucket: obs.Bucket,
+            Key: filename,
+            SourceFile: options.file
           },
-          (err, data) => {
+          (err, result) => {
             if (err) {
-              console.log(err)
-              this.$message.error('上传失败，请重新上传')
-              getQiniuToken()
-                .then((data) => {
-                  setToken(data.data, OssKey)
-                })
+              // 上传失败
               this.loading = false
-              return
-            }
-            if (data.statusCode === 200) {
-              const newData = data.Location.split('/').splice(1).join('/')
-              options.onSuccess(newData)
+              this.$message.error('上传失败，请重新上传')
             } else {
-              options.onError('上传失败')
+              // 上传成功
+              this.loading = false
+              options.onSuccess(filename)
             }
-            this.loading = false
           }
         )
       } catch (e) {
