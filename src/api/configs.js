@@ -84,6 +84,18 @@ export function setSandPay(data) {
   })
 }
 
+// 易宝支付配置
+export function ybPay() {
+  return request.get('/configs/ybpay')
+}
+
+// 易宝支付配置
+export function setYbPay(data) {
+  return request.put('/configs/ybpay', {
+    ...data
+  })
+}
+
 // 提现配置
 export function withdrawal() {
   return request.get('/configs/withdrawal')

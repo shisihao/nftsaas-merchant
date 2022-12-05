@@ -181,6 +181,33 @@
           </el-form-item>
         </el-form>
       </div>
+      <div v-else-if="active === 4">
+        <el-form ref="form" :model="form" :rules="rules" label-width="160px">
+          <el-form-item label="商户号：" prop="mer_no">
+            <el-input v-model="form.mer_no" :precision="0" :min="0" clearable />
+          </el-form-item>
+          <el-form-item label="商户私钥：" prop="private_key">
+            <el-input
+              v-model="form.private_key"
+              type="textarea"
+              :rows="5"
+              :precision="0"
+              :min="0"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="商户公钥：" prop="public_key">
+            <el-input
+              v-model="form.public_key"
+              type="textarea"
+              :rows="5"
+              :precision="0"
+              :min="0"
+              clearable
+            />
+          </el-form-item>
+        </el-form>
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" :loading="btnLoading" @click="onFormSubmit()">
           {{ $t("table.confirm") }}
@@ -194,7 +221,7 @@
 </template>
 
 <script>
-import { aliPay, setAliPay, wxPay, setWxPay, sandPay, setSandPay } from '@/api/configs'
+import { aliPay, setAliPay, wxPay, setWxPay, sandPay, setSandPay, ybPay, setYbPay } from '@/api/configs'
 import CustomUpload from '@/components/Upload/CustomUpload'
 
 export default {
@@ -224,6 +251,11 @@ export default {
           method: '杉德支付',
           desc: '杉德支付（sandpay.com.cn）是国内先进的网上支付平台',
           key: 3
+        },
+        {
+          method: '易宝支付',
+          desc: '易宝支付是国内先进的网上支付平台',
+          key: 4
         }
       ],
       active: ''
@@ -236,64 +268,44 @@ export default {
     init() {},
     onFormSubmit() {
       this.btnLoading = true
+
+      let api
       if (this.active === 1) {
-        this.setAli()
+        api = setAliPay(this.form)
       } else if (this.active === 2) {
-        this.setWx()
+        api = setWxPay(this.form)
       } else if (this.active === 3) {
-        this.setSand()
+        api = setSandPay(this.form)
+      } else if (this.active === 4) {
+        api = setYbPay(this.form)
       }
+
+      api.then(({ msg }) => {
+        this.$message.success(msg)
+        this.visible = false
+      }).finally(() => {
+        this.btnLoading = false
+      })
     },
     handleClick(row) {
+      this.form = {}
       this.active = row.key
       this.visible = true
+      let api
       if (this.active === 1) {
-        this.getAli()
+        api = aliPay()
       } else if (this.active === 2) {
-        this.getWx()
+        api = wxPay()
       } else if (this.active === 3) {
-        this.getSand()
+        api = sandPay()
+      } else if (this.active === 4) {
+        api = ybPay()
       }
-    },
-    getAli() {
-      aliPay().then((res) => {
+      api.then((res) => {
         this.form = res.data.value
       })
     },
-    setAli() {
-      setAliPay(this.form).then(({ msg }) => {
-        this.$message.success(msg)
-        this.visible = false
-      }).finally(() => {
-        this.btnLoading = false
-      })
-    },
-    getWx() {
-      wxPay().then((res) => {
-        this.form = res.data.value
-      })
-    },
-    setWx() {
-      setWxPay(this.form).then(({ msg }) => {
-        this.$message.success(msg)
-        this.visible = false
-      }).finally(() => {
-        this.btnLoading = false
-      })
-    },
-    getSand() {
-      sandPay().then((res) => {
-        this.form = res.data.value
-      })
-    },
-    setSand() {
-      setSandPay(this.form).then(({ msg }) => {
-        this.$message.success(msg)
-        this.visible = false
-      }).finally(() => {
-        this.btnLoading = false
-      })
-    },
+
     handleBeforeUpload1(file, cb, refName) {
       const a = file.name.split('.')
       const isLt2M = file.size / 1024 / 1024 < 3
