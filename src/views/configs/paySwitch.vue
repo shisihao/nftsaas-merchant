@@ -31,8 +31,7 @@ export default {
       form: {
         // on-开启 off-关闭
         alipay: 'off',
-        bank: 'off',
-        yb_pay: 'off'
+        bank: 'off'
       },
       rules: {}
     }
