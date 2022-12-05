@@ -200,7 +200,7 @@ export default {
 
         let filename = ''
         if (['three_url.three_image', 'three_url.three_bin'].includes(this.refName)) {
-          filename = obs.folder + '/' + Math.random().toString(36).substring(2) + options.file.name
+          filename = obs.folder + '/' + options.file.name
         } else {
           filename = obs.folder + '/' + `${String(+new Date()) + Math.random().toString(36).substring(2)}.${options.file.name.split('.').pop()}`
         }
