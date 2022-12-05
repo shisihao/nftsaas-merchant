@@ -5,17 +5,22 @@ const info = store.getters.info
 const init_wallet = (array) => {
   return info.wallet_status === 0 ? array : [...array, { label: '云账号钱包', value: 'sandpay' }]
 }
+const init_yb_wallet = (array) => {
+  return info.yb_wallet_status === 0 ? array : [...array, { label: '易宝', value: 'yb_pay' }]
+}
 
-export const payOptions = init_wallet(
-  [
-    { label: '全部', value: '' },
-    { label: integral, value: 'integral' },
-    { label: '微信', value: 'wxpay' },
-    { label: '支付宝', value: 'alipay' },
-    // { label: '农行', value: 'abcpay' },
-    // { label: '京东', value: 'jdpay' },
-    { label: '银行卡快捷', value: 'bank' }
-  ]
+export const payOptions = init_yb_wallet(
+  init_wallet(
+    [
+      { label: '全部', value: '' },
+      { label: integral, value: 'integral' },
+      { label: '微信', value: 'wxpay' },
+      { label: '支付宝', value: 'alipay' },
+      // { label: '农行', value: 'abcpay' },
+      // { label: '京东', value: 'jdpay' },
+      { label: '银行卡快捷', value: 'bank' }
+    ]
+  )
 )
 
 export const whetherOptions = [
