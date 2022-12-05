@@ -1,28 +1,11 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="form" :rules="rules" label-width="150px">
-      <el-form-item label="app_id" prop="app_id">
-        <el-input v-model="form.app_id" placeholder="请输入app_id" clearable />
+      <el-form-item label="通道号" prop="sender">
+        <el-input v-model="form.sender" placeholder="请输入通道号" clearable />
       </el-form-item>
       <el-form-item label="签名" prop="sign">
         <el-input v-model="form.sign" placeholder="请输入签名" clearable />
-      </el-form-item>
-      <el-form-item label="模板" prop="template">
-        <el-input v-model="form.template" placeholder="请输入模板" clearable />
-      </el-form-item>
-      <el-form-item label="access_key_id" prop="access_key_id">
-        <el-input
-          v-model="form.access_key_id"
-          placeholder="请输入access_key_id	"
-          clearable
-        />
-      </el-form-item>
-      <el-form-item label="access_key_secret" prop="access_key_secret">
-        <el-input
-          v-model="form.access_key_secret"
-          placeholder="请输入access_key_secret	"
-          clearable
-        />
       </el-form-item>
       <el-button type="primary" :loading="btnLoading" @click="onFormSubmit()">
         {{ $t("table.confirm") }}
@@ -40,23 +23,10 @@ export default {
       btnLoading: false,
       form: {},
       rules: {
-        app_id: [
-          { required: true, message: 'app_id不能为空', trigger: 'blur' }
+        sender: [
+          { required: true, message: '通道号不能为空', trigger: 'blur' }
         ],
-        sign: [{ required: true, message: '签名不能为空', trigger: 'blur' }],
-        template: [
-          { required: true, message: '模板不能为空', trigger: 'blur' }
-        ],
-        access_key_id: [
-          { required: true, message: 'access_key_id不能为空', trigger: 'blur' }
-        ],
-        access_key_secret: [
-          {
-            required: true,
-            message: 'access_key_secret	不能为空',
-            trigger: 'blur'
-          }
-        ]
+        sign: [{ required: true, message: '签名不能为空', trigger: 'blur' }]
       }
     }
   },

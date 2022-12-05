@@ -541,11 +541,11 @@ export function setCert(data) {
 
 // 获取短信配置
 export function getSms() {
-  return request.get('/configs/sms')
+  return request.get('/configs/hw_sms')
 }
 // 设置短信配置
 export function setSms(data) {
-  return request.put('/configs/sms', {
+  return request.put('/configs/hw_sms', {
     ...data
   })
 }
