@@ -236,62 +236,37 @@ export default {
     init() {},
     onFormSubmit() {
       this.btnLoading = true
+
+      let api
       if (this.active === 1) {
-        this.setAli()
+        api = setAliPay(this.form)
       } else if (this.active === 2) {
-        this.setWx()
+        api = setWxPay(this.form)
       } else if (this.active === 3) {
-        this.setSand()
+        api = setSandPay(this.form)
       }
+
+      api.then(({ msg }) => {
+        this.$message.success(msg)
+        this.visible = false
+      }).finally(() => {
+        this.btnLoading = false
+      })
     },
     handleClick(row) {
+      this.form = {}
       this.active = row.key
       this.visible = true
+      let api
       if (this.active === 1) {
-        this.getAli()
+        api = aliPay()
       } else if (this.active === 2) {
-        this.getWx()
+        api = wxPay()
       } else if (this.active === 3) {
-        this.getSand()
+        api = sandPay()
       }
-    },
-    getAli() {
-      aliPay().then((res) => {
+      api.then((res) => {
         this.form = res.data.value
-      })
-    },
-    setAli() {
-      setAliPay(this.form).then(({ msg }) => {
-        this.$message.success(msg)
-        this.visible = false
-      }).finally(() => {
-        this.btnLoading = false
-      })
-    },
-    getWx() {
-      wxPay().then((res) => {
-        this.form = res.data.value
-      })
-    },
-    setWx() {
-      setWxPay(this.form).then(({ msg }) => {
-        this.$message.success(msg)
-        this.visible = false
-      }).finally(() => {
-        this.btnLoading = false
-      })
-    },
-    getSand() {
-      sandPay().then((res) => {
-        this.form = res.data.value
-      })
-    },
-    setSand() {
-      setSandPay(this.form).then(({ msg }) => {
-        this.$message.success(msg)
-        this.visible = false
-      }).finally(() => {
-        this.btnLoading = false
       })
     },
     handleBeforeUpload1(file, cb, refName) {
