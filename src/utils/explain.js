@@ -6,7 +6,7 @@ const init_wallet = (array) => {
   return info.wallet_status === 0 ? array : [...array, { label: '云账号钱包', value: 'sandpay' }]
 }
 const init_yb_wallet = (array) => {
-  return info.yb_wallet_status === 0 ? array : [...array, { label: '易宝', value: 'yb_pay' }]
+  return info.yb_wallet_status === 0 ? array : [...array, { label: '易宝', value: 'ybpay' }]
 }
 
 export const payOptions = init_yb_wallet(
