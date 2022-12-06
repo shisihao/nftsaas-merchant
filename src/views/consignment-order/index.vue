@@ -273,7 +273,7 @@
                   </div>
                 </el-popover>
               </div>
-              <div v-if="row.status === 3">
+              <div v-if="row.status === 2">
                 <el-popover placement="bottom-start" max-width="300" trigger="hover">
                   <div>
                     {{ row.reason || '' }}
