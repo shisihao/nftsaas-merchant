@@ -152,7 +152,12 @@
                   <div v-if="row.goods && row.goods.name">
                     名称：{{ row.goods.name || '' }}
                   </div>
-                  <div>藏品编号：{{ row.goods.serial ||'' }}</div>
+                  <div>
+                    藏品编号：
+                    <template v-if="row.consignment.type === 'goods'">
+                      {{ row.goods.serial + '/' + row.consignment.user_goods.num + '/' + row.goods.cast_goods_stock }}
+                    </template>
+                  </div>
                   <div>价格：￥{{ row.consignment.price || '' }}</div>
                   <div>编号：{{ row.consignment.user_goods.num || '' }}</div>
                 </div>
