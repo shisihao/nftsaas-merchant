@@ -221,6 +221,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { aliPay, setAliPay, wxPay, setWxPay, sandPay, setSandPay, ybPay, setYbPay } from '@/api/configs'
 import CustomUpload from '@/components/Upload/CustomUpload'
 
@@ -251,12 +252,8 @@ export default {
           method: '杉德支付',
           desc: '杉德支付（sandpay.com.cn）是国内先进的网上支付平台',
           key: 3
-        },
-        {
-          method: '易宝支付',
-          desc: '易宝支付是国内先进的网上支付平台',
-          key: 4
         }
+
       ],
       active: ''
     }
@@ -264,8 +261,22 @@ export default {
   created() {
     this.init()
   },
+  computed: {
+    ...mapGetters(['info'])
+  },
   methods: {
-    init() {},
+    init() {
+      if (this.info.yb_wallet_status === 1) {
+        this.tableData = [
+          ...this.tableData,
+          {
+            method: '易宝支付',
+            desc: '易宝支付是国内先进的网上支付平台',
+            key: 4
+          }
+        ]
+      }
+    },
     onFormSubmit() {
       this.btnLoading = true
 
