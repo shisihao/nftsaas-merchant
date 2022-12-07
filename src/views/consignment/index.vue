@@ -65,7 +65,7 @@
               </li>
               <li>
                 <div>编号：</div>
-                <div>{{ row.goods.serial }}</div>
+                <div v-if="row.type === 'goods'">{{ row.goods.serial+'/'+row.user_goods.num +'/'+row.goods.cast_goods_stock }}</div>
               </li>
               <li>
                 <div>名称：</div>
