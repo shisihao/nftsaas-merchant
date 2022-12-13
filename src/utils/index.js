@@ -432,8 +432,8 @@ export function listTree(data, id = 'id', pid = 'pid') {
  * @returns
  */
 export function parseDate(input) {
-  var parts = input.match(/(\d+)/g)
-  return new Date(parts[0], parts[1] - 1, parts[2])
+  var parts = input.replace(/-/g,"/")
+  return new Date(parts)
 }
 
 /**
