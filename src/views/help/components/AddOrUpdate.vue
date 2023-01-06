@@ -69,7 +69,7 @@ export default {
           this.btnLoading = true
           // 去除异步加载图片
           this.form.content = this.form.content.replace(/crossorigin=\"anonymous\"/g, '')
-          
+
           addOrUpdate(this.form)
             .then(({ msg }) => {
               this.$message.success(msg)

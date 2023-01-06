@@ -104,5 +104,7 @@ export const localMap = {
   // consignmentPrice: () => import('@/views/consignment-price/index'), // 商品基准价
   consignmentConfig: () => import('@/views/configs/consignmentConfig'), // 藏品寄售配置
   lock: () => import('@/views/configs/locksetting'), // 寄售锁单配置
-  loginPass: () => import('@/views/configs/login-pass') // 登录开关
+  loginPass: () => import('@/views/configs/login-pass'), // 登录开关
+  boxUserList: () => import('@/views/boxUserList/index'), // 用户盲盒列表
+  activityRank: () => import('@/views/activityRank/index') // 消费排行榜
 }

@@ -85,7 +85,7 @@
         header-align="center"
       >
         <template slot-scope="{ row }">
-          <el-avatar :key="row.id" icon="el-icon-user-solid" style="vertical-align: top;" :src="row.avatar ? (domin + row.avatar) : ''" />
+          <el-avatar :key="row.id" icon="el-icon-user-solid" style="vertical-align: top;" :src="row.avatar ?(row.avatar.indexOf('https')!==-1?row.avatar:(domin + row.avatar)):''" />
           <div style="display: inline-block;margin-left: 2px">
             <div>
               {{ row.name }}
