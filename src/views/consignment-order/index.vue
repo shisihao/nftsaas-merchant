@@ -38,6 +38,12 @@
             @keyup.enter.native="getList(1)"
           />
         </el-form-item>
+        <el-form-item label="类型">
+          <el-select v-model="search.type" placeholder="请选择" @change="getList(1)">
+            <el-option label="买方" value="sell" />
+            <el-option label="卖方" value="buy" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="下单时间">
           <el-date-picker
             v-model="dateRangeValue"
@@ -326,6 +332,7 @@ export default {
         order_no: '',
         keywords: '',
         serial: '',
+        type: 'sell',
         hash: '',
         status: '',
         issuer_id: '',

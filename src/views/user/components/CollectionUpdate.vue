@@ -117,7 +117,7 @@
       />
     </el-dialog>
     <div v-if="GoogleCodeVisible" class="content">
-      <google-code ref="GoogleCode" @refreshList="getList()" />
+      <google-code ref="GoogleCode" @refreshList="delayList" />
     </div>
   </div>
 </template>
@@ -204,6 +204,14 @@ export default {
     },
     onClose() {
       this.$reset('data', false)
+    },
+    delayList() {
+      this.loading = true
+      this.list = []
+      setTimeout(() => {
+        this.loading = false
+        this.getList()
+      }, 2000)
     },
     onDelete(row, index) {
       this.GoogleCodeVisible = true
