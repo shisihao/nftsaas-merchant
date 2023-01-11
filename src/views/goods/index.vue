@@ -258,7 +258,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="pages.total > 0" :total="pages.total" :page-sizes="[20,30,50,100,200]" :page.sync="pages.current" :limit.sync="pages.limit" @pagination="getList()" />
+    <pagination v-show="pages.total > 0" :total="pages.total" :page.sync="pages.current" :limit.sync="pages.limit" @pagination="getList()" />
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update
       v-if="addOrUpdateVisible"

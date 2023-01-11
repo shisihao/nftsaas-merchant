@@ -36,7 +36,7 @@ export default {
     pageSizes: {
       type: Array,
       default() {
-        return [20, 30, 50]
+        return [20, 30, 50, 100, 200]
       }
     },
     pagerCount: {
